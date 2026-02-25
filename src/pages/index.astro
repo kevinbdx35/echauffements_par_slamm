@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout title="Échauffements — NOGI & MMA">
@@ -14,7 +15,7 @@ import Layout from '../layouts/Layout.astro';
 
     <div class="flex flex-col gap-4 max-w-sm mx-auto sm:grid sm:grid-cols-2 sm:max-w-xl">
       <a
-        href="/nogi"
+        href={`${base}nogi`}
         class="flex items-center gap-4 bg-gray-800 active:bg-gray-700 border border-gray-700 rounded-2xl p-5 text-left transition-colors"
       >
         <span class="text-3xl shrink-0">🥋</span>
@@ -26,7 +27,7 @@ import Layout from '../layouts/Layout.astro';
       </a>
 
       <a
-        href="/mma"
+        href={`${base}mma`}
         class="flex items-center gap-4 bg-gray-800 active:bg-gray-700 border border-gray-700 rounded-2xl p-5 text-left transition-colors"
       >
         <span class="text-3xl shrink-0">🥊</span>

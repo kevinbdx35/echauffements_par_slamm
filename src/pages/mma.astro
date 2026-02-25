@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import ExerciceCard from '../components/ExerciceCard.astro';
 import exercices from '../data/mma.json';
+const base = import.meta.env.BASE_URL;
 ---
 
 <Layout
@@ -9,7 +10,7 @@ import exercices from '../data/mma.json';
   description="Programme d'échauffement pour les séances MMA — arts martiaux mixtes"
 >
   <div class="mb-6">
-    <a href="/" class="text-gray-500 text-sm">← Accueil</a>
+    <a href={base} class="text-gray-500 text-sm">← Accueil</a>
     <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Échauffement <span class="text-red-500">MMA</span></h1>
     <p class="text-gray-400 text-sm">Arts martiaux mixtes · {exercices.length} exercices · Dans l'ordre</p>
   </div>
