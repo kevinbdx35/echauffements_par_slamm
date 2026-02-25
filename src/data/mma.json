@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "phase": 1,
     "titre": "Hip Escapes (Crevettes)",
     "description": "Identique au grappling, mais en MMA c'est aussi ce qui te sort d'un ground and pound. Le mouvement qui sauve ta vie sous un adversaire qui frappe.",
     "youtube_ids": [],
@@ -8,6 +9,7 @@
   },
   {
     "id": 2,
+    "phase": 1,
     "titre": "Technical Stand-Ups",
     "description": "LE geste prioritaire en MMA : se relever face à l'adversaire sans exposer sa tête, main postée pour bloquer un éventuel kick. La transition sol-debout par excellence.",
     "youtube_ids": [],
@@ -15,6 +17,7 @@
   },
   {
     "id": 3,
+    "phase": 1,
     "titre": "Sprawls",
     "description": "Un vrai sprawl MMA : hanches lourdes au sol, une main qui contrôle la nuque, l'autre qui cherche le underhook ou le wizzer. Le réflexe anti-takedown.",
     "youtube_ids": [],
@@ -22,6 +25,7 @@
   },
   {
     "id": 4,
+    "phase": 1,
     "titre": "Get-Ups de combat (Wall Walk)",
     "description": "Depuis le dos, wall-walk imaginaire : pieds qui repoussent, cadrage, hip escape, technical stand-up. La séquence complète de relevé contre la cage.",
     "youtube_ids": [],
@@ -29,6 +33,7 @@
   },
   {
     "id": 5,
+    "phase": 0,
     "titre": "Jab - Cross - Check Hook + Angle Out",
     "description": "La combinaison de base avec sortie d'angle. On ne reste JAMAIS sur la ligne de centre après avoir frappé. Chaque combo se termine par un déplacement latéral. On travaille le transfert de poids, la rotation des hanches, le retour de garde.",
     "youtube_ids": [],
@@ -36,6 +41,7 @@
   },
   {
     "id": 6,
+    "phase": 0,
     "titre": "Jab - Low Kick arrière - Pivot",
     "description": "L'enchaînement poing-pied le plus fondamental du MMA. Le jab mesure la distance, le low kick punit, le pivot te repositionne.",
     "youtube_ids": [],
@@ -43,6 +49,7 @@
   },
   {
     "id": 7,
+    "phase": 0,
     "titre": "Teep (Front Kick) - Reculer - Counter Cross",
     "description": "Le teep est le jab des jambes. On pousse, on crée la distance, on punit l'avancée. Travail du timing défensif-offensif.",
     "youtube_ids": [],
@@ -50,6 +57,7 @@
   },
   {
     "id": 8,
+    "phase": 0,
     "titre": "Check (défense low kick) - Counter",
     "description": "Lever le genou pour checker, reposer le pied, immédiatement counter (cross ou low kick retour). Le check sans counter est un cadeau pour l'adversaire.",
     "youtube_ids": [],
@@ -57,6 +65,7 @@
   },
   {
     "id": 9,
+    "phase": 0,
     "titre": "Shoot to Sprawl Drill (avec partenaire)",
     "description": "A shoot, B sprawl. Puis on inverse. On enchaîne sans pause. Le dialogue fondamental du MMA : attaque de takedown vs défense de takedown.",
     "youtube_ids": [],
@@ -64,6 +73,7 @@
   },
   {
     "id": 10,
+    "phase": 0,
     "titre": "Clinch to Wall Work",
     "description": "Pummeling classique qui se transforme en cage press : un des deux pousse l'autre contre un mur, contrôle les hanches, l'autre travaille les underhooks pour se dégager. C'est 40% du MMA moderne.",
     "youtube_ids": [],
@@ -71,6 +81,7 @@
   },
   {
     "id": 11,
+    "phase": 0,
     "titre": "Dirty Boxing Shadow",
     "description": "En position de clinch (collar tie + underhook), on travaille les uppercuts courts, les coudes courte distance, les knee strikes au corps. Le bras qui ne frappe pas contrôle TOUJOURS la tête ou le bras adverse.",
     "youtube_ids": [],
@@ -78,6 +89,7 @@
   },
   {
     "id": 12,
+    "phase": 0,
     "titre": "Ground and Pound Posture Drill",
     "description": "Depuis la garde de l'adversaire (ou top half-guard), on travaille la posture : dos droit, mains postées, création d'espace pour frapper, retour en base quand l'adversaire casse la posture. Pas de frappes lourdes, juste le positionnement.",
     "youtube_ids": [],
@@ -85,6 +97,7 @@
   },
   {
     "id": 13,
+    "phase": 0,
     "titre": "Cage Cutting Drill",
     "description": "Shadow en avançant à 45 degrés, jamais en ligne droite. On coupe l'angle pour coincer l'adversaire imaginaire. Petit pas latéral, jab, petit pas, avancer.",
     "youtube_ids": [],
@@ -92,6 +105,7 @@
   },
   {
     "id": 14,
+    "phase": 0,
     "titre": "In-and-Out avec Level Change",
     "description": "Entrer en distance de frappe (step-jab), sortir, revenir avec un changement de niveau (menace de takedown), se relever, sortir d'angle. L'adversaire ne doit jamais savoir si tu viens frapper ou lutter.",
     "youtube_ids": [],
@@ -99,6 +113,7 @@
   },
   {
     "id": 15,
+    "phase": 0,
     "titre": "Stance Switching",
     "description": "Orthodox vers southpaw et retour, avec un jab ou un low kick à chaque switch. En MMA, le switch stance est une arme.",
     "youtube_ids": [],
@@ -106,6 +121,7 @@
   },
   {
     "id": 16,
+    "phase": 0,
     "titre": "Pummeling avec Knee Strikes",
     "description": "Le pummeling classique pour les underhooks, mais à chaque underhook gagné, on ajoute un genou au corps léger. La réalité du clinch MMA : la lutte et les frappes coexistent.",
     "youtube_ids": [],
@@ -113,6 +129,7 @@
   },
   {
     "id": 17,
+    "phase": 0,
     "titre": "Collar Tie Snap Down + Go-Behind",
     "description": "Contrôle de la nuque, snap down pour casser la posture, enchaîner avec un passage dans le dos. Le collar tie contrôle tout : il set up les genoux, les coudes, les takedowns.",
     "youtube_ids": [],
@@ -120,6 +137,7 @@
   },
   {
     "id": 18,
+    "phase": 0,
     "titre": "Whizzer to Underhook Recovery",
     "description": "Quand l'adversaire a le underhook, tu poses le whizzer (overhook), tu tournes les hanches, tu récupères ta position. La défense de clinch la plus importante en MMA.",
     "youtube_ids": [],
