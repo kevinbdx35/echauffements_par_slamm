@@ -33,7 +33,7 @@
   },
   {
     "id": 5,
-    "phase": 0,
+    "phase": 2,
     "titre": "Jab - Cross - Check Hook + Angle Out",
     "description": "La combinaison de base avec sortie d'angle. On ne reste JAMAIS sur la ligne de centre après avoir frappé. Chaque combo se termine par un déplacement latéral. On travaille le transfert de poids, la rotation des hanches, le retour de garde.",
     "youtube_ids": [],
@@ -41,7 +41,7 @@
   },
   {
     "id": 6,
-    "phase": 0,
+    "phase": 2,
     "titre": "Jab - Low Kick arrière - Pivot",
     "description": "L'enchaînement poing-pied le plus fondamental du MMA. Le jab mesure la distance, le low kick punit, le pivot te repositionne.",
     "youtube_ids": [],
@@ -49,7 +49,7 @@
   },
   {
     "id": 7,
-    "phase": 0,
+    "phase": 2,
     "titre": "Teep (Front Kick) - Reculer - Counter Cross",
     "description": "Le teep est le jab des jambes. On pousse, on crée la distance, on punit l'avancée. Travail du timing défensif-offensif.",
     "youtube_ids": [],
@@ -57,7 +57,7 @@
   },
   {
     "id": 8,
-    "phase": 0,
+    "phase": 2,
     "titre": "Check (défense low kick) - Counter",
     "description": "Lever le genou pour checker, reposer le pied, immédiatement counter (cross ou low kick retour). Le check sans counter est un cadeau pour l'adversaire.",
     "youtube_ids": [],

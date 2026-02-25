@@ -4,5 +4,11 @@
     "numero": "Phase 1",
     "titre": "Mobilité articulaire et formes de corps au sol",
     "duree": "3-4 min"
+  },
+  {
+    "id": 2,
+    "numero": "Phase 2",
+    "titre": "Shadow striking structure",
+    "duree": "4-5 min"
   }
 ]
