@@ -1,0 +1,41 @@
+---
+interface Props {
+  title: string;
+  description?: string;
+}
+const { title, description = 'Programme d\'échauffement NOGI et MMA' } = Astro.props;
+---
+
+<!doctype html>
+<html lang="fr" class="bg-gray-950 text-white">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="min-h-screen">
+    <header class="border-b border-gray-800 sticky top-0 z-10 bg-gray-950/90 backdrop-blur-sm">
+      <div class="max-w-4xl mx-auto px-4 py-3 flex items-center justify-between">
+        <a href="/" class="text-white font-black text-base tracking-tight">
+          <span class="text-red-500">⬡</span> Échauffements par SLAMM
+        </a>
+        <nav class="flex gap-5">
+          <a href="/nogi" class="text-gray-300 active:text-white text-sm font-semibold py-1">NOGI</a>
+          <a href="/mma" class="text-gray-300 active:text-white text-sm font-semibold py-1">MMA</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="max-w-4xl mx-auto px-4 py-6 sm:py-10">
+      <slot />
+    </main>
+
+    <footer class="border-t border-gray-800 mt-10 sm:mt-20">
+      <div class="max-w-4xl mx-auto px-4 py-5 text-center text-gray-600 text-xs">
+        Site créé par Kevin depuis la Bretagne
+      </div>
+    </footer>
+  </body>
+</html>

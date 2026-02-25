@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "titre": "Corde à sauter",
+    "description": "Cardio et coordination des pieds pour la mobilité en combat debout.",
+    "youtube_ids": [],
+    "duree": "3 min"
+  },
+  {
+    "id": 2,
+    "titre": "Shadowboxing - Jab/Cross",
+    "description": "Travail des combinaisons de base debout avec déplacements.",
+    "youtube_ids": [],
+    "duree": "3 min"
+  },
+  {
+    "id": 3,
+    "titre": "Kicks d'échauffement - Low kick / Teep",
+    "description": "Activation des jambes et de l'équilibre pour les frappes.",
+    "youtube_ids": [],
+    "duree": "2 min"
+  },
+  {
+    "id": 4,
+    "titre": "Clinch et genoux",
+    "description": "Travail du corps à corps et frappes au corps en clinch.",
+    "youtube_ids": [],
+    "duree": "3 min"
+  },
+  {
+    "id": 5,
+    "titre": "Transition debout / sol",
+    "description": "Enchaînements takedown → contrôle au sol pour le MMA.",
+    "youtube_ids": [],
+    "duree": "3 min"
+  }
+]
