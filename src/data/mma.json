@@ -65,7 +65,7 @@
   },
   {
     "id": 9,
-    "phase": 0,
+    "phase": 3,
     "titre": "Shoot to Sprawl Drill (avec partenaire)",
     "description": "A shoot, B sprawl. Puis on inverse. On enchaîne sans pause. Le dialogue fondamental du MMA : attaque de takedown vs défense de takedown.",
     "youtube_ids": [],
@@ -73,7 +73,7 @@
   },
   {
     "id": 10,
-    "phase": 0,
+    "phase": 3,
     "titre": "Clinch to Wall Work",
     "description": "Pummeling classique qui se transforme en cage press : un des deux pousse l'autre contre un mur, contrôle les hanches, l'autre travaille les underhooks pour se dégager. C'est 40% du MMA moderne.",
     "youtube_ids": [],
@@ -81,7 +81,7 @@
   },
   {
     "id": 11,
-    "phase": 0,
+    "phase": 3,
     "titre": "Dirty Boxing Shadow",
     "description": "En position de clinch (collar tie + underhook), on travaille les uppercuts courts, les coudes courte distance, les knee strikes au corps. Le bras qui ne frappe pas contrôle TOUJOURS la tête ou le bras adverse.",
     "youtube_ids": [],
@@ -89,7 +89,7 @@
   },
   {
     "id": 12,
-    "phase": 0,
+    "phase": 3,
     "titre": "Ground and Pound Posture Drill",
     "description": "Depuis la garde de l'adversaire (ou top half-guard), on travaille la posture : dos droit, mains postées, création d'espace pour frapper, retour en base quand l'adversaire casse la posture. Pas de frappes lourdes, juste le positionnement.",
     "youtube_ids": [],
