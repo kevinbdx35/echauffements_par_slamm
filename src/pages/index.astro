@@ -7,25 +7,13 @@ const base = import.meta.env.BASE_URL;
   <div class="text-center py-8 sm:py-16">
     <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-3 sm:mb-4">
       <span class="text-red-500">Échauffements</span><br />
-      NOGI & MMA
+      MMA & NOGI
     </h1>
     <p class="text-gray-400 text-base sm:text-lg max-w-sm mx-auto mb-8 sm:mb-12 px-2">
       Programme structuré avant chaque séance. Suis les exercices dans l'ordre.
     </p>
 
     <div class="flex flex-col gap-4 max-w-sm mx-auto sm:grid sm:grid-cols-2 sm:max-w-xl">
-      <a
-        href={`${base}nogi`}
-        class="flex items-center gap-4 bg-gray-800 active:bg-gray-700 border border-gray-700 rounded-2xl p-5 text-left transition-colors"
-      >
-        <span class="text-3xl shrink-0">👕</span>
-        <div class="flex-1 min-w-0">
-          <h2 class="text-xl font-black text-white">NOGI</h2>
-          <p class="text-gray-400 text-sm leading-snug">Grappling sans kimono</p>
-        </div>
-        <span class="text-red-400 text-lg shrink-0">→</span>
-      </a>
-
       <a
         href={`${base}mma`}
         class="flex items-center gap-4 bg-gray-800 active:bg-gray-700 border border-gray-700 rounded-2xl p-5 text-left transition-colors"
@@ -34,6 +22,18 @@ const base = import.meta.env.BASE_URL;
         <div class="flex-1 min-w-0">
           <h2 class="text-xl font-black text-white">MMA</h2>
           <p class="text-gray-400 text-sm leading-snug">Arts martiaux mixtes</p>
+        </div>
+        <span class="text-red-400 text-lg shrink-0">→</span>
+      </a>
+
+      <a
+        href={`${base}nogi`}
+        class="flex items-center gap-4 bg-gray-800 active:bg-gray-700 border border-gray-700 rounded-2xl p-5 text-left transition-colors"
+      >
+        <span class="text-3xl shrink-0">👕</span>
+        <div class="flex-1 min-w-0">
+          <h2 class="text-xl font-black text-white">NOGI</h2>
+          <p class="text-gray-400 text-sm leading-snug">Grappling sans kimono</p>
         </div>
         <span class="text-red-400 text-lg shrink-0">→</span>
       </a>
