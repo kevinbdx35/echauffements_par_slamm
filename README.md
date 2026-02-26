@@ -6,8 +6,9 @@ Site de partage des programmes d'échauffement NOGI et MMA, construit avec [Astr
 
 ## Programmes
 
-- **NOGI** — Échauffement rituel tous les mardis · 17 exercices · 18–20 minutes
-- **MMA** — Arts martiaux mixtes
+- **NOGI** — Échauffement rituel tous les mardis · 18 exercices · 18–20 minutes · 5 phases
+- **MMA** — Arts martiaux mixtes · 18 exercices · 5 phases
+- **Étirements** — Programme de fin de séance · PDF 22 pages · 15 minutes
 
 ## Stack
 
@@ -37,7 +38,18 @@ Dans `src/data/nogi.json` ou `src/data/mma.json`, ajouter l'ID YouTube dans le t
 }
 ```
 
-L'ID se trouve dans l'URL YouTube : `youtube.com/watch?v=`**`ID_ICI`**
+L'ID se trouve dans l'URL YouTube :
+- Vidéo classique : `youtube.com/watch?v=`**`ID_ICI`**
+- Short : `youtube.com/shorts/`**`ID_ICI`**
+- Lien court : `youtu.be/`**`ID_ICI`**
+
+Pour démarrer une vidéo à un timestamp précis, utiliser le format objet :
+
+```json
+{ "id": "ID_YOUTUBE", "start": 95 }
+```
+
+Si une vidéo est supprimée ou rendue privée, un message "Vidéo indisponible" s'affiche automatiquement à la place de la miniature.
 
 ## Déploiement
 
