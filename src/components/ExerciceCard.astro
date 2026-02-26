@@ -14,7 +14,6 @@ const videos = youtubeIds
   .filter(v => v.id.trim() !== '');
 
 const principale = videos[0];
-const complementaires = videos.slice(1);
 ---
 
 <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
@@ -37,7 +36,7 @@ const complementaires = videos.slice(1);
   {videos.length > 0 ? (
     <div class="px-3 pb-3 flex flex-col gap-2">
       <div
-        class="main-video aspect-video w-full rounded-xl overflow-hidden shadow-lg relative cursor-pointer ring-1 ring-red-500/40"
+        class="main-video aspect-video w-full rounded-xl overflow-hidden shadow-lg relative cursor-pointer ring-2 ring-red-500"
         data-video-id={principale.id}
         data-video-start={principale.start ?? ''}
       >
@@ -52,18 +51,24 @@ const complementaires = videos.slice(1);
           <span class="text-gray-500 text-xs">{principale.id}</span>
         </div>
       </div>
-      {complementaires.length > 0 && (
+      {videos.length > 1 && (
         <div class="flex gap-2 overflow-x-auto pb-1">
-          {complementaires.map((v, i) => (
+          {videos.map((v, i) => (
             <button
-              class="comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden ring-1 ring-gray-600 opacity-60 hover:opacity-90 hover:ring-gray-500 transition-all"
+              class:list={[
+                "comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden ring-2 transition-all",
+                i === 0
+                  ? "ring-red-500 opacity-100"
+                  : "ring-gray-600 opacity-60 hover:opacity-90 hover:ring-gray-500"
+              ]}
               data-video-id={v.id}
               data-video-start={v.start ?? ''}
-              aria-label={`Vidéo complémentaire ${i + 1}`}
+              data-index={i}
+              aria-label={i === 0 ? "Vidéo principale" : `Vidéo complémentaire ${i}`}
             >
               <img
                 src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`}
-                alt={`${titre} — vidéo ${i + 2}`}
+                alt={`${titre} — vidéo ${i + 1}`}
                 class="w-full h-full object-cover"
                 loading="lazy"
               />
@@ -117,6 +122,7 @@ const complementaires = videos.slice(1);
 
       const id = (btn as HTMLElement).dataset.videoId!;
       const start = (btn as HTMLElement).dataset.videoStart ?? '';
+      const index = parseInt((btn as HTMLElement).dataset.index ?? '0');
 
       mainEl.dataset.videoId = id;
       mainEl.dataset.videoStart = start;
@@ -131,12 +137,22 @@ const complementaires = videos.slice(1);
       `;
       attachMainVideoHandlers(mainEl);
 
+      // Border rouge si principale, grise si secondaire
+      if (index === 0) {
+        mainEl.classList.remove('ring-gray-600');
+        mainEl.classList.add('ring-red-500');
+      } else {
+        mainEl.classList.remove('ring-red-500');
+        mainEl.classList.add('ring-gray-600');
+      }
+
+      // Highlight miniature active
       row.querySelectorAll('.comp-thumb').forEach(t => {
-        t.classList.remove('ring-red-500/40', 'opacity-100');
+        t.classList.remove('ring-red-500', 'opacity-100');
         t.classList.add('ring-gray-600', 'opacity-60');
       });
       btn.classList.remove('ring-gray-600', 'opacity-60');
-      btn.classList.add('ring-red-500/40', 'opacity-100');
+      btn.classList.add('ring-red-500', 'opacity-100');
     });
   });
 </script>
