@@ -56,10 +56,8 @@ const principale = videos[0];
           {videos.map((v, i) => (
             <button
               class:list={[
-                "comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden ring-4 transition-all",
-                i === 0
-                  ? "ring-red-500 opacity-100"
-                  : "ring-gray-600 opacity-60 hover:opacity-90 hover:ring-gray-500"
+                "comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden transition-all",
+                i === 0 ? "opacity-100" : "opacity-60 hover:opacity-90"
               ]}
               data-video-id={v.id}
               data-video-start={v.start ?? ''}
@@ -148,11 +146,11 @@ const principale = videos[0];
 
       // Highlight miniature active
       row.querySelectorAll('.comp-thumb').forEach(t => {
-        t.classList.remove('ring-red-500', 'opacity-100');
-        t.classList.add('ring-gray-600', 'opacity-60');
+        t.classList.remove('opacity-100');
+        t.classList.add('opacity-60');
       });
-      btn.classList.remove('ring-gray-600', 'opacity-60');
-      btn.classList.add('ring-red-500', 'opacity-100');
+      btn.classList.remove('opacity-60');
+      btn.classList.add('opacity-100');
     });
   });
 </script>
