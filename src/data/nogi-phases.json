@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "numero": "Phase 1",
+    "titre": "Mobilité articulaire au sol",
+    "duree": "3-4 min"
+  },
+  {
+    "id": 2,
+    "numero": "Phase 2",
+    "titre": "Déplacements spécifiques",
+    "duree": "4-5 min"
+  },
+  {
+    "id": 3,
+    "numero": "Phase 3",
+    "titre": "Enchaînements au sol avec partenaire",
+    "duree": "5-6 min"
+  },
+  {
+    "id": 4,
+    "numero": "Phase 4",
+    "titre": "Préhensile et Grip Fighting",
+    "duree": "2-3 min"
+  },
+  {
+    "id": 5,
+    "numero": "Phase 5",
+    "titre": "Travail de base au sol",
+    "duree": "2 min"
+  }
+]

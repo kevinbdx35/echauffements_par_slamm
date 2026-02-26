@@ -2,7 +2,10 @@
 import Layout from '../layouts/Layout.astro';
 import ExerciceCard from '../components/ExerciceCard.astro';
 import exercices from '../data/nogi.json';
+import phases from '../data/nogi-phases.json';
 const base = import.meta.env.BASE_URL;
+
+const getPhase = (id: number) => phases.find(p => p.id === id);
 ---
 
 <Layout
@@ -24,14 +27,30 @@ const base = import.meta.env.BASE_URL;
   </div>
 
   <div class="flex flex-col gap-4">
-    {exercices.map((ex) => (
-      <ExerciceCard
-        numero={ex.id}
-        titre={ex.titre}
-        description={ex.description}
-        youtubeIds={ex.youtube_ids}
-        duree={ex.duree}
-      />
+    {exercices.map((ex, index) => (
+      <>
+        {ex.phase > 0 && (index === 0 || exercices[index - 1].phase !== ex.phase) && (() => {
+          const phase = getPhase(ex.phase);
+          return phase ? (
+            <div class="flex items-center gap-3 mt-2">
+              <div class="flex-1 h-px bg-gray-700"></div>
+              <div class="text-center">
+                <span class="text-xs font-black text-red-500 uppercase tracking-widest">{phase.numero}</span>
+                <p class="text-white font-bold text-sm">{phase.titre}</p>
+                <span class="text-xs text-gray-500">{phase.duree}</span>
+              </div>
+              <div class="flex-1 h-px bg-gray-700"></div>
+            </div>
+          ) : null;
+        })()}
+        <ExerciceCard
+          numero={ex.id}
+          titre={ex.titre}
+          description={ex.description}
+          youtubeIds={ex.youtube_ids}
+          duree={ex.duree}
+        />
+      </>
     ))}
   </div>
 

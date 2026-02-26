@@ -1,6 +1,7 @@
 [
   {
     "id": 1,
+    "phase": 1,
     "titre": "Hip Escapes (Crevettes)",
     "description": "LE mouvement fondamental. Hanche qui se décolle, cadrage du corps, replacement de garde. À faire lentement et proprement.",
     "youtube_ids": [],
@@ -8,6 +9,7 @@
   },
   {
     "id": 2,
+    "phase": 1,
     "titre": "Reverse Hip Escapes",
     "description": "Mouvement inverse de la crevette.",
     "youtube_ids": [],
@@ -15,6 +17,7 @@
   },
   {
     "id": 3,
+    "phase": 1,
     "titre": "Granby Rolls (Inversions)",
     "description": "Roulade sur l'épaule en ramenant les hanches par-dessus. Essentiel pour les récupérations de garde et les scrambles.",
     "youtube_ids": ["exkwjkM0P7U"],
@@ -22,6 +25,7 @@
   },
   {
     "id": 4,
+    "phase": 1,
     "titre": "Sit-Outs",
     "description": "Depuis les quatre appuis, passer la jambe dessous en pivotant. Base de toutes les sorties de turtle.",
     "youtube_ids": [],
@@ -29,6 +33,7 @@
   },
   {
     "id": 5,
+    "phase": 1,
     "titre": "Technical Stand-Ups",
     "description": "Depuis le sol, main postée, pied opposé qui pousse, on se relève face à l'adversaire. Le geste de survie par excellence.",
     "youtube_ids": ["yC_sSqO4Vx0", "quMmk9Xs2HE"],
@@ -36,6 +41,7 @@
   },
   {
     "id": 6,
+    "phase": 2,
     "titre": "Guard Retention (Solo)",
     "description": "Allongé sur le dos, pieds actifs face à un partenaire imaginaire qui tourne autour. Travail de cadrage permanent avec les hanches.",
     "youtube_ids": ["wLHgfgRXyjE"],
@@ -43,6 +49,7 @@
   },
   {
     "id": 7,
+    "phase": 2,
     "titre": "Knee Slide Passes (Shadow)",
     "description": "En glissant le genou au sol, pression de hanche, sprawl de la jambe arrière.",
     "youtube_ids": ["oaT5JLfAihc"],
@@ -50,6 +57,7 @@
   },
   {
     "id": 8,
+    "phase": 2,
     "titre": "Sprawls",
     "description": "Pas des burpees. Des vrais sprawls : hanches lourdes au sol, menton rentré, retour position de combat.",
     "youtube_ids": ["UQDUcqBVaPY", "NlaIS1ek978"],
@@ -57,6 +65,7 @@
   },
   {
     "id": 9,
+    "phase": 2,
     "titre": "Shoots (Pénétrations)",
     "description": "Changement de niveau, genou au sol entre les pieds imaginaires de l'adversaire, drive vers l'avant.",
     "youtube_ids": [],
@@ -64,6 +73,7 @@
   },
   {
     "id": 10,
+    "phase": 2,
     "titre": "Duck-Unders",
     "description": "Changement de niveau, passage sous le bras, contrôle du dos. Travail en shadow.",
     "youtube_ids": [],
@@ -71,6 +81,7 @@
   },
   {
     "id": 11,
+    "phase": 3,
     "titre": "Guard Pull to Sweep Drill",
     "description": "Partenaire A tire garde, tente un sweep basique (scissor ou hip bump), partenaire B résiste légèrement puis on inverse.",
     "youtube_ids": [],
@@ -78,6 +89,7 @@
   },
   {
     "id": 12,
+    "phase": 3,
     "titre": "Pass / Re-guard Flow",
     "description": "Un passe, l'autre replace sa garde sans résistance réelle. On cherche la fluidité, pas la victoire.",
     "youtube_ids": [],
@@ -85,6 +97,7 @@
   },
   {
     "id": 13,
+    "phase": 3,
     "titre": "Back Take to Escape Flow",
     "description": "Un prend le dos (hooks + seatbelt), l'autre sort par le côté du choking arm, replace sa garde. On alterne.",
     "youtube_ids": [],
@@ -92,6 +105,7 @@
   },
   {
     "id": 14,
+    "phase": 4,
     "titre": "Pummeling (Battle for Underhooks)",
     "description": "Face à face, on échange les underhooks en boucle. 1 minute fluide, 1 minute avec légère résistance. Base du clinch et du contrôle debout.",
     "youtube_ids": [],
@@ -99,6 +113,7 @@
   },
   {
     "id": 15,
+    "phase": 4,
     "titre": "Wrist Control Snap Downs",
     "description": "Contrôle du poignet, tire vers le bas pour casser la posture, l'autre résiste et récupère. On alterne.",
     "youtube_ids": [],
@@ -106,6 +121,7 @@
   },
   {
     "id": 16,
+    "phase": 5,
     "titre": "Arm Drag (Seated Guard)",
     "description": "Assis face à face, on enchaîne les arm drags pour accéder au dos. Léger, technique, fluide.",
     "youtube_ids": [],
@@ -113,6 +129,7 @@
   },
   {
     "id": 17,
+    "phase": 5,
     "titre": "Leg Pummeling",
     "description": "Assis face à face, jambes entremêlées, chacun essaie de placer ses hooks/contrôles de jambes (inside position). Fondement du leg lock game moderne.",
     "youtube_ids": ["w5qnEO1r-lY"],
