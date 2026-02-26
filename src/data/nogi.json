@@ -114,13 +114,21 @@
   {
     "id": 15,
     "phase": 4,
+    "titre": "Hand-Fighting for Takedowns",
+    "description": "Bataille pour le contrôle des mains et des poignets : collar tie, wrist control, underhook — chaque position de main ouvre une attaque de takedown. On travaille les enchaînements et les réponses en shadow ou avec partenaire.",
+    "youtube_ids": ["8vQ9YGWnhmg"],
+    "duree": "1 minute"
+  },
+  {
+    "id": 16,
+    "phase": 4,
     "titre": "Wrist Control Snap Downs",
     "description": "Contrôle du poignet, tire vers le bas pour casser la posture, l'autre résiste et récupère. On alterne.",
     "youtube_ids": [],
     "duree": "1 minute"
   },
   {
-    "id": 16,
+    "id": 17,
     "phase": 5,
     "titre": "Arm Drag (Seated Guard)",
     "description": "Assis face à face, on enchaîne les arm drags pour accéder au dos. Léger, technique, fluide.",
@@ -128,7 +136,7 @@
     "duree": ""
   },
   {
-    "id": 17,
+    "id": 18,
     "phase": 5,
     "titre": "Leg Pummeling",
     "description": "Assis face à face, jambes entremêlées, chacun essaie de placer ses hooks/contrôles de jambes (inside position). Fondement du leg lock game moderne.",
