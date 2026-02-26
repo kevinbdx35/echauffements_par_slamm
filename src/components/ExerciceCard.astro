@@ -1,6 +1,4 @@
 ---
-import YouTubeEmbed from './YouTubeEmbed.astro';
-
 type VideoEntry = string | { id: string; start?: number };
 
 interface Props {
@@ -38,24 +36,39 @@ const complementaires = videos.slice(1);
   </div>
   {videos.length > 0 ? (
     <div class="px-3 pb-3 flex flex-col gap-2">
-      <div class="flex flex-col gap-1">
-        <span class="text-xs font-semibold text-red-400 uppercase tracking-wider">Principale</span>
-        <YouTubeEmbed youtubeId={principale.id} titre={titre} start={principale.start} />
+      <div
+        class="main-video aspect-video w-full rounded-xl overflow-hidden shadow-lg relative cursor-pointer ring-1 ring-red-500/40"
+        data-video-id={principale.id}
+        data-video-start={principale.start ?? ''}
+      >
+        <img
+          src={`https://img.youtube.com/vi/${principale.id}/hqdefault.jpg`}
+          alt={titre}
+          class="w-full h-full object-cover"
+          loading="lazy"
+        />
+        <div class="video-error hidden absolute inset-0 flex flex-col items-center justify-center bg-gray-700 gap-1">
+          <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
+          <span class="text-gray-500 text-xs">{principale.id}</span>
+        </div>
       </div>
       {complementaires.length > 0 && (
-        <div>
-          <button
-            class="voir-aussi-btn mt-1 flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-300 transition-colors"
-            aria-expanded="false"
-          >
-            <span class="voir-aussi-chevron transition-transform duration-200">▶</span>
-            <span>Voir aussi ({complementaires.length})</span>
-          </button>
-          <div class="voir-aussi-container hidden flex flex-col gap-3 mt-2">
-            {complementaires.map(v => (
-              <YouTubeEmbed youtubeId={v.id} titre={titre} start={v.start} />
-            ))}
-          </div>
+        <div class="flex gap-2 overflow-x-auto pb-1">
+          {complementaires.map((v, i) => (
+            <button
+              class="comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden ring-1 ring-gray-600 opacity-60 hover:opacity-90 hover:ring-gray-500 transition-all"
+              data-video-id={v.id}
+              data-video-start={v.start ?? ''}
+              aria-label={`Vidéo complémentaire ${i + 1}`}
+            >
+              <img
+                src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`}
+                alt={`${titre} — vidéo ${i + 2}`}
+                class="w-full h-full object-cover"
+                loading="lazy"
+              />
+            </button>
+          ))}
         </div>
       )}
     </div>
@@ -67,14 +80,63 @@ const complementaires = videos.slice(1);
 </div>
 
 <script>
-  document.querySelectorAll('.voir-aussi-btn').forEach(btn => {
+  function attachMainVideoHandlers(mainEl: HTMLElement) {
+    const img = mainEl.querySelector('img');
+    if (img) {
+      img.addEventListener('error', () => {
+        img.classList.add('hidden');
+        mainEl.querySelector('.video-error')?.classList.remove('hidden');
+        mainEl.classList.remove('cursor-pointer');
+        mainEl.dataset.unavailable = 'true';
+      });
+    }
+    mainEl.addEventListener('click', () => {
+      if (mainEl.dataset.unavailable || mainEl.querySelector('iframe')) return;
+      const id = mainEl.dataset.videoId!;
+      const start = mainEl.dataset.videoStart;
+      const embedUrl = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1${start ? `&start=${start}` : ''}`;
+      const iframe = document.createElement('iframe');
+      iframe.src = embedUrl;
+      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.className = 'w-full h-full';
+      mainEl.innerHTML = '';
+      mainEl.appendChild(iframe);
+    });
+  }
+
+  document.querySelectorAll('.main-video').forEach(el => {
+    attachMainVideoHandlers(el as HTMLElement);
+  });
+
+  document.querySelectorAll('.comp-thumb').forEach(btn => {
     btn.addEventListener('click', () => {
-      const container = btn.nextElementSibling as HTMLElement;
-      const chevron = btn.querySelector('.voir-aussi-chevron') as HTMLElement;
-      const isOpen = !container.classList.contains('hidden');
-      container.classList.toggle('hidden', isOpen);
-      chevron.style.transform = isOpen ? '' : 'rotate(90deg)';
-      btn.setAttribute('aria-expanded', String(!isOpen));
+      const row = btn.closest('.flex') as HTMLElement;
+      const mainEl = row?.parentElement?.querySelector('.main-video') as HTMLElement | null;
+      if (!mainEl) return;
+
+      const id = (btn as HTMLElement).dataset.videoId!;
+      const start = (btn as HTMLElement).dataset.videoStart ?? '';
+
+      mainEl.dataset.videoId = id;
+      mainEl.dataset.videoStart = start;
+      delete mainEl.dataset.unavailable;
+      mainEl.classList.add('cursor-pointer');
+      mainEl.innerHTML = `
+        <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="" class="w-full h-full object-cover" />
+        <div class="video-error hidden absolute inset-0 flex flex-col items-center justify-center bg-gray-700 gap-1">
+          <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
+          <span class="text-gray-500 text-xs">${id}</span>
+        </div>
+      `;
+      attachMainVideoHandlers(mainEl);
+
+      row.querySelectorAll('.comp-thumb').forEach(t => {
+        t.classList.remove('ring-red-500/40', 'opacity-100');
+        t.classList.add('ring-gray-600', 'opacity-60');
+      });
+      btn.classList.remove('ring-gray-600', 'opacity-60');
+      btn.classList.add('ring-red-500/40', 'opacity-100');
     });
   });
 </script>
