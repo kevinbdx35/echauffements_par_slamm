@@ -1,15 +1,19 @@
 ---
 import YouTubeEmbed from './YouTubeEmbed.astro';
 
+type VideoEntry = string | { id: string; start?: number };
+
 interface Props {
   numero: number;
   titre: string;
   description: string;
-  youtubeIds: string[];
+  youtubeIds: VideoEntry[];
   duree: string;
 }
 const { numero, titre, description, youtubeIds, duree } = Astro.props;
-const videos = youtubeIds.filter(id => id.trim() !== '');
+const videos = youtubeIds
+  .map(v => typeof v === 'string' ? { id: v, start: undefined } : v)
+  .filter(v => v.id.trim() !== '');
 ---
 
 <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
@@ -31,8 +35,8 @@ const videos = youtubeIds.filter(id => id.trim() !== '');
   </div>
   {videos.length > 0 ? (
     <div class="px-3 pb-3 flex flex-col gap-3">
-      {videos.map(id => (
-        <YouTubeEmbed youtubeId={id} titre={titre} />
+      {videos.map(v => (
+        <YouTubeEmbed youtubeId={v.id} titre={titre} start={v.start} />
       ))}
     </div>
   ) : (

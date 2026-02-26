@@ -2,10 +2,11 @@
 interface Props {
   youtubeId: string;
   titre: string;
+  start?: number;
 }
-const { youtubeId, titre } = Astro.props;
+const { youtubeId, titre, start } = Astro.props;
 const thumbnail = `https://img.youtube.com/vi/${youtubeId}/hqdefault.jpg`;
-const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1`;
+const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1${start ? `&start=${start}` : ''}`;
 ---
 
 <div
