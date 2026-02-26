@@ -26,6 +26,8 @@ const getPhase = (id: number) => phases.find(p => p.id === id);
     </div>
   </div>
 
+  <p class="text-xs text-gray-500 mb-4">La vidéo avec la <span class="text-red-500 font-semibold">bordure rouge</span> est la référence principale. Les miniatures en dessous sont des vidéos complémentaires.</p>
+
   <div class="flex flex-col gap-4">
     {exercices.map((ex, index) => (
       <>

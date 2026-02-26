@@ -36,7 +36,7 @@ const principale = videos[0];
   {videos.length > 0 ? (
     <div class="px-3 pb-3 flex flex-col gap-2">
       <div
-        class="main-video aspect-video w-full rounded-xl overflow-hidden shadow-lg relative cursor-pointer ring-2 ring-red-500"
+        class="main-video aspect-video w-full rounded-xl overflow-hidden shadow-lg relative cursor-pointer ring-4 ring-red-500"
         data-video-id={principale.id}
         data-video-start={principale.start ?? ''}
       >
@@ -56,7 +56,7 @@ const principale = videos[0];
           {videos.map((v, i) => (
             <button
               class:list={[
-                "comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden ring-2 transition-all",
+                "comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden ring-4 transition-all",
                 i === 0
                   ? "ring-red-500 opacity-100"
                   : "ring-gray-600 opacity-60 hover:opacity-90 hover:ring-gray-500"
