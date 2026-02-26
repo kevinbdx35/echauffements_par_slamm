@@ -4,7 +4,7 @@
     "phase": 1,
     "titre": "Hip Escapes (Crevettes)",
     "description": "LE mouvement fondamental. Hanche qui se décolle, cadrage du corps, replacement de garde. À faire lentement et proprement.",
-    "youtube_ids": ["7amxkTTYYU8"],
+    "youtube_ids": [],
     "duree": "2 allers-retours"
   },
   {
@@ -12,7 +12,7 @@
     "phase": 1,
     "titre": "Reverse Hip Escapes",
     "description": "Mouvement inverse de la crevette.",
-    "youtube_ids": [],
+    "youtube_ids": ["7amxkTTYYU8"],
     "duree": "2 allers-retours"
   },
   {
