@@ -20,12 +20,16 @@ const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1
     class="w-full h-full object-cover"
     loading="lazy"
   />
+  <div class="youtube-unavailable hidden absolute inset-0 flex flex-col items-center justify-center bg-gray-700 gap-1">
+    <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
+    <span class="text-gray-500 text-xs">{youtubeId}</span>
+  </div>
 </div>
 
 <script>
   document.addEventListener('click', function (e) {
     const el = (e.target as HTMLElement).closest('[data-youtube-id]') as HTMLElement | null;
-    if (!el) return;
+    if (!el || el.dataset.unavailable) return;
     const iframe = document.createElement('iframe');
     iframe.src = el.dataset.embedUrl!;
     iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
@@ -33,5 +37,17 @@ const embedUrl = `https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1
     iframe.className = 'w-full h-full';
     el.innerHTML = '';
     el.appendChild(iframe);
+  });
+
+  document.querySelectorAll('[data-youtube-id] img').forEach(img => {
+    img.addEventListener('error', function () {
+      const container = (this as HTMLElement).closest('[data-youtube-id]') as HTMLElement | null;
+      if (!container) return;
+      container.dataset.unavailable = 'true';
+      container.classList.remove('cursor-pointer');
+      (this as HTMLElement).classList.add('hidden');
+      const errorEl = container.querySelector('.youtube-unavailable');
+      if (errorEl) errorEl.classList.remove('hidden');
+    });
   });
 </script>
