@@ -16,14 +16,14 @@ const pdfUrl = `${base}etirements.pdf`;
       <span class="text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-3 py-1">
         ⏱ 15 min
       </span>
+      <a
+        href={pdfUrl}
+        download
+        class="text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700 rounded-full px-3 py-1 hover:text-white transition-colors"
+      >
+        ⬇ Télécharger le PDF
+      </a>
     </div>
-    <a
-      href={pdfUrl}
-      download
-      class="text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700 rounded-full px-3 py-1 inline-block hover:text-white transition-colors"
-    >
-      ⬇ Télécharger le PDF
-    </a>
   </div>
 
   <div id="loading" class="text-center text-gray-500 py-16">Chargement du PDF…</div>
