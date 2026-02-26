@@ -14,6 +14,9 @@ const { numero, titre, description, youtubeIds, duree } = Astro.props;
 const videos = youtubeIds
   .map(v => typeof v === 'string' ? { id: v, start: undefined } : v)
   .filter(v => v.id.trim() !== '');
+
+const principale = videos[0];
+const complementaires = videos.slice(1);
 ---
 
 <div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
@@ -34,10 +37,27 @@ const videos = youtubeIds
     )}
   </div>
   {videos.length > 0 ? (
-    <div class="px-3 pb-3 flex flex-col gap-3">
-      {videos.map(v => (
-        <YouTubeEmbed youtubeId={v.id} titre={titre} start={v.start} />
-      ))}
+    <div class="px-3 pb-3 flex flex-col gap-2">
+      <div class="flex flex-col gap-1">
+        <span class="text-xs font-semibold text-red-400 uppercase tracking-wider">Principale</span>
+        <YouTubeEmbed youtubeId={principale.id} titre={titre} start={principale.start} />
+      </div>
+      {complementaires.length > 0 && (
+        <div>
+          <button
+            class="voir-aussi-btn mt-1 flex items-center gap-1.5 text-xs text-gray-500 hover:text-gray-300 transition-colors"
+            aria-expanded="false"
+          >
+            <span class="voir-aussi-chevron transition-transform duration-200">▶</span>
+            <span>Voir aussi ({complementaires.length})</span>
+          </button>
+          <div class="voir-aussi-container hidden flex flex-col gap-3 mt-2">
+            {complementaires.map(v => (
+              <YouTubeEmbed youtubeId={v.id} titre={titre} start={v.start} />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   ) : (
     <div class="mx-3 mb-3 rounded-lg bg-gray-700/40 border border-dashed border-gray-600 flex items-center justify-center py-4">
@@ -45,3 +65,16 @@ const videos = youtubeIds
     </div>
   )}
 </div>
+
+<script>
+  document.querySelectorAll('.voir-aussi-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const container = btn.nextElementSibling as HTMLElement;
+      const chevron = btn.querySelector('.voir-aussi-chevron') as HTMLElement;
+      const isOpen = !container.classList.contains('hidden');
+      container.classList.toggle('hidden', isOpen);
+      chevron.style.transform = isOpen ? '' : 'rotate(90deg)';
+      btn.setAttribute('aria-expanded', String(!isOpen));
+    });
+  });
+</script>
