@@ -76,7 +76,7 @@
     "phase": 2,
     "titre": "Duck-Unders",
     "description": "Changement de niveau, passage sous le bras, contrôle du dos. Travail en shadow.",
-    "youtube_ids": [],
+    "youtube_ids": [{ "id": "xGSVfwj1z2I", "start": 95 }, { "id": "0767Jz59Z4U" }, { "id": "5FK-0ejLoI0" }],
     "duree": "5 de chaque côté"
   },
   {
