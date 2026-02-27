@@ -46,9 +46,8 @@ const principale = videos[0];
           class="w-full h-full object-cover"
           loading="lazy"
         />
-        <div class="video-error hidden absolute inset-0 flex flex-col items-center justify-center bg-gray-700 gap-1">
+        <div class="video-error hidden absolute inset-0 flex items-center justify-center bg-gray-700">
           <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
-          <span class="text-gray-500 text-xs">{principale.id}</span>
         </div>
       </div>
       {videos.length > 1 && (
@@ -128,9 +127,8 @@ const principale = videos[0];
       mainEl.classList.add('cursor-pointer');
       mainEl.innerHTML = `
         <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="" class="w-full h-full object-cover" />
-        <div class="video-error hidden absolute inset-0 flex flex-col items-center justify-center bg-gray-700 gap-1">
+        <div class="video-error hidden absolute inset-0 flex items-center justify-center bg-gray-700">
           <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
-          <span class="text-gray-500 text-xs">${id}</span>
         </div>
       `;
       attachMainVideoHandlers(mainEl);

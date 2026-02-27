@@ -3,8 +3,10 @@ interface Props {
   title: string;
   description?: string;
 }
-const { title, description = 'Programme d\'échauffement NOGI et MMA' } = Astro.props;
+const { title, description = 'Programme d\'échauffement NOGI et MMA par SLAMM' } = Astro.props;
 const base = import.meta.env.BASE_URL;
+const pathname = Astro.url.pathname;
+const isActive = (segment: string) => pathname.includes(`/${segment}`);
 ---
 
 <!doctype html>
@@ -15,6 +17,11 @@ const base = import.meta.env.BASE_URL;
     <meta name="description" content={description} />
     <title>{title}</title>
     <link rel="icon" type="image/svg+xml" href={`${base}favicon.svg`} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={Astro.url.href} />
+    <meta property="og:site_name" content="Échauffements par SLAMM" />
   </head>
   <body class="min-h-screen">
     <header class="border-b border-gray-800 sticky top-0 z-10 bg-gray-950/90 backdrop-blur-sm">
@@ -23,9 +30,9 @@ const base = import.meta.env.BASE_URL;
           <span class="text-red-500">⬡</span> Échauffements par SLAMM
         </a>
         <nav class="flex gap-5">
-          <a href={`${base}mma`} class="text-gray-300 active:text-white text-sm font-semibold py-1">MMA</a>
-          <a href={`${base}nogi`} class="text-gray-300 active:text-white text-sm font-semibold py-1">NOGI</a>
-          <a href={`${base}etirements`} class="text-gray-300 active:text-white text-sm font-semibold py-1">Étirements</a>
+          <a href={`${base}mma`} class:list={["text-sm font-semibold py-1", isActive('mma') ? "text-white border-b-2 border-red-500" : "text-gray-400 hover:text-white"]}>MMA</a>
+          <a href={`${base}nogi`} class:list={["text-sm font-semibold py-1", isActive('nogi') ? "text-white border-b-2 border-red-500" : "text-gray-400 hover:text-white"]}>NOGI</a>
+          <a href={`${base}etirements`} class:list={["text-sm font-semibold py-1", isActive('etirements') ? "text-white border-b-2 border-red-500" : "text-gray-400 hover:text-white"]}>Étirements</a>
         </nav>
       </div>
     </header>
