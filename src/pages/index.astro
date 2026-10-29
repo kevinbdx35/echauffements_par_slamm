@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
 import mma from '../data/mma.json';
 import nogi from '../data/nogi.json';
 const base = import.meta.env.BASE_URL;
@@ -7,37 +8,82 @@ const base = import.meta.env.BASE_URL;
 const programmes = [
   { href: `${base}mma`, titre: 'MMA', sousTitre: 'Arts martiaux mixtes', meta: `18-20 min · ${mma.length} exercices` },
   { href: `${base}nogi`, titre: 'NOGI', sousTitre: 'Grappling sans kimono', meta: `18-20 min · ${nogi.length} exercices` },
-  { href: `${base}etirements`, titre: 'Étirements', sousTitre: 'Fin de séance', meta: '15 min · 22 pages', large: true },
 ];
+const apres = { href: `${base}etirements`, titre: 'Étirements', sousTitre: 'Fin de séance, tout le corps', meta: '15 min · 22 pages' };
 ---
 
 <Layout title="Échauffements — NOGI & MMA">
-  <div class="text-center py-8 sm:py-16">
-    <h1 class="text-3xl sm:text-5xl font-black tracking-tight mb-3 sm:mb-4">
-      <span class="text-accent-500">Échauffements</span><br />
-      MMA & NOGI
-    </h1>
-    <p class="text-gray-400 text-base sm:text-lg max-w-sm mx-auto mb-8 sm:mb-12 px-2">
-      Programme structuré avant chaque séance. Suis les exercices dans l'ordre.
-    </p>
+  <div class="max-w-site mx-auto px-4 md:px-8 py-10 lg:py-24 grid gap-10 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-16 lg:items-start">
+    <div>
+      <h1 class="font-display text-[clamp(44px,13.5vw,104px)] lg:text-[clamp(64px,6.2vw,92px)]">
+        <span class="block text-accent">Échauffements</span>
+        MMA &amp; NOGI
+      </h1>
+      <p class="mt-5 text-lg text-muted max-w-[32ch]">
+        Programme structuré avant chaque séance. Suis les exercices dans l'ordre.
+      </p>
+    </div>
 
-    <div class="grid grid-cols-1 gap-4 max-w-sm mx-auto sm:grid-cols-2 sm:max-w-xl">
+    <div class="flex flex-col">
       {programmes.map(p => (
-        <a
-          href={p.href}
-          class:list={[
-            "group flex items-center gap-4 bg-gray-800 border border-gray-700 rounded-xl p-5 text-left transition-[background-color,border-color,transform] duration-150 ease-out hover:border-gray-600 active:bg-gray-700 motion-safe:active:scale-[0.98]",
-            p.large && "sm:col-span-2",
-          ]}
-        >
-          <div class="flex-1 min-w-0">
-            <h2 class="text-xl font-black text-white">{p.titre}</h2>
-            <p class="text-gray-300 text-sm leading-snug">{p.sousTitre}</p>
-            <p class="text-gray-400 text-xs mt-1">{p.meta}</p>
-          </div>
-          <span class="text-accent-400 text-lg shrink-0 transition-transform duration-150 ease-out motion-safe:group-hover:translate-x-0.5" aria-hidden="true">→</span>
+        <a href={p.href} class="prog">
+          <span class="prog-title font-display">{p.titre}</span>
+          <span class="text-muted">{p.sousTitre}</span>
+          <span class="text-sm font-semibold tabular-nums">{p.meta}</span>
+          <span class="prog-arrow"><Icon name="arrow-right" /></span>
         </a>
       ))}
+      <p class="mt-8 pb-2.5 text-xs font-bold uppercase tracking-[0.12em] text-muted">Après la séance</p>
+      <a href={apres.href} class="prog border-b border-line">
+        <span class="prog-title font-display">{apres.titre}</span>
+        <span class="text-muted">{apres.sousTitre}</span>
+        <span class="text-sm font-semibold tabular-nums">{apres.meta}</span>
+        <span class="prog-arrow"><Icon name="arrow-right" /></span>
+      </a>
     </div>
   </div>
 </Layout>
+
+<style>
+  .prog {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 4px 16px;
+    padding-block: 24px;
+    border-top: 1px solid rgb(var(--c-line));
+  }
+  .prog > :not(.prog-arrow) { grid-column: 1; }
+  .prog-title {
+    font-size: clamp(40px, 9vw, 64px);
+    transition: color 150ms ease;
+  }
+  .prog-arrow {
+    grid-column: 2;
+    grid-row: 1 / span 3;
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--c-line));
+    transition-property: transform, color, background-color, border-color;
+    transition-duration: 150ms;
+    transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .prog:hover .prog-title { color: rgb(var(--c-accent)); }
+    .prog:hover .prog-arrow {
+      background: rgb(var(--c-accent-strong));
+      border-color: rgb(var(--c-accent-strong));
+      color: #fff;
+    }
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .prog:active .prog-arrow { transform: scale(0.94); }
+    @media (hover: hover) and (pointer: fine) {
+      .prog:hover .prog-arrow { transform: translateX(2px); }
+      .prog:active .prog-arrow { transform: translateX(2px) scale(0.94); }
+    }
+  }
+</style>
