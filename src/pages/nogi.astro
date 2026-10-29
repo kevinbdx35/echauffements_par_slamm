@@ -13,20 +13,18 @@ const getPhase = (id: number) => phases.find(p => p.id === id);
   description="Échauffement rituel NOGI — applicable tous les mardis"
 >
   <div class="mb-6">
-    <a href={base} class="text-gray-500 text-sm">← Accueil</a>
-    <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Échauffement <span class="text-red-500">NOGI</span></h1>
+    <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center text-gray-400 text-sm transition-colors duration-150 hover:text-white">← Accueil</a>
+    <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Échauffement <span class="text-accent-500">NOGI</span></h1>
     <p class="text-gray-400 text-sm mb-3">Tous les mardis · {exercices.length} exercices · Dans l'ordre</p>
     <div class="flex flex-wrap gap-2">
-      <span class="text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-3 py-1">
-        ⏱ 18–20 min
+      <span class="text-xs font-semibold bg-accent-500/10 text-accent-400 border border-accent-500/20 rounded-full px-3 py-1">
+        18-20 min
       </span>
       <span class="text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700 rounded-full px-3 py-1">
         Zéro mouvement inutile
       </span>
     </div>
   </div>
-
-  <p class="text-xs text-gray-500 mb-4">La vidéo avec la <span class="text-red-500 font-semibold">bordure rouge</span> est la référence principale. Les miniatures en dessous sont des vidéos complémentaires.</p>
 
   <div class="flex flex-col gap-4">
     {exercices.map((ex, index) => (
@@ -37,7 +35,7 @@ const getPhase = (id: number) => phases.find(p => p.id === id);
             <div class="flex items-center gap-3 mt-2">
               <div class="flex-1 h-px bg-gray-700"></div>
               <div class="text-center">
-                <span class="text-xs font-black text-red-500 uppercase tracking-widest">{phase.numero}</span>
+                <span class="text-xs font-black text-accent-500 uppercase tracking-widest">{phase.numero}</span>
                 <p class="text-white font-bold text-sm">{phase.titre}</p>
                 <span class="text-xs text-gray-500">{phase.duree}</span>
               </div>
@@ -56,28 +54,28 @@ const getPhase = (id: number) => phases.find(p => p.id === id);
     ))}
   </div>
 
-  <div class="mt-10 bg-gray-800 border border-gray-700 rounded-2xl p-5">
+  <div class="mt-10 bg-gray-800 border border-gray-700 rounded-xl p-5">
     <h2 class="text-base font-black text-white mb-4">Principes de cet échauffement</h2>
     <ul class="flex flex-col gap-3 mb-5">
       <li class="flex gap-3">
-        <span class="text-red-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Durée totale :</span> 18–20 minutes</span>
+        <span class="text-accent-500 font-black shrink-0">•</span>
+        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Durée totale :</span> 18-20 minutes</span>
       </li>
       <li class="flex gap-3">
-        <span class="text-red-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Zéro mouvement inutile</span> — Chaque drill est un pattern qui revient en combat réel</span>
+        <span class="text-accent-500 font-black shrink-0">•</span>
+        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Zéro mouvement inutile</span> : chaque drill est un pattern qui revient en combat réel</span>
       </li>
       <li class="flex gap-3">
-        <span class="text-red-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Montée progressive</span> — Du solo au partenaire, du lent au plus dynamique</span>
+        <span class="text-accent-500 font-black shrink-0">•</span>
+        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Montée progressive</span> : du solo au partenaire, du lent au plus dynamique</span>
       </li>
       <li class="flex gap-3">
-        <span class="text-red-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Répétable à l'infini</span> — C'est un rituel, pas une surprise. Le corps apprend par la répétition</span>
+        <span class="text-accent-500 font-black shrink-0">•</span>
+        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Répétable à l'infini</span> : c'est un rituel, pas une surprise. Le corps apprend par la répétition</span>
       </li>
       <li class="flex gap-3">
-        <span class="text-red-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Le cardio vient naturellement</span> — En enchaînant ces mouvements techniques avec fluidité, la fréquence cardiaque monte sans jamais faire de "gym"</span>
+        <span class="text-accent-500 font-black shrink-0">•</span>
+        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Le cardio vient naturellement</span> : en enchaînant ces mouvements techniques avec fluidité, la fréquence cardiaque monte sans jamais faire de "gym"</span>
       </li>
     </ul>
     <p class="text-gray-400 text-sm border-t border-gray-700 pt-4">
@@ -85,7 +83,7 @@ const getPhase = (id: number) => phases.find(p => p.id === id);
     </p>
   </div>
 
-  <p class="mt-6 text-xs text-gray-600 text-center">
+  <p class="mt-6 text-xs text-gray-400 text-center">
     Cet échauffement rituel pourra s'ajuster dans le temps si besoin.
   </p>
 </Layout>
