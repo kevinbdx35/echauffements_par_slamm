@@ -3,9 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import Programme from '../components/Programme.astro';
 import exercices from '../data/mma.json';
 import phases from '../data/mma-phases.json';
+import programmes from '../data/programmes.json';
 
 const principes = [
-  { titre: 'Durée totale', texte: '18-20 minutes.' },
+  { titre: 'Durée totale', texte: `${programmes.mma.duree}.` },
   { titre: 'Couvre les 3 phases du MMA', texte: 'Debout (striking), clinch (dirty boxing/lutte), sol (grappling) ET surtout les transitions entre chaque phase.' },
   { titre: 'Zéro mouvement décoratif', texte: 'Chaque drill reproduit une situation de combat réelle.' },
   { titre: 'Montée progressive', texte: 'Du solo au partenaire, du sol au debout.' },
@@ -20,7 +21,9 @@ const principes = [
 >
   <Programme
     discipline="MMA"
-    duree="18-20 min"
+    sousTitre="Arts martiaux mixtes · Dans l'ordre"
+    accroche="Zéro mouvement inutile"
+    duree={programmes.mma.duree}
     exercices={exercices}
     phases={phases}
     principes={principes}

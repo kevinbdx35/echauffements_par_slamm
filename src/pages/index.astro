@@ -3,13 +3,15 @@ import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import mma from '../data/mma.json';
 import nogi from '../data/nogi.json';
+import etirements from '../data/etirements.json';
+import durees from '../data/programmes.json';
 const base = import.meta.env.BASE_URL;
 
 const programmes = [
-  { href: `${base}mma`, titre: 'MMA', sousTitre: 'Arts martiaux mixtes', meta: `18-20 min · ${mma.length} exercices` },
-  { href: `${base}nogi`, titre: 'NOGI', sousTitre: 'Grappling sans kimono', meta: `18-20 min · ${nogi.length} exercices` },
+  { href: `${base}mma`, titre: 'MMA', sousTitre: 'Arts martiaux mixtes', meta: `${durees.mma.duree} · ${mma.length} exercices` },
+  { href: `${base}nogi`, titre: 'NOGI', sousTitre: 'Grappling sans kimono', meta: `${durees.nogi.duree} · ${nogi.length} exercices` },
 ];
-const apres = { href: `${base}etirements`, titre: 'Étirements', sousTitre: 'Fin de séance, tout le corps', meta: '15 min · 22 pages' };
+const apres = { href: `${base}etirements`, titre: 'Étirements', sousTitre: 'Fin de séance, tout le corps', meta: `${durees.etirements.duree} · ${etirements.length} pages` };
 ---
 
 <Layout title="Échauffements — NOGI & MMA">

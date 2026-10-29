@@ -9,6 +9,8 @@ interface Principe { titre: string; texte: string }
 
 interface Props {
   discipline: string;
+  sousTitre: string;
+  accroche: string;
   duree: string;
   exercices: Ex[];
   phases: Phase[];
@@ -16,7 +18,7 @@ interface Props {
   conclusion: string;
   note: string;
 }
-const { discipline, duree, exercices, phases, principes, conclusion, note } = Astro.props;
+const { discipline, sousTitre, accroche, duree, exercices, phases, principes, conclusion, note } = Astro.props;
 const base = import.meta.env.BASE_URL;
 
 const phasesUtilisees = phases.filter(p => exercices.some(e => e.phase === p.id));
@@ -31,6 +33,7 @@ const court = (t: string) => t.split(/\s+/).slice(0, 2).join(' ');
     <h1 class="mt-2 font-display text-[clamp(56px,12vw,120px)]">
       Échauffement <span class="text-accent">{discipline}</span>
     </h1>
+    <p class="mt-5 text-lg text-muted">{sousTitre}</p>
     <dl class="mt-6 flex flex-wrap gap-x-7 gap-y-2 tabular-nums">
       <div class="flex flex-col">
         <dt class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Durée</dt>
@@ -45,6 +48,7 @@ const court = (t: string) => t.split(/\s+/).slice(0, 2).join(' ');
         <dd class="font-display text-[32px] leading-[1.1]">{phasesUtilisees.length}</dd>
       </div>
     </dl>
+    <p class="mt-5 inline-flex px-3 py-1 rounded-full border border-line text-[13px] font-semibold text-muted">{accroche}</p>
   </div>
 </section>
 

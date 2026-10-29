@@ -3,9 +3,10 @@ import Layout from '../layouts/Layout.astro';
 import Programme from '../components/Programme.astro';
 import exercices from '../data/nogi.json';
 import phases from '../data/nogi-phases.json';
+import programmes from '../data/programmes.json';
 
 const principes = [
-  { titre: 'Durée totale', texte: '18-20 minutes, tous les mardis.' },
+  { titre: 'Durée totale', texte: `${programmes.nogi.duree}, tous les mardis.` },
   { titre: 'Zéro mouvement inutile', texte: 'Chaque drill est un pattern qui revient en combat réel.' },
   { titre: 'Montée progressive', texte: 'Du solo au partenaire, du lent au plus dynamique.' },
   { titre: "Répétable à l'infini", texte: "C'est un rituel, pas une surprise. Le corps apprend par la répétition." },
@@ -19,7 +20,9 @@ const principes = [
 >
   <Programme
     discipline="NOGI"
-    duree="18-20 min"
+    sousTitre="Tous les mardis · Dans l'ordre"
+    accroche="Zéro mouvement inutile"
+    duree={programmes.nogi.duree}
     exercices={exercices}
     phases={phases}
     principes={principes}
