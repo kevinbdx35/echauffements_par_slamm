@@ -4,10 +4,8 @@ import '../styles/global.css';
 interface Props {
   title: string;
   description?: string;
-  // Transitoire : les pages pas encore refondues gardent l'ancien conteneur
-  contained?: boolean;
 }
-const { title, description = 'Programme d\'échauffement NOGI et MMA par SLAMM', contained = true } = Astro.props;
+const { title, description = 'Programme d\'échauffement NOGI et MMA par SLAMM' } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const pathname = Astro.url.pathname;
 const isActive = (segment: string) => pathname.includes(`/${segment}`);
@@ -43,11 +41,7 @@ const isActive = (segment: string) => pathname.includes(`/${segment}`);
     </header>
 
     <main class="flex-1">
-      {contained ? (
-        <div class="max-w-4xl mx-auto px-4 py-6 sm:py-10"><slot /></div>
-      ) : (
-        <slot />
-      )}
+      <slot />
     </main>
 
     <footer class="border-t border-line">

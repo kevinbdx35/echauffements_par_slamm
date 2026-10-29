@@ -1,7 +1,7 @@
 @import '@fontsource-variable/archivo/wdth.css';
 
 /* Couleurs du site, en triplets RGB pour que Tailwind gère l'opacité (bg-surface/80).
-   Thème sombre par défaut. */
+   Thème sombre par défaut, thème clair selon le réglage de l'appareil. */
 :root {
   --c-bg: 11 11 13;
   --c-surface: 21 21 24;
@@ -13,6 +13,22 @@
   --c-accent: 229 72 77;
   --c-accent-strong: 220 38 38;
   color-scheme: dark;
+}
+
+/* Thème clair si l'appareil est réglé en clair */
+@media (prefers-color-scheme: light) {
+  :root {
+    --c-bg: 246 246 247;
+    --c-surface: 255 255 255;
+    --c-surface-2: 236 236 239;
+    --c-line: 222 222 226;
+    --c-fg: 24 24 27;
+    --c-muted: 82 82 91;
+    --c-faint: 161 161 170;
+    --c-accent: 212 42 48;
+    --c-accent-strong: 200 30 36;
+    color-scheme: light;
+  }
 }
 
 /* Titres : Archivo condensé, très gras, en majuscules */
@@ -28,4 +44,24 @@
 
 html {
   -webkit-tap-highlight-color: transparent;
+}
+
+/* Saut vers une phase : défilement fluide pour garder le repère spatial */
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--c-accent));
+  outline-offset: 3px;
+}
+
+/* Retour à la pression sur tout élément cliquable */
+.press {
+  transition-property: transform, color, background-color, border-color, opacity, box-shadow;
+  transition-duration: 150ms;
+  transition-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .press:active { transform: scale(0.97); }
 }
