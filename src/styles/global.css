@@ -9,7 +9,7 @@
   --c-line: 42 42 47;
   --c-fg: 244 244 245;
   --c-muted: 161 161 170;
-  --c-faint: 82 82 91;
+  --c-faint: 113 113 122;
   --c-accent: 229 72 77;
   --c-accent-strong: 220 38 38;
   color-scheme: dark;
@@ -24,7 +24,7 @@
     --c-line: 222 222 226;
     --c-fg: 24 24 27;
     --c-muted: 82 82 91;
-    --c-faint: 161 161 170;
+    --c-faint: 113 113 122;
     --c-accent: 212 42 48;
     --c-accent-strong: 200 30 36;
     color-scheme: light;
