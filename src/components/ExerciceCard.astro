@@ -16,139 +16,152 @@ const videos = youtubeIds
 const principale = videos[0];
 ---
 
-<div class="bg-gray-800 rounded-xl overflow-hidden border border-gray-700">
-  <div class="p-3 flex items-center gap-3">
-    <span class="text-5xl font-black text-red-500 leading-none shrink-0 w-14 text-center">
+<article class="exercice bg-gray-800 rounded-xl overflow-hidden border border-gray-700" data-titre={titre}>
+  <div class="p-4 flex items-start gap-3">
+    <span class="w-8 shrink-0 text-2xl font-black text-gray-400 tabular-nums leading-none pt-0.5">
       {String(numero).padStart(2, '0')}
     </span>
     <div class="flex-1 min-w-0">
       <h3 class="text-white font-bold text-base leading-tight">{titre}</h3>
+      {duree && (
+        <p class="mt-1.5 inline-block text-xs font-semibold text-gray-200 bg-gray-700 px-2 py-0.5 rounded-full">
+          {duree}
+        </p>
+      )}
       {description && (
-        <p class="text-gray-400 text-sm mt-0.5">{description}</p>
+        <p class="text-gray-400 text-sm leading-relaxed mt-2">{description}</p>
       )}
     </div>
-    {duree && (
-      <span class="shrink-0 text-xs font-semibold text-red-400 bg-red-500/10 px-2 py-1 rounded-full">
-        {duree}
-      </span>
-    )}
   </div>
   {videos.length > 0 ? (
     <div class="px-3 pb-3 flex flex-col gap-2">
       <div
-        class="main-video aspect-video w-full rounded-xl overflow-hidden shadow-lg relative cursor-pointer ring-4 ring-red-500"
+        class="main-video aspect-video w-full rounded-lg overflow-hidden relative bg-gray-950"
         data-video-id={principale.id}
         data-video-start={principale.start ?? ''}
       >
-        <img
-          src={`https://img.youtube.com/vi/${principale.id}/hqdefault.jpg`}
-          alt={titre}
-          class="w-full h-full object-cover"
-          loading="lazy"
-        />
+        <button type="button" class="play-btn group absolute inset-0 w-full h-full" aria-label={`Lire la vidéo : ${titre}`}>
+          <img
+            src={`https://img.youtube.com/vi/${principale.id}/hqdefault.jpg`}
+            alt=""
+            class="w-full h-full object-cover transition-opacity duration-150 ease-out"
+            loading="lazy"
+          />
+          <span class="play-icon absolute inset-0 flex items-center justify-center">
+            <span class="size-14 rounded-full bg-gray-950/70 backdrop-blur-sm flex items-center justify-center transition-transform duration-150 ease-out motion-safe:group-active:scale-95">
+              <span class="ml-1 size-5 bg-white [clip-path:polygon(0_0,100%_50%,0_100%)]"></span>
+            </span>
+          </span>
+        </button>
         <div class="video-error hidden absolute inset-0 flex items-center justify-center bg-gray-700">
           <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
         </div>
       </div>
       {videos.length > 1 && (
-        <div class="flex gap-2 overflow-x-auto pb-1 mt-2">
-          {videos.map((v, i) => (
-            <button
-              class:list={[
-                "comp-thumb shrink-0 w-24 aspect-video rounded-lg overflow-hidden transition-all",
-                i === 0 ? "opacity-100" : "opacity-60 hover:opacity-90"
-              ]}
-              data-video-id={v.id}
-              data-video-start={v.start ?? ''}
-              data-index={i}
-              aria-label={i === 0 ? "Vidéo principale" : `Vidéo complémentaire ${i}`}
-            >
-              <img
-                src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`}
-                alt={`${titre} — vidéo ${i + 1}`}
-                class="w-full h-full object-cover"
-                loading="lazy"
-              />
-            </button>
-          ))}
-        </div>
+        <>
+          <p class="video-caption text-xs text-gray-400">Vidéo principale</p>
+          <div class="flex gap-2 overflow-x-auto p-0.5 pb-1">
+            {videos.map((v, i) => (
+              <button
+                type="button"
+                class:list={[
+                  "comp-thumb shrink-0 w-24 aspect-video rounded-md overflow-hidden ring-2 transition-[opacity,transform] duration-150 ease-out motion-safe:active:scale-[0.97]",
+                  i === 0 ? "opacity-100 ring-accent-500" : "opacity-60 ring-transparent hover:opacity-90"
+                ]}
+                data-video-id={v.id}
+                data-video-start={v.start ?? ''}
+                data-index={i}
+                aria-label={i === 0 ? "Vidéo principale" : `Vidéo complémentaire ${i}`}
+                aria-pressed={i === 0 ? 'true' : 'false'}
+              >
+                <img
+                  src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`}
+                  alt=""
+                  class="w-full h-full object-cover"
+                  loading="lazy"
+                />
+              </button>
+            ))}
+          </div>
+        </>
       )}
     </div>
   ) : (
     <div class="mx-3 mb-3 rounded-lg bg-gray-700/40 border border-dashed border-gray-600 flex items-center justify-center py-4">
-      <span class="text-gray-500 text-xs">Vidéo à venir</span>
+      <span class="text-gray-400 text-xs">Vidéo à venir</span>
     </div>
   )}
-</div>
+</article>
 
 <script>
-  function attachMainVideoHandlers(mainEl: HTMLElement) {
-    const img = mainEl.querySelector('img');
-    if (img) {
-      img.addEventListener('error', () => {
-        img.classList.add('hidden');
-        mainEl.querySelector('.video-error')?.classList.remove('hidden');
-        mainEl.classList.remove('cursor-pointer');
-        mainEl.dataset.unavailable = 'true';
-      });
-    }
-    mainEl.addEventListener('click', () => {
-      if (mainEl.dataset.unavailable || mainEl.querySelector('iframe')) return;
-      const id = mainEl.dataset.videoId!;
-      const start = mainEl.dataset.videoStart;
-      const embedUrl = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1${start ? `&start=${start}` : ''}`;
-      const iframe = document.createElement('iframe');
-      iframe.src = embedUrl;
-      iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
-      iframe.allowFullscreen = true;
-      iframe.className = 'w-full h-full';
-      mainEl.innerHTML = '';
-      mainEl.appendChild(iframe);
-    });
+  function showError(mainEl: HTMLElement) {
+    mainEl.querySelector('.play-btn')?.classList.add('hidden');
+    mainEl.querySelector('.video-error')?.classList.remove('hidden');
+    mainEl.dataset.unavailable = 'true';
   }
 
-  document.querySelectorAll('.main-video').forEach(el => {
-    attachMainVideoHandlers(el as HTMLElement);
-  });
+  function watchThumbnail(mainEl: HTMLElement) {
+    const img = mainEl.querySelector<HTMLImageElement>('.play-btn img');
+    if (!img) return;
+    img.addEventListener('error', () => showError(mainEl), { once: true });
+    if (img.complete && img.naturalWidth === 0) showError(mainEl);
+  }
 
-  document.querySelectorAll('.comp-thumb').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const row = btn.closest('.flex') as HTMLElement;
-      const mainEl = row?.parentElement?.querySelector('.main-video') as HTMLElement | null;
-      if (!mainEl) return;
+  function setMainVideo(mainEl: HTMLElement, id: string, start: string) {
+    mainEl.dataset.videoId = id;
+    mainEl.dataset.videoStart = start;
+    delete mainEl.dataset.unavailable;
+    mainEl.querySelector('iframe')?.remove();
+    mainEl.querySelector('.video-error')?.classList.add('hidden');
 
-      const id = (btn as HTMLElement).dataset.videoId!;
-      const start = (btn as HTMLElement).dataset.videoStart ?? '';
-      const index = parseInt((btn as HTMLElement).dataset.index ?? '0');
+    const btn = mainEl.querySelector('.play-btn') as HTMLElement;
+    btn.classList.remove('hidden');
+    const img = btn.querySelector('img') as HTMLImageElement;
+    img.classList.add('opacity-0');
+    img.addEventListener('load', () => img.classList.remove('opacity-0'), { once: true });
+    img.addEventListener('error', () => showError(mainEl), { once: true });
+    img.src = `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+  }
 
-      mainEl.dataset.videoId = id;
-      mainEl.dataset.videoStart = start;
-      delete mainEl.dataset.unavailable;
-      mainEl.classList.add('cursor-pointer');
-      mainEl.innerHTML = `
-        <img src="https://img.youtube.com/vi/${id}/hqdefault.jpg" alt="" class="w-full h-full object-cover" />
-        <div class="video-error hidden absolute inset-0 flex items-center justify-center bg-gray-700">
-          <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
-        </div>
-      `;
-      attachMainVideoHandlers(mainEl);
+  function playMainVideo(mainEl: HTMLElement) {
+    if (mainEl.dataset.unavailable || mainEl.querySelector('iframe')) return;
+    const id = mainEl.dataset.videoId!;
+    const start = mainEl.dataset.videoStart;
+    const iframe = document.createElement('iframe');
+    iframe.src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1${start ? `&start=${start}` : ''}`;
+    iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.title = (mainEl.closest('.exercice') as HTMLElement)?.dataset.titre ?? '';
+    iframe.className = 'absolute inset-0 w-full h-full';
+    mainEl.querySelector('.play-btn')?.classList.add('hidden');
+    mainEl.appendChild(iframe);
+  }
 
-      // Border rouge si principale, grise si secondaire
-      if (index === 0) {
-        mainEl.classList.remove('ring-gray-600');
-        mainEl.classList.add('ring-red-500');
-      } else {
-        mainEl.classList.remove('ring-red-500');
-        mainEl.classList.add('ring-gray-600');
-      }
+  document.querySelectorAll<HTMLElement>('.exercice').forEach(card => {
+    const mainEl = card.querySelector<HTMLElement>('.main-video');
+    if (!mainEl) return;
+    watchThumbnail(mainEl);
 
-      // Highlight miniature active
-      row.querySelectorAll('.comp-thumb').forEach(t => {
-        t.classList.remove('opacity-100');
-        t.classList.add('opacity-60');
+    mainEl.querySelector('.play-btn')?.addEventListener('click', () => playMainVideo(mainEl));
+
+    const caption = card.querySelector('.video-caption');
+    const thumbs = card.querySelectorAll<HTMLElement>('.comp-thumb');
+    thumbs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.getAttribute('aria-pressed') === 'true') return;
+        const index = parseInt(btn.dataset.index ?? '0');
+        setMainVideo(mainEl, btn.dataset.videoId!, btn.dataset.videoStart ?? '');
+        if (caption) caption.textContent = index === 0 ? 'Vidéo principale' : `Vidéo complémentaire ${index}`;
+
+        thumbs.forEach(t => {
+          t.setAttribute('aria-pressed', 'false');
+          t.classList.remove('opacity-100', 'ring-accent-500');
+          t.classList.add('opacity-60', 'ring-transparent', 'hover:opacity-90');
+        });
+        btn.setAttribute('aria-pressed', 'true');
+        btn.classList.remove('opacity-60', 'ring-transparent', 'hover:opacity-90');
+        btn.classList.add('opacity-100', 'ring-accent-500');
       });
-      btn.classList.remove('opacity-60');
-      btn.classList.add('opacity-100');
     });
   });
 </script>
