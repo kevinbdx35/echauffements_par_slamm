@@ -1,0 +1,147 @@
+---
+import Icon from './Icon.astro';
+import Exercice from './Exercice.astro';
+
+type VideoEntry = string | { id: string; start?: number };
+interface Ex { id: number; phase: number; titre: string; description: string; youtube_ids: VideoEntry[]; duree: string }
+interface Phase { id: number; numero: string; titre: string; duree: string }
+interface Principe { titre: string; texte: string }
+
+interface Props {
+  discipline: string;
+  duree: string;
+  exercices: Ex[];
+  phases: Phase[];
+  principes: Principe[];
+  conclusion: string;
+  note: string;
+}
+const { discipline, duree, exercices, phases, principes, conclusion, note } = Astro.props;
+const base = import.meta.env.BASE_URL;
+
+const phasesUtilisees = phases.filter(p => exercices.some(e => e.phase === p.id));
+const court = (t: string) => t.split(/\s+/).slice(0, 2).join(' ');
+---
+
+<section>
+  <div class="max-w-site mx-auto px-4 md:px-8 pt-4 pb-8 lg:pt-10 lg:pb-14">
+    <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center gap-1.5 text-sm font-semibold text-muted transition-colors duration-150 hover:text-fg">
+      <Icon name="arrow-left" class="size-4" /> Accueil
+    </a>
+    <h1 class="mt-2 font-display text-[clamp(56px,12vw,120px)]">
+      Échauffement <span class="text-accent">{discipline}</span>
+    </h1>
+    <dl class="mt-6 flex flex-wrap gap-x-7 gap-y-2 tabular-nums">
+      <div class="flex flex-col">
+        <dt class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Durée</dt>
+        <dd class="font-display text-[32px] leading-[1.1] !normal-case">{duree}</dd>
+      </div>
+      <div class="flex flex-col">
+        <dt class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Exercices</dt>
+        <dd class="font-display text-[32px] leading-[1.1]">{exercices.length}</dd>
+      </div>
+      <div class="flex flex-col">
+        <dt class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Phases</dt>
+        <dd class="font-display text-[32px] leading-[1.1]">{phasesUtilisees.length}</dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<nav class="phase-chips lg:hidden sticky top-14 z-[5] border-b border-line bg-bg/90 backdrop-blur-md" aria-label="Phases">
+  <div class="chips-track max-w-site mx-auto px-4 md:px-8 py-2.5 flex gap-2 overflow-x-auto snap-x scroll-pl-4 md:scroll-pl-8">
+    {phasesUtilisees.map(p => (
+      <a href={`#phase-${p.id}`} data-phase={p.id} class="chip press snap-start shrink-0 inline-flex items-center gap-2 min-h-10 px-3.5 rounded-full border border-line text-sm font-semibold text-muted whitespace-nowrap">
+        <span class="chip-n text-faint tabular-nums">{p.id}</span>{court(p.titre)}
+      </a>
+    ))}
+  </div>
+</nav>
+
+<div class="max-w-site mx-auto px-4 md:px-8 pt-2 pb-20 lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-14">
+  <aside class="hidden lg:block sticky top-[88px] self-start" aria-label="Sommaire">
+    <p class="mb-3 text-xs font-bold uppercase tracking-[0.12em] text-muted">Phases</p>
+    <ol class="flex flex-col">
+      {phasesUtilisees.map(p => (
+        <li>
+          <a href={`#phase-${p.id}`} data-phase={p.id} class="toc-link transition-colors duration-150 grid grid-cols-[28px_1fr] gap-x-2 gap-y-0.5 py-2.5 border-t border-line text-muted hover:text-fg">
+            <span class="toc-n font-display text-xl leading-[1.1] text-faint tabular-nums">{p.id}</span>
+            <span class="text-sm font-semibold leading-snug">{p.titre}</span>
+            <span class="col-start-2 text-xs tabular-nums">{p.duree}</span>
+          </a>
+        </li>
+      ))}
+    </ol>
+    <div class="border-t border-line"></div>
+  </aside>
+
+  <div class="min-w-0">
+    {phasesUtilisees.map((p, i) => (
+      <section id={`phase-${p.id}`} class:list={["phase scroll-mt-32 lg:scroll-mt-24", i === 0 ? "pt-10" : "pt-[72px]"]} aria-labelledby={`phase-${p.id}-titre`}>
+        <header class="grid grid-cols-[auto_1fr] gap-x-4 items-end pb-5 border-b-2 border-fg">
+          <span class="font-display text-[clamp(64px,14vw,96px)] leading-[0.8] text-accent tabular-nums" aria-hidden="true">{p.id}</span>
+          <h2 id={`phase-${p.id}-titre`} class="font-display text-[clamp(28px,5vw,44px)]">{p.titre}</h2>
+          <p class="col-start-2 mt-1.5 text-sm font-semibold text-muted tabular-nums">{p.numero} · {p.duree}</p>
+        </header>
+        {exercices.filter(e => e.phase === p.id).map(ex => (
+          <Exercice
+            numero={ex.id}
+            titre={ex.titre}
+            description={ex.description}
+            youtubeIds={ex.youtube_ids}
+            duree={ex.duree}
+          />
+        ))}
+      </section>
+    ))}
+
+    <section class="mt-[88px]" aria-labelledby="principes">
+      <h2 id="principes" class="font-display text-[clamp(36px,7vw,64px)] pb-5 border-b-2 border-fg">Principes</h2>
+      <ul class="grid md:grid-cols-2 md:gap-x-10">
+        {principes.map(pr => (
+          <li class="py-5 border-b border-line">
+            <strong class="block text-lg leading-snug">{pr.titre}</strong>
+            <span class="block mt-1 text-muted">{pr.texte}</span>
+          </li>
+        ))}
+      </ul>
+      <p class="mt-10 text-[clamp(20px,2.6vw,26px)] leading-[1.4] font-medium max-w-[46ch] text-pretty">{conclusion}</p>
+      <p class="mt-6 text-sm text-muted">{note}</p>
+    </section>
+  </div>
+</div>
+
+<style>
+  .chips-track { scrollbar-width: none; }
+  .chips-track::-webkit-scrollbar { display: none; }
+  .chip[aria-current='true'] {
+    background: rgb(var(--c-fg));
+    border-color: rgb(var(--c-fg));
+    color: rgb(var(--c-bg));
+  }
+  .chip-n, .toc-n { transition: color 150ms ease; }
+  .chip[aria-current='true'] .chip-n,
+  .toc-link[aria-current='true'] .toc-n { color: rgb(var(--c-accent)); }
+  .toc-link[aria-current='true'] { color: rgb(var(--c-fg)); }
+</style>
+
+<script>
+  // Phase en cours : met à jour le sommaire et les pastilles au défilement
+  const sections = document.querySelectorAll<HTMLElement>('section.phase');
+  const links = document.querySelectorAll<HTMLElement>('[data-phase]');
+  const track = document.querySelector<HTMLElement>('.chips-track');
+
+  function setPhase(id: string) {
+    links.forEach(a => a.setAttribute('aria-current', String(a.dataset.phase === id)));
+    const chip = track?.querySelector<HTMLElement>(`[data-phase="${id}"]`);
+    if (track && chip && track.offsetParent) track.scrollLeft = chip.offsetLeft - parseFloat(getComputedStyle(track).paddingLeft);
+  }
+
+  if (sections.length) {
+    setPhase(sections[0].id.replace('phase-', ''));
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) setPhase(e.target.id.replace('phase-', '')); });
+    }, { rootMargin: '-30% 0px -60% 0px' });
+    sections.forEach(s => observer.observe(s));
+  }
+</script>

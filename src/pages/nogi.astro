@@ -1,89 +1,29 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import ExerciceCard from '../components/ExerciceCard.astro';
+import Programme from '../components/Programme.astro';
 import exercices from '../data/nogi.json';
 import phases from '../data/nogi-phases.json';
-const base = import.meta.env.BASE_URL;
 
-const getPhase = (id: number) => phases.find(p => p.id === id);
+const principes = [
+  { titre: 'Durée totale', texte: '18-20 minutes, tous les mardis.' },
+  { titre: 'Zéro mouvement inutile', texte: 'Chaque drill est un pattern qui revient en combat réel.' },
+  { titre: 'Montée progressive', texte: 'Du solo au partenaire, du lent au plus dynamique.' },
+  { titre: "Répétable à l'infini", texte: "C'est un rituel, pas une surprise. Le corps apprend par la répétition." },
+  { titre: 'Le cardio vient naturellement', texte: 'En enchaînant ces mouvements techniques avec fluidité, la fréquence cardiaque monte sans jamais faire de « gym ».' },
+];
 ---
 
 <Layout
   title="Échauffement NOGI"
   description="Échauffement rituel NOGI — applicable tous les mardis"
 >
-  <div class="mb-6">
-    <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center text-gray-400 text-sm transition-colors duration-150 hover:text-white">← Accueil</a>
-    <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Échauffement <span class="text-accent-500">NOGI</span></h1>
-    <p class="text-gray-400 text-sm mb-3">Tous les mardis · {exercices.length} exercices · Dans l'ordre</p>
-    <div class="flex flex-wrap gap-2">
-      <span class="text-xs font-semibold bg-accent-500/10 text-accent-400 border border-accent-500/20 rounded-full px-3 py-1">
-        18-20 min
-      </span>
-      <span class="text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700 rounded-full px-3 py-1">
-        Zéro mouvement inutile
-      </span>
-    </div>
-  </div>
-
-  <div class="flex flex-col gap-4">
-    {exercices.map((ex, index) => (
-      <>
-        {ex.phase > 0 && (index === 0 || exercices[index - 1].phase !== ex.phase) && (() => {
-          const phase = getPhase(ex.phase);
-          return phase ? (
-            <div class="flex items-center gap-3 mt-2">
-              <div class="flex-1 h-px bg-gray-700"></div>
-              <div class="text-center">
-                <span class="text-xs font-black text-accent-500 uppercase tracking-widest">{phase.numero}</span>
-                <p class="text-white font-bold text-sm">{phase.titre}</p>
-                <span class="text-xs text-gray-500">{phase.duree}</span>
-              </div>
-              <div class="flex-1 h-px bg-gray-700"></div>
-            </div>
-          ) : null;
-        })()}
-        <ExerciceCard
-          numero={ex.id}
-          titre={ex.titre}
-          description={ex.description}
-          youtubeIds={ex.youtube_ids}
-          duree={ex.duree}
-        />
-      </>
-    ))}
-  </div>
-
-  <div class="mt-10 bg-gray-800 border border-gray-700 rounded-xl p-5">
-    <h2 class="text-base font-black text-white mb-4">Principes de cet échauffement</h2>
-    <ul class="flex flex-col gap-3 mb-5">
-      <li class="flex gap-3">
-        <span class="text-accent-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Durée totale :</span> 18-20 minutes</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-accent-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Zéro mouvement inutile</span> : chaque drill est un pattern qui revient en combat réel</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-accent-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Montée progressive</span> : du solo au partenaire, du lent au plus dynamique</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-accent-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Répétable à l'infini</span> : c'est un rituel, pas une surprise. Le corps apprend par la répétition</span>
-      </li>
-      <li class="flex gap-3">
-        <span class="text-accent-500 font-black shrink-0">•</span>
-        <span class="text-gray-300 text-sm"><span class="text-white font-semibold">Le cardio vient naturellement</span> : en enchaînant ces mouvements techniques avec fluidité, la fréquence cardiaque monte sans jamais faire de "gym"</span>
-      </li>
-    </ul>
-    <p class="text-gray-400 text-sm border-t border-gray-700 pt-4">
-      Chaque minute de l'échauffement rend meilleur en grappling. Pas de jumping jacks, pas de pompes punitives. Du mouvement spécifique, du drilling léger, de la construction de réflexes.
-    </p>
-  </div>
-
-  <p class="mt-6 text-xs text-gray-400 text-center">
-    Cet échauffement rituel pourra s'ajuster dans le temps si besoin.
-  </p>
+  <Programme
+    discipline="NOGI"
+    duree="18-20 min"
+    exercices={exercices}
+    phases={phases}
+    principes={principes}
+    conclusion="Chaque minute de l'échauffement rend meilleur en grappling. Pas de jumping jacks, pas de pompes punitives. Du mouvement spécifique, du drilling léger, de la construction de réflexes."
+    note="Cet échauffement rituel pourra s'ajuster dans le temps si besoin."
+  />
 </Layout>

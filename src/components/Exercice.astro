@@ -1,4 +1,6 @@
 ---
+import Icon from './Icon.astro';
+
 type VideoEntry = string | { id: string; start?: number };
 
 interface Props {
@@ -16,27 +18,26 @@ const videos = youtubeIds
 const principale = videos[0];
 ---
 
-<article class="exercice bg-gray-800 rounded-xl overflow-hidden border border-gray-700" data-titre={titre}>
-  <div class="p-4 flex items-start gap-3">
-    <span class="w-8 shrink-0 text-2xl font-black text-gray-400 tabular-nums leading-none pt-0.5">
+<article class="exercice grid gap-4 py-7 border-b border-line lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-8 lg:py-9" data-titre={titre}>
+  <div class="min-w-0 grid grid-cols-[44px_minmax(0,1fr)] gap-x-3 content-start">
+    <span class="font-display text-[32px] leading-[0.95] text-faint tabular-nums" aria-hidden="true">
       {String(numero).padStart(2, '0')}
     </span>
-    <div class="flex-1 min-w-0">
-      <h3 class="text-white font-bold text-base leading-tight">{titre}</h3>
-      {duree && (
-        <p class="mt-1.5 inline-block text-xs font-semibold text-gray-200 bg-gray-700 px-2 py-0.5 rounded-full">
-          {duree}
-        </p>
-      )}
-      {description && (
-        <p class="text-gray-400 text-sm leading-relaxed mt-2">{description}</p>
-      )}
-    </div>
+    <h3 class="col-start-2 font-display text-[clamp(26px,4.4vw,32px)] leading-[0.98]">{titre}</h3>
+    {duree && (
+      <p class="col-start-2 justify-self-start mt-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-2 text-[13px] font-bold tabular-nums">
+        <Icon name="timer" class="size-3.5 text-accent" />{duree}
+      </p>
+    )}
+    {description && (
+      <p class="col-span-2 md:col-span-1 md:col-start-2 mt-3 text-muted max-w-[60ch]">{description}</p>
+    )}
   </div>
+
   {videos.length > 0 ? (
-    <div class="px-3 pb-3 flex flex-col gap-2">
+    <div class="min-w-0 flex flex-col gap-2.5">
       <div
-        class="main-video aspect-video w-full rounded-lg overflow-hidden relative bg-gray-950"
+        class="main-video relative aspect-video w-full rounded-xl overflow-hidden bg-surface-2"
         data-video-id={principale.id}
         data-video-start={principale.start ?? ''}
       >
@@ -47,26 +48,23 @@ const principale = videos[0];
             class="w-full h-full object-cover transition-opacity duration-150 ease-out"
             loading="lazy"
           />
-          <span class="play-icon absolute inset-0 flex items-center justify-center">
-            <span class="size-14 rounded-full bg-gray-950/70 backdrop-blur-sm flex items-center justify-center transition-transform duration-150 ease-out motion-safe:group-active:scale-95">
-              <span class="ml-1 size-5 bg-white [clip-path:polygon(0_0,100%_50%,0_100%)]"></span>
-            </span>
+          <span class="play-icon absolute inset-0 m-auto size-16 rounded-full bg-black/60 backdrop-blur-sm grid place-items-center text-white transition-[background-color,transform] duration-150 ease-out group-hover:bg-accent-strong motion-safe:group-active:scale-95">
+            <Icon name="play" class="size-[26px] ml-[3px]" />
           </span>
         </button>
-        <div class="video-error hidden absolute inset-0 flex items-center justify-center bg-gray-700">
-          <span class="text-gray-300 text-sm font-semibold">Vidéo indisponible</span>
+        <div class="video-error hidden absolute inset-0 flex items-center justify-center bg-surface-2">
+          <span class="text-muted text-sm font-semibold">Vidéo indisponible</span>
         </div>
       </div>
       {videos.length > 1 && (
-        <>
-          <p class="video-caption text-xs text-gray-400">Vidéo principale</p>
-          <div class="flex gap-2 overflow-x-auto p-0.5 pb-1">
+        <div class="flex flex-col-reverse gap-2">
+          <div class="flex gap-2 overflow-x-auto p-0.5">
             {videos.map((v, i) => (
               <button
                 type="button"
                 class:list={[
-                  "comp-thumb shrink-0 w-24 aspect-video rounded-md overflow-hidden ring-2 transition-[opacity,transform] duration-150 ease-out motion-safe:active:scale-[0.97]",
-                  i === 0 ? "opacity-100 ring-accent-500" : "opacity-60 ring-transparent hover:opacity-90"
+                  "comp-thumb press shrink-0 w-[88px] aspect-video rounded-md overflow-hidden bg-surface-2 ring-2",
+                  i === 0 ? "opacity-100 ring-accent" : "opacity-50 ring-transparent hover:opacity-80"
                 ]}
                 data-video-id={v.id}
                 data-video-start={v.start ?? ''}
@@ -74,21 +72,17 @@ const principale = videos[0];
                 aria-label={i === 0 ? "Vidéo principale" : `Vidéo complémentaire ${i}`}
                 aria-pressed={i === 0 ? 'true' : 'false'}
               >
-                <img
-                  src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`}
-                  alt=""
-                  class="w-full h-full object-cover"
-                  loading="lazy"
-                />
+                <img src={`https://img.youtube.com/vi/${v.id}/mqdefault.jpg`} alt="" class="w-full h-full object-cover" loading="lazy" />
               </button>
             ))}
           </div>
-        </>
+          <p class="video-caption text-[13px] text-muted" aria-live="polite">Vidéo principale</p>
+        </div>
       )}
     </div>
   ) : (
-    <div class="mx-3 mb-3 rounded-lg bg-gray-700/40 border border-dashed border-gray-600 flex items-center justify-center py-4">
-      <span class="text-gray-400 text-xs">Vidéo à venir</span>
+    <div class="rounded-xl border border-dashed border-line flex items-center justify-center py-6">
+      <span class="text-muted text-sm">Vidéo à venir</span>
     </div>
   )}
 </article>
@@ -155,12 +149,12 @@ const principale = videos[0];
 
         thumbs.forEach(t => {
           t.setAttribute('aria-pressed', 'false');
-          t.classList.remove('opacity-100', 'ring-accent-500');
-          t.classList.add('opacity-60', 'ring-transparent', 'hover:opacity-90');
+          t.classList.remove('opacity-100', 'ring-accent');
+          t.classList.add('opacity-50', 'ring-transparent', 'hover:opacity-80');
         });
         btn.setAttribute('aria-pressed', 'true');
-        btn.classList.remove('opacity-60', 'ring-transparent', 'hover:opacity-90');
-        btn.classList.add('opacity-100', 'ring-accent-500');
+        btn.classList.remove('opacity-50', 'ring-transparent', 'hover:opacity-80');
+        btn.classList.add('opacity-100', 'ring-accent');
       });
     });
   });
