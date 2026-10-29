@@ -1,0 +1,31 @@
+@import '@fontsource-variable/archivo/wdth.css';
+
+/* Couleurs du site, en triplets RGB pour que Tailwind gère l'opacité (bg-surface/80).
+   Thème sombre par défaut. */
+:root {
+  --c-bg: 11 11 13;
+  --c-surface: 21 21 24;
+  --c-surface-2: 32 32 36;
+  --c-line: 42 42 47;
+  --c-fg: 244 244 245;
+  --c-muted: 161 161 170;
+  --c-faint: 82 82 91;
+  --c-accent: 229 72 77;
+  --c-accent-strong: 220 38 38;
+  color-scheme: dark;
+}
+
+/* Titres : Archivo condensé, très gras, en majuscules */
+.font-display {
+  font-stretch: 68%;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: -0.005em;
+  word-spacing: 0.1em;
+  line-height: 0.92;
+  text-wrap: balance;
+}
+
+html {
+  -webkit-tap-highlight-color: transparent;
+}

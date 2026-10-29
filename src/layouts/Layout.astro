@@ -1,16 +1,20 @@
 ---
+import '../styles/global.css';
+
 interface Props {
   title: string;
   description?: string;
+  // Transitoire : les pages pas encore refondues gardent l'ancien conteneur
+  contained?: boolean;
 }
-const { title, description = 'Programme d\'échauffement NOGI et MMA par SLAMM' } = Astro.props;
+const { title, description = 'Programme d\'échauffement NOGI et MMA par SLAMM', contained = true } = Astro.props;
 const base = import.meta.env.BASE_URL;
 const pathname = Astro.url.pathname;
 const isActive = (segment: string) => pathname.includes(`/${segment}`);
 ---
 
 <!doctype html>
-<html lang="fr" class="bg-gray-950 text-white">
+<html lang="fr" class="bg-bg text-fg">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,27 +27,33 @@ const isActive = (segment: string) => pathname.includes(`/${segment}`);
     <meta property="og:url" content={Astro.url.href} />
     <meta property="og:site_name" content="Échauffements par SLAMM" />
   </head>
-  <body class="min-h-dvh">
-    <header class="border-b border-gray-800 sticky top-0 z-10 bg-gray-950/90 backdrop-blur-sm">
-      <div class="max-w-4xl mx-auto px-4 h-14 flex items-center justify-between">
-        <a href={base} class="h-full flex items-center whitespace-nowrap text-white font-black text-base tracking-tight">
-          <span class="text-accent-500 mr-1.5">⬡</span><span class="hidden sm:inline">Échauffements par&nbsp;</span>SLAMM
+  <body class="min-h-dvh flex flex-col font-sans antialiased">
+    <header class="sticky top-0 z-10 border-b border-line bg-bg/90 backdrop-blur-md">
+      <div class="max-w-site mx-auto px-4 md:px-8 h-14 flex items-center justify-between gap-4">
+        <a href={base} class="h-full flex items-center gap-2 whitespace-nowrap">
+          <span class="text-accent text-lg leading-none" aria-hidden="true">⬡</span>
+          <span class="font-display text-xl tracking-[0.01em]"><span class="hidden sm:inline">Échauffements par </span>SLAMM</span>
         </a>
-        <nav class="h-full flex gap-1 sm:gap-3">
-          <a href={`${base}mma`} class:list={["h-full flex items-center px-2 border-b-2 text-sm font-semibold", isActive('mma') ? "text-white border-accent-500" : "text-gray-400 border-transparent hover:text-white"]}>MMA</a>
-          <a href={`${base}nogi`} class:list={["h-full flex items-center px-2 border-b-2 text-sm font-semibold", isActive('nogi') ? "text-white border-accent-500" : "text-gray-400 border-transparent hover:text-white"]}>NOGI</a>
-          <a href={`${base}etirements`} class:list={["h-full flex items-center px-2 border-b-2 text-sm font-semibold", isActive('etirements') ? "text-white border-accent-500" : "text-gray-400 border-transparent hover:text-white"]}>Étirements</a>
+        <nav class="h-full flex" aria-label="Programmes">
+          <a href={`${base}mma`} aria-current={isActive('mma') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('mma') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>MMA</a>
+          <a href={`${base}nogi`} aria-current={isActive('nogi') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('nogi') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>NOGI</a>
+          <a href={`${base}etirements`} aria-current={isActive('etirements') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('etirements') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>Étirements</a>
         </nav>
       </div>
     </header>
 
-    <main class="max-w-4xl mx-auto px-4 py-6 sm:py-10">
-      <slot />
+    <main class="flex-1">
+      {contained ? (
+        <div class="max-w-4xl mx-auto px-4 py-6 sm:py-10"><slot /></div>
+      ) : (
+        <slot />
+      )}
     </main>
 
-    <footer class="border-t border-gray-800 mt-10 sm:mt-20">
-      <div class="max-w-4xl mx-auto px-4 py-5 text-center text-gray-400 text-xs">
-        Site créé par Kevin depuis la Bretagne
+    <footer class="border-t border-line">
+      <div class="max-w-site mx-auto px-4 md:px-8 py-6 flex flex-wrap justify-between gap-3 text-muted text-[13px]">
+        <span>Site créé par Kevin depuis la Bretagne</span>
+        <span>SLAMM</span>
       </div>
     </footer>
   </body>

@@ -1,0 +1,19 @@
+---
+// Icônes Phosphor, intégrées en SVG au build
+import arrowRight from '@phosphor-icons/core/bold/arrow-right-bold.svg?raw';
+import arrowLeft from '@phosphor-icons/core/bold/arrow-left-bold.svg?raw';
+import timer from '@phosphor-icons/core/bold/timer-bold.svg?raw';
+import download from '@phosphor-icons/core/bold/download-simple-bold.svg?raw';
+import play from '@phosphor-icons/core/fill/play-fill.svg?raw';
+
+const icons = { 'arrow-right': arrowRight, 'arrow-left': arrowLeft, timer, download, play };
+
+interface Props {
+  name: keyof typeof icons;
+  class?: string;
+}
+const { name, class: className = 'size-5' } = Astro.props;
+const svg = icons[name].replace('<svg ', `<svg class="${className}" aria-hidden="true" focusable="false" `);
+---
+
+<Fragment set:html={svg} />
