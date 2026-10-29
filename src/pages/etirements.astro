@@ -9,24 +9,24 @@ const pdfUrl = `${base}etirements.pdf`;
   description="Programme d'étirements après séance NOGI et MMA — 22 pages"
 >
   <div class="mb-6">
-    <a href={base} class="text-gray-500 text-sm">← Accueil</a>
-    <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Étirements <span class="text-red-500">fin de séance</span></h1>
+    <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center text-gray-400 text-sm transition-colors duration-150 hover:text-white">← Accueil</a>
+    <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Étirements <span class="text-accent-500">fin de séance</span></h1>
     <p class="text-gray-400 text-sm mb-3">À faire après chaque séance · 22 pages</p>
-    <div class="flex flex-wrap gap-2">
-      <span class="text-xs font-semibold bg-red-500/10 text-red-400 border border-red-500/20 rounded-full px-3 py-1">
-        ⏱ 15 min
+    <div class="flex flex-wrap items-center gap-2">
+      <span class="text-xs font-semibold bg-accent-500/10 text-accent-400 border border-accent-500/20 rounded-full px-3 py-1">
+        15 min
       </span>
       <a
         href={pdfUrl}
         download
-        class="text-xs font-semibold bg-gray-800 text-gray-400 border border-gray-700 rounded-full px-3 py-1 hover:text-white transition-colors"
+        class="text-xs font-semibold bg-gray-800 text-gray-300 border border-gray-700 rounded-full px-3 py-1 transition-[color,border-color,transform] duration-150 ease-out hover:text-white hover:border-gray-600 motion-safe:active:scale-[0.97]"
       >
-        ⬇ Télécharger le PDF
+        Télécharger le PDF
       </a>
     </div>
   </div>
 
-  <div id="loading" class="text-center text-gray-500 py-16">Chargement du PDF…</div>
+  <p id="loading" role="status" class="text-center text-gray-400 py-16">Chargement du PDF…</p>
   <div id="pdf-container" class="flex flex-col gap-3" data-pdf-url={pdfUrl}></div>
 </Layout>
 
@@ -40,28 +40,58 @@ const pdfUrl = `${base}etirements.pdf`;
     pdfjsLib.GlobalWorkerOptions.workerSrc =
       'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
+    // Plafonné à 2 : au-delà, la mémoire explose sur mobile pour un gain de netteté invisible
+    const outputScale = Math.min(window.devicePixelRatio || 1, 2);
+
+    async function renderPage(page, slot) {
+      const containerWidth = container.clientWidth || 700;
+      const viewport = page.getViewport({ scale: containerWidth / page.getViewport({ scale: 1 }).width });
+
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.floor(viewport.width * outputScale);
+      canvas.height = Math.floor(viewport.height * outputScale);
+      canvas.className = 'absolute inset-0 w-full h-full opacity-0 transition-opacity duration-200 ease-out';
+      slot.appendChild(canvas);
+
+      await page.render({
+        canvasContext: canvas.getContext('2d'),
+        transform: outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null,
+        viewport,
+      }).promise;
+      requestAnimationFrame(() => canvas.classList.remove('opacity-0'));
+    }
+
     try {
       const pdf = await pdfjsLib.getDocument(pdfUrl).promise;
       loading.remove();
 
+      // Réserve la hauteur de chaque page avant le rendu pour éviter les sauts de mise en page
+      const slots = [];
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
-        const containerWidth = container.clientWidth || 700;
-        const baseViewport = page.getViewport({ scale: 1 });
-        const scale = containerWidth / baseViewport.width;
-        const viewport = page.getViewport({ scale });
-
-        const canvas = document.createElement('canvas');
-        canvas.width = viewport.width;
-        canvas.height = viewport.height;
-        canvas.className = 'w-full rounded-xl bg-white';
-        container.appendChild(canvas);
-
-        await page.render({
-          canvasContext: canvas.getContext('2d'),
-          viewport,
-        }).promise;
+        const { width, height } = page.getViewport({ scale: 1 });
+        const slot = document.createElement('div');
+        slot.className = 'relative w-full rounded-xl overflow-hidden bg-gray-800';
+        slot.style.aspectRatio = `${width} / ${height}`;
+        slot.setAttribute('aria-label', `Page ${i} sur ${pdf.numPages}`);
+        slot.setAttribute('role', 'img');
+        container.appendChild(slot);
+        slots.push({ page, slot });
       }
+
+      // Rendu à l'approche du viewport seulement : 22 pages d'un coup bloquent un téléphone
+      const pending = new Map(slots.map(s => [s.slot, s.page]));
+      const observer = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const page = pending.get(entry.target);
+          if (!page) return;
+          pending.delete(entry.target);
+          observer.unobserve(entry.target);
+          renderPage(page, entry.target).catch(console.error);
+        });
+      }, { rootMargin: '800px 0px' });
+      slots.forEach(s => observer.observe(s.slot));
     } catch (e) {
       loading.textContent = 'Impossible de charger le PDF.';
       console.error(e);
