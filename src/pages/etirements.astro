@@ -1,5 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
 const base = import.meta.env.BASE_URL;
 const pdfUrl = `${base}etirements.pdf`;
 ---
@@ -7,27 +8,55 @@ const pdfUrl = `${base}etirements.pdf`;
 <Layout
   title="Étirements de fin de séance"
   description="Programme d'étirements après séance NOGI et MMA — 22 pages"
+ 
 >
-  <div class="mb-6">
-    <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center text-gray-400 text-sm transition-colors duration-150 hover:text-white">← Accueil</a>
-    <h1 class="text-2xl sm:text-4xl font-black mt-3 mb-1">Étirements <span class="text-accent-500">fin de séance</span></h1>
-    <p class="text-gray-400 text-sm mb-3">À faire après chaque séance · 22 pages</p>
-    <div class="flex flex-wrap items-center gap-2">
-      <span class="text-xs font-semibold bg-accent-500/10 text-accent-400 border border-accent-500/20 rounded-full px-3 py-1">
-        15 min
-      </span>
-      <a
-        href={pdfUrl}
-        download
-        class="text-xs font-semibold bg-gray-800 text-gray-300 border border-gray-700 rounded-full px-3 py-1 transition-[color,border-color,transform] duration-150 ease-out hover:text-white hover:border-gray-600 motion-safe:active:scale-[0.97]"
-      >
-        Télécharger le PDF
+  <section>
+    <div class="max-w-site mx-auto px-4 md:px-8 pt-4 pb-8 lg:pt-10 lg:pb-14">
+      <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center gap-1.5 text-sm font-semibold text-muted transition-colors duration-150 hover:text-fg">
+        <Icon name="arrow-left" class="size-4" /> Accueil
+      </a>
+      <h1 class="mt-2 font-display text-[clamp(56px,12vw,120px)]">
+        Étirements <span class="text-accent">fin de séance</span>
+      </h1>
+      <dl class="mt-6 flex flex-wrap gap-x-7 gap-y-2 tabular-nums">
+        <div class="flex flex-col">
+          <dt class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Durée</dt>
+          <dd class="font-display text-[32px] leading-[1.1] !normal-case">15 min</dd>
+        </div>
+        <div class="flex flex-col">
+          <dt class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Pages</dt>
+          <dd class="font-display text-[32px] leading-[1.1]">22</dd>
+        </div>
+      </dl>
+      <p class="mt-5 text-lg text-muted">À faire après chaque séance.</p>
+    </div>
+  </section>
+
+  <div class="lg:hidden sticky top-14 z-[5] border-b border-line bg-bg/90 backdrop-blur-md">
+    <div class="max-w-site mx-auto px-4 md:px-8 py-2.5 flex items-center justify-between gap-4">
+      <p class="text-sm font-semibold text-muted tabular-nums">Page <span class="page-current text-fg">1</span> / 22</p>
+      <a href={pdfUrl} download class="download press hover:border-muted inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-full border border-line text-sm font-semibold">
+        <Icon name="download" class="size-4" /> Télécharger le PDF
       </a>
     </div>
   </div>
 
-  <p id="loading" role="status" class="text-center text-gray-400 py-16">Chargement du PDF…</p>
-  <div id="pdf-container" class="flex flex-col gap-3" data-pdf-url={pdfUrl}></div>
+  <div class="max-w-site mx-auto px-4 md:px-8 pt-6 pb-20 lg:pt-2 lg:grid lg:grid-cols-[220px_minmax(0,760px)] lg:gap-14">
+    <aside class="hidden lg:flex flex-col gap-5 sticky top-[88px] self-start">
+      <div>
+        <p class="text-xs font-bold uppercase tracking-[0.12em] text-muted">Page</p>
+        <p class="font-display text-[56px] tabular-nums"><span class="page-current">1</span><span class="text-faint"> / 22</span></p>
+      </div>
+      <a href={pdfUrl} download class="download press hover:border-muted self-start inline-flex items-center gap-1.5 min-h-10 px-3.5 rounded-full border border-line text-sm font-semibold">
+        <Icon name="download" class="size-4" /> Télécharger le PDF
+      </a>
+    </aside>
+
+    <div class="min-w-0">
+      <p id="loading" role="status" class="text-center text-muted py-16">Chargement du PDF…</p>
+      <div id="pdf-container" class="flex flex-col gap-4" data-pdf-url={pdfUrl}></div>
+    </div>
+  </div>
 </Layout>
 
 <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -71,10 +100,11 @@ const pdfUrl = `${base}etirements.pdf`;
         const page = await pdf.getPage(i);
         const { width, height } = page.getViewport({ scale: 1 });
         const slot = document.createElement('div');
-        slot.className = 'relative w-full rounded-xl overflow-hidden bg-gray-800';
+        slot.className = 'relative w-full rounded-xl overflow-hidden bg-surface-2';
         slot.style.aspectRatio = `${width} / ${height}`;
         slot.setAttribute('aria-label', `Page ${i} sur ${pdf.numPages}`);
         slot.setAttribute('role', 'img');
+        slot.dataset.page = i;
         container.appendChild(slot);
         slots.push({ page, slot });
       }
@@ -92,6 +122,15 @@ const pdfUrl = `${base}etirements.pdf`;
         });
       }, { rootMargin: '800px 0px' });
       slots.forEach(s => observer.observe(s.slot));
+
+      // Compteur de page : la page qui occupe le milieu de l'écran
+      const counters = document.querySelectorAll('.page-current');
+      const counterObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) counters.forEach(c => { c.textContent = entry.target.dataset.page; });
+        });
+      }, { rootMargin: '-45% 0px -45% 0px' });
+      slots.forEach(s => counterObserver.observe(s.slot));
     } catch (e) {
       loading.textContent = 'Impossible de charger le PDF.';
       console.error(e);
