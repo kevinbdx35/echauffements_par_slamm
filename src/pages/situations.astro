@@ -185,12 +185,12 @@ const [format, disc, level] = groupes;
           <p id="round-label" class="font-display text-2xl tabular-nums"></p>
         </div>
       </div>
-      <div class="flex-1 w-full max-w-site mx-auto px-4 md:px-8 py-4 lg:py-8 grid gap-6 content-start lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12">
-        <div class="min-w-0 lg:col-start-1 lg:row-start-1">
+      <div id="session-grid" class="flex-1 w-full max-w-site mx-auto px-4 md:px-8 py-4 lg:py-8 grid gap-6 content-start lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12">
+        <div id="timer-box" class="min-w-0 lg:col-start-1 lg:row-start-1">
           <p id="timer" class="sit-timer font-display tabular-nums" role="timer">0:00</p>
           <p id="flash" class="sit-flash" aria-live="assertive"></p>
         </div>
-        <div class="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+        <div id="card-box" class="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2">
           <p id="card-label" class={label}></p>
           <div id="session-card" class="mt-2"></div>
         </div>
@@ -1109,10 +1109,13 @@ const [format, disc, level] = groupes;
   .sit-band { background: rgb(var(--c-surface-2)); color: rgb(var(--c-fg)); }
   .sit-band[data-phase='prep'] #phase-label { color: rgb(var(--c-accent)); }
   .sit-band[data-phase='work'] { background: rgb(var(--c-accent-strong)); color: #fff; }
+  #timer-box, #session-card { container-type: inline-size; }
   .sit-timer {
     font-size: clamp(112px, 30vw, 280px);
+    font-size: min(clamp(112px, 30vw, 280px), 62cqi);
     line-height: 0.85;
     letter-spacing: -0.02em;
+    white-space: nowrap;
   }
   .sit-flash {
     min-height: 1.5em;
@@ -1138,10 +1141,11 @@ const [format, disc, level] = groupes;
     border-radius: 0.75rem;
     padding: 10px 14px;
     display: grid;
+    align-content: start;
     gap: 6px;
   }
   .sit-pair-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .sit-pair-name { font-size: 18px; font-weight: 700; overflow-wrap: anywhere; }
+  .sit-pair-name { min-width: 0; font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: break-word; }
   .sit-warn { font-size: 13px; font-weight: 700; color: rgb(var(--c-accent)); }
   .sit-resting { margin-top: 10px; color: rgb(var(--c-muted)); }
   .sit-resting strong { color: rgb(var(--c-fg)); }
@@ -1211,13 +1215,32 @@ const [format, disc, level] = groupes;
   .sit-ctrl[data-confirm] { background: rgb(var(--c-accent-strong)); border-color: rgb(var(--c-accent-strong)); color: #fff; }
 
   /* Mode mur : lisible depuis le tapis */
-  #session[data-wall] .sit-timer { font-size: clamp(150px, 36vw, 440px); }
-  #session[data-wall] .sit-pos { font-size: clamp(56px, 13vw, 140px); }
+  /* Le chrono remplit la largeur de sa colonne sans déborder, ni dépasser la moitié de la hauteur */
+  #session[data-wall] .sit-timer { font-size: clamp(120px, 34vw, 420px); font-size: max(96px, min(62cqi, 48vh)); }
+  #session[data-wall] .sit-flash { font-size: 30px; }
+  #session[data-wall] .sit-pos { font-size: clamp(48px, 12vw, 132px); font-size: clamp(48px, 13cqi, 132px); }
   #session[data-wall] .sit-goal { font-size: 22px; }
   #session[data-wall] .sit-rule-text { font-size: 26px; }
   #session[data-wall] .sit-half-name { font-size: 40px; }
+  #session[data-wall] .sit-pairs { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
   #session[data-wall] .sit-pair-name { font-size: 26px; }
-  #session[data-wall] #round-label { font-size: 32px; }
+  #session[data-wall] #phase-label { font-size: 18px; }
+  #session[data-wall] #round-label { font-size: 34px; }
+  /* Grand écran : deux colonnes égales, le chrono a la place de grandir */
+  @media (min-width: 1024px) {
+    #session[data-wall] #session-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); max-width: none; }
+  }
+  /* Téléphone ou tablette en paysage : chrono et carte côte à côte, sans défiler */
+  @media (orientation: landscape) and (min-width: 640px) {
+    #session[data-wall] #session-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); grid-template-rows: auto 1fr; }
+    #session[data-wall] #timer-box { grid-column: 1; grid-row: 1; }
+    #session[data-wall] #card-box { grid-column: 2; grid-row: 1 / span 2; }
+    #session[data-wall] #people { grid-column: 1; grid-row: 2; }
+  }
+  /* Carte étroite : les deux rôles l'un sous l'autre pour que le texte agrandi ne se coupe pas */
+  @container (max-width: 560px) {
+    #session[data-wall] .sit-halves { grid-template-columns: minmax(0, 1fr); }
+  }
 
   /* Fin de séance */
   .sit-hist {
