@@ -8,7 +8,7 @@ Site de partage des programmes d'échauffement NOGI et MMA, construit avec [Astr
 
 - **NOGI** — Échauffement rituel tous les mardis · 18 exercices · 18–20 minutes · 5 phases
 - **MMA** — Arts martiaux mixtes · 18 exercices · 5 phases
-- **Situations** — Sparring à thème pendant la séance · 96 positions en 9 thèmes tirées au sort · chrono de rounds, binômes par poids ou roi du tapis
+- **Situations** — Sparring à thème pendant la séance · 96 positions en 9 thèmes tirées au sort · chrono de rounds et sons, tout le monde en même temps ou roi du tapis
 - **Étirements** — Programme de fin de séance · PDF 22 pages · 15 minutes
 
 ## Stack
@@ -99,7 +99,14 @@ Le paquet de la page Situations est dans `src/data/situations.json`. Il contient
 { "t": "Leg locks interdits", "d": "*", "g": true, "sauf": ["jambes"] }
 ```
 
-Les positions ajoutées depuis la page (« Situations du club ») restent dans le navigateur de l'appareil, avec les réglages et la liste des membres (clé `slamm-situations-v1` du `localStorage`).
+Les positions ajoutées depuis la page (« Situations du club ») restent dans le navigateur de l'appareil, avec les réglages (clé `slamm-situations-v1` du `localStorage`). La page ne gère ni noms ni poids : les pratiquants se mettent par deux eux-mêmes.
+
+### Formats de séance
+
+- **Tout le monde en même temps** : tous les binômes travaillent la même carte. Options : inverser les rôles à mi-round (« On inverse les rôles ! ») et changer de partenaire à chaque round (« Changez de partenaire » s'affiche pendant le repos).
+- **Roi du tapis** : le roi tient le rôle A, le challenger le rôle B. « Le roi garde sa place » augmente sa série de 1 ; « Le challenger prend la place » fait du challenger le nouveau roi, avec une série de 1. Sans clic, le roi garde sa place à la fin du round. Le résultat peut être corrigé pendant le repos, et sur l'écran de fin pour le dernier round, qui affiche la meilleure série de la séance.
+
+Le menu « Thème de la séance » indique le nombre de positions de chaque thème selon la discipline et le niveau choisis ; un thème vide est désactivé, et la sélection revient à « Tous les thèmes » s'il le devient.
 
 ## Déploiement
 

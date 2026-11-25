@@ -17,7 +17,7 @@ const steppers = [
   { key: 'restSec', titre: 'Repos', moins: 'Raccourcir le repos', plus: 'Allonger le repos' },
 ];
 const groupes = [
-  { name: 'format', titre: 'Format', options: [['pairs', 'Binômes en rotation'], ['kot', 'Roi du tapis']] },
+  { name: 'format', titre: 'Format', options: [['group', 'Tout le monde en même temps'], ['kot', 'Roi du tapis']] },
   { name: 'disc', titre: 'Discipline', options: [['all', 'Tout'], ['NOGI', 'NOGI'], ['MMA', 'MMA']] },
   { name: 'level', titre: 'Niveau', options: [['deb', 'Débutant'], ['conf', 'Confirmé']] },
 ];
@@ -26,7 +26,7 @@ const [format, disc, level] = groupes;
 
 <Layout
   title="Situations de sparring"
-  description={`Sparring à thème NOGI et MMA : ${data.positions.length} positions tirées au sort, binômes par poids et chrono de rounds.`}
+  description={`Sparring à thème NOGI et MMA : ${data.positions.length} positions tirées au sort, chrono de rounds et roi du tapis.`}
 >
   <section>
     <div class="max-w-site mx-auto px-4 md:px-8 pt-4 pb-8 lg:pt-10 lg:pb-14">
@@ -50,13 +50,13 @@ const [format, disc, level] = groupes;
           <dd class="font-display text-[32px] leading-[1.1]">{themes.length}</dd>
         </div>
       </dl>
-      <p class="mt-5 text-lg text-muted max-w-[46ch]">Tire une situation, forme les binômes et lance les rounds. Le téléphone sonne les départs et les fins.</p>
+      <p class="mt-5 text-lg text-muted max-w-[46ch]">Tire une situation et lance les rounds : chacun se met par deux. Le téléphone sonne les départs et les fins.</p>
     </div>
   </section>
 
-  <div class="max-w-site mx-auto px-4 md:px-8 pb-12 grid gap-12 lg:grid-cols-2 lg:gap-16 lg:items-start">
-    <!-- Colonne 1 : séance et paquet -->
-    <div class="min-w-0 flex flex-col gap-12">
+  <div class="max-w-site mx-auto px-4 md:px-8 pb-12">
+    <!-- Une seule colonne, alignée sur l'en-tête : séance, paquet, aperçu, situations du club -->
+    <div class="max-w-[720px] min-w-0 flex flex-col gap-12">
       <section aria-labelledby="h-seance">
         <h2 id="h-seance" class={label}>Séance</h2>
         <fieldset class="mt-4">
@@ -78,10 +78,17 @@ const [format, disc, level] = groupes;
               </div>
             </div>
           ))}
-          <label id="swap-row" class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-y border-line cursor-pointer">
-            <span class="font-semibold">Inverser les rôles à mi-round</span>
-            <input id="swap" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
-          </label>
+          <div id="group-opts">
+            <label class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-t border-line cursor-pointer">
+              <span class="font-semibold">Inverser les rôles à mi-round</span>
+              <input id="swap" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
+            </label>
+            <label class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-t border-line cursor-pointer">
+              <span class="font-semibold">Changer de partenaire à chaque round</span>
+              <input id="partner" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
+            </label>
+          </div>
+          <div class="border-t border-line"></div>
         </div>
       </section>
 
@@ -114,29 +121,6 @@ const [format, disc, level] = groupes;
           <button id="redraw" type="button" class={`${btn} whitespace-nowrap`}><Icon name="shuffle" class="size-4" /> Tirer une autre carte</button>
         </div>
         <div id="preview" class="mt-4" aria-live="polite"></div>
-      </section>
-    </div>
-
-    <!-- Colonne 2 : présents et situations du club -->
-    <div class="min-w-0 flex flex-col gap-12">
-      <section aria-labelledby="h-presents">
-        <div class="flex items-baseline justify-between gap-4">
-          <h2 id="h-presents" class={label}>Présents</h2>
-          <p id="present-count" class="text-sm font-semibold text-muted tabular-nums"></p>
-        </div>
-        <form id="add-member" class="mt-4 grid grid-cols-[minmax(0,1fr)_5.5rem_auto] gap-2">
-          <label class="sr-only" for="m-name">Prénom</label>
-          <input id="m-name" class={field} placeholder="Prénom" maxlength="40" autocomplete="off" required />
-          <label class="sr-only" for="m-weight">Poids en kg</label>
-          <input id="m-weight" class={`${field} px-3 text-center`} placeholder="kg" inputmode="decimal" type="number" min="20" max="250" step="0.5" />
-          <button type="submit" class={`${btn} bg-fg text-bg border-fg`} aria-label="Ajouter le membre"><Icon name="plus" class="size-4" /><span class="hidden sm:inline">Ajouter</span></button>
-        </form>
-        <div class="mt-3 flex flex-wrap gap-2">
-          <button id="check-all" type="button" class={btn}>Tout cocher</button>
-          <button id="check-none" type="button" class={btn}>Tout décocher</button>
-        </div>
-        <ul id="members" class="mt-4 border-b border-line"></ul>
-        <p id="members-empty" class="mt-4 text-muted">Ajoute les membres présents. Le poids sert à former des binômes équilibrés.</p>
       </section>
 
       <section aria-labelledby="h-club">
@@ -214,7 +198,7 @@ const [format, disc, level] = groupes;
       <p class={label}>Séance terminée</p>
       <p class="mt-2 font-display text-[clamp(48px,10vw,96px)]">Bien <span class="text-accent">joué</span></p>
       <div class="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
-        <div id="end-kot" hidden></div>
+        <div id="end-kot" class="min-w-0" hidden></div>
         <div>
           <p class={label}>Situations travaillées</p>
           <ol id="end-list" class="mt-3"></ol>
@@ -235,10 +219,8 @@ const [format, disc, level] = groupes;
 
   type Pos = { p: string; th: string; d: string; ra: string; rb: string; ga: string[]; gb: string[]; st?: boolean; sym?: boolean; lv?: string; club?: string };
   type Con = { t: string; d: string; g?: boolean; s?: boolean; a?: boolean; lv?: string; sauf?: string[] };
-  type Member = { id: string; name: string; w: number | null; on: boolean };
-  type Settings = { format: 'pairs' | 'kot'; rounds: number; roundSec: number; restSec: number; swap: boolean; disc: string; level: string; theme: string };
+  type Settings = { format: 'group' | 'kot'; rounds: number; roundSec: number; restSec: number; swap: boolean; partner: boolean; disc: string; level: string; theme: string };
   type Card = { p: string; th: string; disc: string; ra: string; rb: string; goalA: string; goalB: string; c: string; sym: boolean; conf: boolean; deb: boolean };
-  type Pair = { a: string; b: string; gap: number | null };
 
   const THEMES = data.themes as Record<string, string>;
   const BUILTIN = data.positions as Pos[];
@@ -250,22 +232,24 @@ const [format, disc, level] = groupes;
     restSec: [10, 15, 20, 30, 45, 60],
   };
   const PREP = 10;
-  const DEFAULTS: Settings = { format: 'pairs', rounds: 8, roundSec: 60, restSec: 20, swap: true, disc: 'all', level: 'deb', theme: 'all' };
+  const DEFAULTS: Settings = { format: 'group', rounds: 8, roundSec: 60, restSec: 20, swap: true, partner: true, disc: 'all', level: 'deb', theme: 'all' };
 
   /* ---------- Stockage ---------- */
-  const store = { settings: { ...DEFAULTS }, members: [] as Member[], club: [] as Pos[] };
+  // Le champ members des anciennes versions est ignoré, puis disparaît à la prochaine sauvegarde
+  const store = { settings: { ...DEFAULTS }, club: [] as Pos[] };
   try {
     const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
     if (raw && typeof raw === 'object') {
       const s = { ...DEFAULTS, ...(raw.settings || {}) };
       for (const k of ['rounds', 'roundSec', 'restSec']) if (!OPTS[k].includes(s[k])) s[k] = DEFAULTS[k];
-      if (!['pairs', 'kot'].includes(s.format)) s.format = DEFAULTS.format;
+      if (s.format === 'pairs') s.format = 'group';
+      if (!['group', 'kot'].includes(s.format)) s.format = DEFAULTS.format;
       if (!['all', 'NOGI', 'MMA'].includes(s.disc)) s.disc = DEFAULTS.disc;
       if (!['deb', 'conf'].includes(s.level)) s.level = DEFAULTS.level;
       if (s.theme !== 'all' && !THEMES[s.theme]) s.theme = 'all';
       s.swap = !!s.swap;
+      s.partner = s.partner !== false;
       store.settings = s;
-      if (Array.isArray(raw.members)) store.members = raw.members.filter((m: Member) => m && typeof m.name === 'string' && m.id).map((m: Member) => ({ id: String(m.id), name: m.name.slice(0, 40), w: typeof m.w === 'number' && m.w > 0 ? m.w : null, on: !!m.on }));
       if (Array.isArray(raw.club)) store.club = raw.club.filter((p: Pos) => p && typeof p.p === 'string' && THEMES[p.th] && Array.isArray(p.ga) && Array.isArray(p.gb));
     }
   } catch { /* stockage indisponible : on garde les valeurs par défaut */ }
@@ -275,20 +259,16 @@ const [format, disc, level] = groupes;
   const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
   const esc = (v: unknown) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
   const pick = <T,>(a: T[]): T => a[Math.floor(Math.random() * a.length)];
-  const shuffle = <T,>(a: T[]): T[] => { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
   const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
-  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
   const trashIcon = ($('ico-trash') as HTMLTemplateElement).innerHTML;
-  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   /* ---------- Paquet ---------- */
   const allPositions = () => [...BUILTIN, ...store.club];
   const discsOf = (p: Pos) => p.d.split(' ');
+  const matchesDeck = (p: Pos, s: Settings) =>
+    (s.disc === 'all' || discsOf(p).includes(s.disc)) && (s.level === 'conf' || p.lv !== 'conf');
   function eligible(s: Settings) {
-    return allPositions().filter(p =>
-      (s.disc === 'all' || discsOf(p).includes(s.disc)) &&
-      (s.level === 'conf' || p.lv !== 'conf') &&
-      (s.theme === 'all' || p.th === s.theme));
+    return allPositions().filter(p => matchesDeck(p, s) && (s.theme === 'all' || p.th === s.theme));
   }
   // Une contrainte ne contredit jamais la position
   function fits(c: Con, p: Pos, disc: string, level: string) {
@@ -343,7 +323,24 @@ const [format, disc, level] = groupes;
 
   /* ---------- Réglages ---------- */
   const S = () => store.settings;
-  const present = () => store.members.filter(m => m.on);
+
+  // Menu des thèmes : nombre de positions selon la discipline et le niveau, thèmes vides désactivés
+  function updateThemeOptions() {
+    const s = S();
+    const counts: Record<string, number> = {};
+    let total = 0;
+    for (const p of allPositions()) if (matchesDeck(p, s)) { counts[p.th] = (counts[p.th] || 0) + 1; total++; }
+    const select = $<HTMLSelectElement>('theme');
+    for (const o of Array.from(select.options)) {
+      const n = o.value === 'all' ? total : counts[o.value] || 0;
+      const name = o.value === 'all' ? 'Tous les thèmes' : THEMES[o.value];
+      o.textContent = `${name} (${n})`;
+      o.disabled = o.value !== 'all' && n === 0;
+    }
+    // Le thème choisi est devenu vide : retour à « Tous les thèmes »
+    if (s.theme !== 'all' && !counts[s.theme]) { s.theme = 'all'; save(); }
+    select.value = s.theme;
+  }
 
   function syncSettingsUI() {
     const s = S();
@@ -358,37 +355,24 @@ const [format, disc, level] = groupes;
       b.disabled = b.dataset.dir === '-1' ? i <= 0 : i >= o.length - 1;
     });
     $<HTMLInputElement>('swap').checked = s.swap;
-    $('swap-row').hidden = s.format === 'kot';
-    $<HTMLSelectElement>('theme').value = s.theme;
+    $<HTMLInputElement>('partner').checked = s.partner;
+    $('group-opts').hidden = s.format === 'kot';
+    updateThemeOptions();
     updateSummary();
   }
   function updateSummary() {
-    const s = S(), n = present().length;
+    const s = S();
     const total = PREP + s.rounds * s.roundSec + (s.rounds - 1) * s.restSec;
+    const empty = eligible(s).length === 0;
     const parts = [`${s.rounds} rounds de ${fmt(s.roundSec)}`, `environ ${Math.max(1, Math.round(total / 60))} min`];
-    if (n < 2) parts.push('coche au moins 2 présents');
-    else if (s.format === 'kot') parts.push(`1 roi, 1 challenger, ${n - 2} en file`);
-    else parts.push(`${Math.floor(n / 2)} binôme${n >= 4 ? 's' : ''}${n % 2 ? ' + 1 au repos' : ''}`);
+    if (empty) parts.push('aucune carte ne correspond aux filtres');
     $('summary').textContent = parts.join(' · ');
-    $<HTMLButtonElement>('start').disabled = n < 2;
+    $<HTMLButtonElement>('start').disabled = empty;
   }
   function renderPreview(animate = true) {
     const el = $('preview');
     el.innerHTML = cardHTML(draw(S()));
     if (animate) flip(el);
-  }
-  function renderMembers() {
-    const list = $('members');
-    list.innerHTML = store.members.map(m => `
-      <li class="sit-member"${m.on ? '' : ' data-off'}>
-        <label class="sit-check"><input type="checkbox" data-act="on" data-id="${esc(m.id)}"${m.on ? ' checked' : ''} /><span class="sit-name">${esc(m.name)}</span></label>
-        <label class="sit-weight"><span class="sr-only">Poids de ${esc(m.name)} en kg</span><input type="number" inputmode="decimal" min="20" max="250" step="0.5" placeholder="—" data-act="w" data-id="${esc(m.id)}" value="${m.w ?? ''}" /><span aria-hidden="true">kg</span></label>
-        <button type="button" class="sit-iconbtn press" data-act="del" data-id="${esc(m.id)}" aria-label="Supprimer ${esc(m.name)}">${trashIcon}</button>
-      </li>`).join('');
-    list.hidden = !store.members.length;
-    $('members-empty').hidden = !!store.members.length;
-    $('present-count').textContent = store.members.length ? `${present().length} présent${present().length > 1 ? 's' : ''} sur ${store.members.length}` : '';
-    updateSummary();
   }
   function renderClub() {
     $('club').innerHTML = store.club.map((p, i) => `
@@ -398,6 +382,8 @@ const [format, disc, level] = groupes;
         <button type="button" class="sit-iconbtn press" data-idx="${i}" aria-label="Retirer ${esc(p.p)} du paquet">${trashIcon}</button>
       </li>`).join('');
     $('count-pos').textContent = String(allPositions().length);
+    updateThemeOptions();
+    updateSummary();
   }
 
   document.querySelectorAll<HTMLInputElement>('input[name="format"], input[name="disc"], input[name="level"]').forEach(i => {
@@ -412,40 +398,9 @@ const [format, disc, level] = groupes;
     (S() as any)[k] = o[i]; save(); syncSettingsUI();
   }));
   $<HTMLInputElement>('swap').addEventListener('change', e => { S().swap = (e.target as HTMLInputElement).checked; save(); });
-  $<HTMLSelectElement>('theme').addEventListener('change', e => { S().theme = (e.target as HTMLSelectElement).value; save(); renderPreview(); });
+  $<HTMLInputElement>('partner').addEventListener('change', e => { S().partner = (e.target as HTMLInputElement).checked; save(); });
+  $<HTMLSelectElement>('theme').addEventListener('change', e => { S().theme = (e.target as HTMLSelectElement).value; save(); updateSummary(); renderPreview(); });
   $('redraw').addEventListener('click', () => renderPreview());
-
-  $<HTMLFormElement>('add-member').addEventListener('submit', e => {
-    e.preventDefault();
-    const nameEl = $<HTMLInputElement>('m-name'), wEl = $<HTMLInputElement>('m-weight');
-    const name = nameEl.value.trim().slice(0, 40);
-    if (!name) return;
-    const w = parseFloat(wEl.value.replace(',', '.'));
-    store.members.push({ id: uid(), name, w: w > 0 && w < 300 ? w : null, on: true });
-    save(); renderMembers();
-    nameEl.value = ''; wEl.value = ''; nameEl.focus();
-  });
-  $('members').addEventListener('change', e => {
-    const t = e.target as HTMLInputElement, m = store.members.find(x => x.id === t.dataset.id);
-    if (!m) return;
-    if (t.dataset.act === 'on') {
-      m.on = t.checked;
-      t.closest('li')?.toggleAttribute('data-off', !m.on);
-      $('present-count').textContent = `${present().length} présent${present().length > 1 ? 's' : ''} sur ${store.members.length}`;
-      updateSummary();
-    }
-    if (t.dataset.act === 'w') { const w = parseFloat(t.value); m.w = w > 0 && w < 300 ? w : null; }
-    save();
-  });
-  $('members').addEventListener('click', e => {
-    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-act="del"]');
-    if (!b) return;
-    store.members = store.members.filter(m => m.id !== b.dataset.id);
-    save(); renderMembers();
-  });
-  const checkAll = (on: boolean) => { store.members.forEach(m => { m.on = on; }); save(); renderMembers(); };
-  $('check-all').addEventListener('click', () => checkAll(true));
-  $('check-none').addEventListener('click', () => checkAll(false));
 
   $<HTMLFormElement>('add-club').addEventListener('submit', e => {
     e.preventDefault();
@@ -473,7 +428,6 @@ const [format, disc, level] = groupes;
   });
 
   syncSettingsUI();
-  renderMembers();
   renderClub();
   renderPreview(false);
 
@@ -513,68 +467,15 @@ const [format, disc, level] = groupes;
   }
   function releaseScreen() { try { wakeLock?.release(); } catch { /* déjà libéré */ } wakeLock = null; }
 
-  /* ---------- Binômes ---------- */
-  type Stats = { met: Record<string, number>; timesA: Record<string, number>; rests: Record<string, number> };
-  const pairKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`);
-  function makePairs(ids: string[], st: Stats, round: number, weight: (id: string) => number | null) {
-    const cost = (a: string, b: string) => {
-      const wa = weight(a), wb = weight(b);
-      return (wa != null && wb != null ? Math.abs(wa - wb) : 6) + 25 * (st.met[pairKey(a, b)] || 0);
-    };
-    // Glouton (la paire la moins chère d'abord), puis échanges de partenaires tant que le coût baisse
-    const pairUp = (pool: string[]) => {
-      const rem = shuffle(pool), pairs: [string, string][] = [];
-      while (rem.length > 1) {
-        let bi = 0, bj = 1, best = Infinity;
-        for (let i = 0; i < rem.length; i++) for (let j = i + 1; j < rem.length; j++) {
-          const c = cost(rem[i], rem[j]);
-          if (c < best) { best = c; bi = i; bj = j; }
-        }
-        pairs.push([rem[bi], rem[bj]]);
-        rem.splice(bj, 1); rem.splice(bi, 1);
-      }
-      let improved = true, guard = 0;
-      while (improved && guard++ < 50) {
-        improved = false;
-        for (let i = 0; i < pairs.length; i++) for (let j = i + 1; j < pairs.length; j++) {
-          const [a, b] = pairs[i], [c, d] = pairs[j], now = cost(a, b) + cost(c, d);
-          if (cost(a, c) + cost(b, d) < now - 0.01) { pairs[i] = [a, c]; pairs[j] = [b, d]; improved = true; }
-          else if (cost(a, d) + cost(b, c) < now - 0.01) { pairs[i] = [a, d]; pairs[j] = [b, c]; improved = true; }
-        }
-      }
-      return { pairs, total: pairs.reduce((t, [a, b]) => t + cost(a, b), 0) };
-    };
-    let rester: string | null = null;
-    let result: ReturnType<typeof pairUp>;
-    if (ids.length % 2) {
-      // Le repos tourne : parmi ceux qui se sont le moins reposés, celui qui laisse les binômes les plus équilibrés
-      const fewest = Math.min(...ids.map(id => st.rests[id] || 0));
-      const candidates = ids.filter(id => (st.rests[id] || 0) === fewest);
-      let best = Infinity;
-      result = { pairs: [], total: 0 };
-      for (const c of shuffle(candidates)) {
-        const r = pairUp(ids.filter(id => id !== c));
-        if (r.total < best) { best = r.total; result = r; rester = c; }
-      }
-    } else result = pairUp(ids);
-    const out: Pair[] = result.pairs.map(([x, y]) => {
-      const ax = st.timesA[x] || 0, ay = st.timesA[y] || 0;
-      const [a, b] = ax < ay || (ax === ay && Math.random() < 0.5) ? [x, y] : [y, x];
-      const wa = weight(a), wb = weight(b);
-      return { a, b, gap: wa != null && wb != null ? Math.abs(wa - wb) : null };
-    });
-    return { pairs: out, rester, round };
-  }
-
   /* ---------- Séance ---------- */
-  type Kot = { queue: string[]; king: string; chal: string; streak: Record<string, number>; best: Record<string, number>; wins: Record<string, number> };
+  // Roi du tapis : le roi tient le rôle A, le challenger le rôle B ; on suit la série du roi
+  type Kot = { streak: number; best: number };
   type Sess = {
-    set: Settings; names: Record<string, string>; weights: Record<string, number | null>;
+    set: Settings;
     phase: 'prep' | 'work' | 'rest' | 'done'; round: number; dur: number; end: number; prevRem: number;
     paused: boolean; left: number; swapped: boolean;
     card: Card | null; next: Card | null; history: { round: number; card: Card }[];
-    stats: Stats; pairs: ReturnType<typeof makePairs> | null; nextPairs: ReturnType<typeof makePairs> | null;
-    kot: Kot | null; snap: Kot | null; lastBout: { king: string; chal: string } | null; decision: 'king' | 'chal' | null;
+    kot: Kot | null; snap: Kot | null; decision: 'king' | 'chal' | null;
   };
   let ses: Sess | null = null;
   let raf = 0, interval = 0, flashTimer = 0, stopTimer = 0, lastShown = -1;
@@ -582,36 +483,20 @@ const [format, disc, level] = groupes;
   const clone = <T,>(o: T): T => JSON.parse(JSON.stringify(o));
 
   function kotDecide(k: Kot, kingWins: boolean) {
-    const bump = (id: string) => { k.wins[id] = (k.wins[id] || 0) + 1; k.best[id] = Math.max(k.best[id] || 0, k.streak[id] || 0); };
-    if (kingWins) {
-      k.streak[k.king] = (k.streak[k.king] || 0) + 1; bump(k.king);
-      k.streak[k.chal] = 0; k.queue.push(k.chal);
-    } else {
-      k.streak[k.king] = 0; k.queue.push(k.king);
-      k.king = k.chal; k.streak[k.king] = 1; bump(k.king);
-    }
-    k.chal = k.queue.shift() as string;
+    // Le roi garde sa place : sa série augmente. Le challenger prend la place : nouveau roi, série de 1
+    k.streak = kingWins ? k.streak + 1 : 1;
+    k.best = Math.max(k.best, k.streak);
   }
 
   function startSession() {
-    const ids = present().map(m => m.id);
-    if (ids.length < 2) return;
-    initAudio();
     const set = clone(S());
-    const names: Record<string, string> = {}, weights: Record<string, number | null> = {};
-    present().forEach(m => { names[m.id] = m.name; weights[m.id] = m.w; });
+    if (!eligible(set).length) return;
+    initAudio();
     ses = {
-      set, names, weights, phase: 'prep', round: 1, dur: 0, end: 0, prevRem: 0, paused: false, left: 0, swapped: false,
+      set, phase: 'prep', round: 1, dur: 0, end: 0, prevRem: 0, paused: false, left: 0, swapped: false,
       card: null, next: draw(set), history: [],
-      stats: { met: {}, timesA: {}, rests: {} }, pairs: null, nextPairs: null,
-      kot: null, snap: null, lastBout: null, decision: null,
+      kot: set.format === 'kot' ? { streak: 0, best: 0 } : null, snap: null, decision: null,
     };
-    if (set.format === 'kot') {
-      const q = shuffle(ids);
-      ses.kot = { king: q.shift() as string, chal: q.shift() as string, queue: q, streak: {}, best: {}, wins: {} };
-    } else {
-      ses.nextPairs = makePairs(ids, ses.stats, 1, id => weights[id]);
-    }
     overlay.hidden = false;
     $('live').hidden = false; $('end').hidden = true;
     document.documentElement.style.overflow = 'hidden';
@@ -638,18 +523,11 @@ const [format, disc, level] = groupes;
     if (phase === 'work') {
       s.card = s.next; s.next = null;
       if (s.card) s.history.push({ round: s.round, card: s.card });
-      if (s.nextPairs) {
-        s.pairs = s.nextPairs; s.nextPairs = null;
-        const st = s.stats;
-        s.pairs.pairs.forEach(p => { const k = pairKey(p.a, p.b); st.met[k] = (st.met[k] || 0) + 1; st.timesA[p.a] = (st.timesA[p.a] || 0) + 1; });
-        if (s.pairs.rester) st.rests[s.pairs.rester] = (st.rests[s.pairs.rester] || 0) + 1;
-      }
-      s.lastBout = null; s.decision = null; s.snap = null;
+      s.decision = null; s.snap = null;
       sounds.go();
     }
     if (phase === 'rest') {
       s.next = draw(s.set, s.history.slice(-3).map(h => h.card.p));
-      if (s.set.format === 'pairs') s.nextPairs = makePairs(Object.keys(s.names), s.stats, s.round + 1, id => s.weights[id]);
     }
     render(true);
   }
@@ -657,10 +535,9 @@ const [format, disc, level] = groupes;
   function endWork(at: number) {
     if (!ses) return;
     sounds.end();
-    // Roi du tapis : sans clic, le roi garde sa place (modifiable pendant le repos)
+    // Roi du tapis : sans clic, le roi garde sa place et sa série augmente (modifiable pendant le repos)
     if (ses.kot) {
       ses.snap = clone(ses.kot);
-      ses.lastBout = { king: ses.kot.king, chal: ses.kot.chal };
       kotDecide(ses.kot, true);
       ses.decision = 'king';
     }
@@ -688,7 +565,7 @@ const [format, disc, level] = groupes;
     if (ses.phase === 'work') {
       if (ses.dur > 20 && crossed(prev, rem, 10000)) sounds.ten();
       const mid = ses.dur * 500;
-      if (ses.set.format === 'pairs' && ses.set.swap && !ses.swapped && prev > mid && rem <= mid) {
+      if (ses.set.format === 'group' && ses.set.swap && !ses.swapped && prev > mid && rem <= mid) {
         ses.swapped = true;
         if (rem > mid - 1500) { sounds.swap(); flash('On inverse les rôles !', 3000); }
         render(false);
@@ -715,8 +592,6 @@ const [format, disc, level] = groupes;
     flashTimer = window.setTimeout(() => el.classList.remove('is-on'), ms);
   }
 
-  const nm = (id: string) => esc(ses?.names[id] ?? '');
-
   function render(newCard: boolean) {
     if (!ses) return;
     const s = ses;
@@ -728,59 +603,35 @@ const [format, disc, level] = groupes;
     $('card-label').textContent = s.phase === 'work' ? 'Carte du round' : s.phase === 'prep' ? 'Premier round' : 'Prochain round';
 
     const card = s.phase === 'work' ? s.card : s.next;
-    let names: { a?: string; b?: string; aNote?: string; bNote?: string } | undefined;
-    if (s.kot) {
-      names = { a: s.names[s.kot.king], b: s.names[s.kot.chal], aNote: `roi · série ${s.kot.streak[s.kot.king] || 0}` };
-    } else {
-      const P = s.phase === 'work' ? s.pairs : s.nextPairs;
-      if (P && P.pairs.length === 1) {
-        const p = P.pairs[0], sw = s.phase === 'work' && s.swapped;
-        names = { a: s.names[sw ? p.b : p.a], b: s.names[sw ? p.a : p.b] };
-      }
-    }
+    const names = s.kot ? { a: 'Roi', b: 'Challenger', aNote: `Série ${s.kot.streak}` } : undefined;
     const cardEl = $('session-card');
     cardEl.innerHTML = cardHTML(card, names);
     if (newCard) flip(cardEl);
-    $('people').innerHTML = s.kot ? kotHTML() : pairsHTML();
+    $('people').innerHTML = s.kot ? kotHTML() : groupHTML();
     showTime(s.paused ? s.left : s.end - Date.now());
   }
 
-  function pairsHTML() {
+  function groupHTML() {
     const s = ses as Sess;
-    const P = s.phase === 'work' ? s.pairs : s.nextPairs;
-    if (!P) return '';
-    const sw = s.phase === 'work' && s.swapped;
-    const rows = P.pairs.map(p => {
-      const a = sw ? p.b : p.a, b = sw ? p.a : p.b;
-      return `<li class="sit-pair">
-        <p class="sit-pair-row"><span class="sit-letter sit-letter-a">A</span><span class="sit-pair-name">${nm(a)}</span></p>
-        <p class="sit-pair-row"><span class="sit-letter sit-letter-b">B</span><span class="sit-pair-name">${nm(b)}</span></p>
-        ${p.gap != null && p.gap > 12 ? `<p class="sit-warn">Écart de ${Math.round(p.gap)} kg : contrôler l'intensité</p>` : ''}
-      </li>`;
-    }).join('');
-    return `<p class="sit-label">${s.phase === 'work' ? 'Binômes' : 'Binômes du prochain round'}${sw ? ' · rôles inversés' : ''}</p>
-      <ul class="sit-pairs">${rows}</ul>
-      ${P.rester ? `<p class="sit-resting">Au repos : <strong>${nm(P.rester)}</strong></p>` : ''}`;
+    if (s.phase === 'rest' && s.set.partner) return '<p class="sit-partner font-display">Changez de partenaire</p>';
+    if (s.phase === 'work' && s.swapped) return '<p class="sit-note">Rôles inversés : A devient B, B devient A</p>';
+    return '';
   }
 
   function kotHTML() {
     const s = ses as Sess, k = s.kot as Kot;
-    let buttons = '';
+    const streak = `<div class="sit-streak"><p class="sit-label">Série du roi</p><p class="sit-streak-n font-display">${k.streak}</p></div>`;
     if (s.phase === 'work') {
-      buttons = `<p class="sit-label">Qui gagne ?</p><div class="sit-kot-btns">
-        <button type="button" class="sit-btn press" data-kot="king">${nm(k.king)} garde sa place</button>
-        <button type="button" class="sit-btn press" data-kot="chal">${nm(k.chal)} prend la place</button></div>`;
-    } else if (s.phase === 'rest' && s.lastBout) {
-      const lb = s.lastBout;
-      buttons = `<p class="sit-label">Round terminé : qui a gagné ?</p><div class="sit-kot-btns">
-        <button type="button" class="sit-btn press" data-kot="king" aria-pressed="${s.decision === 'king'}">${nm(lb.king)} garde sa place</button>
-        <button type="button" class="sit-btn press" data-kot="chal" aria-pressed="${s.decision === 'chal'}">${nm(lb.chal)} prend la place</button></div>`;
+      return `${streak}<p class="sit-label sit-mt">Qui gagne ?</p><div class="sit-kot-btns">
+        <button type="button" class="sit-btn press" data-kot="king">Le roi garde sa place</button>
+        <button type="button" class="sit-btn press" data-kot="chal">Le challenger prend la place</button></div>`;
     }
-    const queue = k.queue.length
-      ? `<ol class="sit-queue">${k.queue.map((id, i) => `<li><span class="sit-queue-n">${i + 1}</span>${nm(id)}</li>`).join('')}</ol>`
-      : '<p class="sit-resting">Personne en attente</p>';
-    return `${buttons}
-      <p class="sit-label sit-mt">File d'attente</p>${queue}`;
+    if (s.phase === 'rest' && s.snap) {
+      return `${streak}<p class="sit-label sit-mt">Round terminé : qui a gagné ?</p><div class="sit-kot-btns">
+        <button type="button" class="sit-btn press" data-kot="king" aria-pressed="${s.decision === 'king'}">Le roi garde sa place</button>
+        <button type="button" class="sit-btn press" data-kot="chal" aria-pressed="${s.decision === 'chal'}">Le challenger prend la place</button></div>`;
+    }
+    return streak;
   }
 
   function kotClick(which: 'king' | 'chal') {
@@ -788,15 +639,15 @@ const [format, disc, level] = groupes;
     const s = ses;
     if (s.phase === 'work') {
       kotDecide(s.kot, which === 'king');
-      sounds.next();
-      flash(`Au suivant : ${s.names[s.kot.chal]}`, 2000);
-      render(false);
     } else if (s.phase === 'rest' && s.snap && s.decision !== which) {
+      // Correction du résultat du round qui vient de finir
       s.kot = clone(s.snap);
       kotDecide(s.kot, which === 'king');
       s.decision = which;
-      render(false);
-    }
+    } else return;
+    sounds.next();
+    flash('Au suivant !', 2000);
+    render(false);
   }
   $('people').addEventListener('click', e => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-kot]');
@@ -877,15 +728,11 @@ const [format, disc, level] = groupes;
     const box = $('end-kot');
     box.hidden = !s.kot;
     if (!s.kot) { box.innerHTML = ''; return; }
-    const k = s.kot;
-    const rank = Object.keys(s.names).sort((a, b) => (k.best[b] || 0) - (k.best[a] || 0) || (k.wins[b] || 0) - (k.wins[a] || 0));
-    const lb = s.lastBout;
     box.innerHTML = `
-      ${lb && s.snap ? `<p class="sit-label">Dernier combat</p><div class="sit-kot-btns sit-mb">
-        <button type="button" class="sit-btn press" data-end="king" aria-pressed="${s.decision === 'king'}">${nm(lb.king)} garde sa place</button>
-        <button type="button" class="sit-btn press" data-end="chal" aria-pressed="${s.decision === 'chal'}">${nm(lb.chal)} prend la place</button></div>` : ''}
-      <p class="sit-label">Classement par meilleure série</p>
-      <ol class="mt-3">${rank.map((id, i) => `<li class="sit-hist"><span class="sit-hist-n">${i + 1}</span><div class="min-w-0"><p class="sit-hist-p">${nm(id)}</p><p class="sit-hist-c">Meilleure série ${k.best[id] || 0} · ${k.wins[id] || 0} victoire${(k.wins[id] || 0) > 1 ? 's' : ''}</p></div></li>`).join('')}</ol>`;
+      ${s.snap ? `<p class="sit-label">Dernier round : qui a gagné ?</p><div class="sit-kot-btns sit-mb">
+        <button type="button" class="sit-btn press" data-end="king" aria-pressed="${s.decision === 'king'}">Le roi garde sa place</button>
+        <button type="button" class="sit-btn press" data-end="chal" aria-pressed="${s.decision === 'chal'}">Le challenger prend la place</button></div>` : ''}
+      <div class="sit-streak"><p class="sit-label">Meilleure série de la séance</p><p class="sit-streak-n font-display">${s.kot.best}</p></div>`;
   }
   $('end-kot').addEventListener('click', e => {
     const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-end]');
@@ -1018,8 +865,9 @@ const [format, disc, level] = groupes;
     font-weight: 800;
     text-transform: uppercase;
     font-size: 28px;
+    font-size: clamp(18px, 6cqi, 28px);
     line-height: 1;
-    overflow-wrap: anywhere;
+    overflow-wrap: break-word;
   }
   .sit-half-note {
     display: block;
@@ -1061,32 +909,7 @@ const [format, disc, level] = groupes;
     .sit-flip { animation: sit-fade 150ms ease-out both; }
   }
 
-  /* Présents */
-  .sit-member {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto auto;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 0;
-    border-top: 1px solid rgb(var(--c-line));
-  }
-  .sit-check { display: flex; align-items: center; gap: 12px; min-height: 44px; min-width: 0; cursor: pointer; }
-  .sit-check input { flex: none; width: 22px; height: 22px; accent-color: rgb(var(--c-accent-strong)); cursor: pointer; }
-  .sit-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 150ms ease; }
-  .sit-member[data-off] .sit-name { color: rgb(var(--c-faint)); }
-  .sit-weight { display: flex; align-items: center; gap: 6px; font-size: 14px; color: rgb(var(--c-muted)); }
-  .sit-weight input {
-    width: 4.5rem;
-    min-height: 40px;
-    padding: 0 8px;
-    border-radius: 999px;
-    border: 1px solid rgb(var(--c-line));
-    background: rgb(var(--c-surface));
-    color: rgb(var(--c-fg));
-    font-size: 16px;
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-  }
+  /* Situations du club */
   .sit-iconbtn {
     display: grid;
     place-items: center;
@@ -1134,26 +957,15 @@ const [format, disc, level] = groupes;
   }
   .sit-flash.is-on { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .sit-flash { transform: none; } }
-  .sit-pairs {
-    margin-top: 8px;
-    display: grid;
-    gap: 8px;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
-  }
-  .sit-pair {
-    border: 1px solid rgb(var(--c-line));
-    background: rgb(var(--c-surface));
-    border-radius: 0.75rem;
-    padding: 10px 14px;
-    display: grid;
-    align-content: start;
-    gap: 6px;
-  }
-  .sit-pair-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
-  .sit-pair-name { min-width: 0; font-size: 18px; font-weight: 700; line-height: 1.2; overflow-wrap: break-word; }
-  .sit-warn { font-size: 13px; font-weight: 700; color: rgb(var(--c-accent)); }
   .sit-resting { margin-top: 10px; color: rgb(var(--c-muted)); }
-  .sit-resting strong { color: rgb(var(--c-fg)); }
+  /* Repos en format « tout le monde » : consigne lisible depuis le tapis */
+  .sit-partner {
+    font-size: clamp(36px, 10vw, 64px);
+    color: rgb(var(--c-accent));
+  }
+  .sit-note { font-size: 18px; font-weight: 700; color: rgb(var(--c-muted)); }
+  .sit-streak { display: flex; flex-direction: column; }
+  .sit-streak-n { font-size: 64px; line-height: 1; font-variant-numeric: tabular-nums; }
   .sit-kot-btns { margin-top: 8px; display: grid; gap: 8px; }
   @media (min-width: 480px) { .sit-kot-btns { grid-template-columns: 1fr 1fr; } }
   .sit-btn {
@@ -1168,28 +980,6 @@ const [format, disc, level] = groupes;
   }
   @media (hover: hover) and (pointer: fine) { .sit-btn:hover { border-color: rgb(var(--c-muted)); } }
   .sit-btn[aria-pressed='true'] { background: rgb(var(--c-fg)); border-color: rgb(var(--c-fg)); color: rgb(var(--c-bg)); }
-  .sit-queue { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
-  .sit-queue li {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 36px;
-    padding: 0 14px 0 6px;
-    border-radius: 999px;
-    border: 1px solid rgb(var(--c-line));
-    font-weight: 600;
-  }
-  .sit-queue-n {
-    display: inline-grid;
-    place-items: center;
-    width: 24px;
-    height: 24px;
-    border-radius: 999px;
-    background: rgb(var(--c-surface-2));
-    font-size: 12px;
-    font-weight: 800;
-    font-variant-numeric: tabular-nums;
-  }
   .sit-ctrl {
     display: inline-flex;
     flex-direction: column;
@@ -1226,9 +1016,10 @@ const [format, disc, level] = groupes;
   #session[data-wall] .sit-pos { font-size: clamp(40px, 12vw, 132px); font-size: clamp(34px, 13cqi, 132px); }
   #session[data-wall] .sit-goal { font-size: 22px; }
   #session[data-wall] .sit-rule-text { font-size: 26px; }
-  #session[data-wall] .sit-half-name { font-size: 40px; }
-  #session[data-wall] .sit-pairs { grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); }
-  #session[data-wall] .sit-pair-name { font-size: 26px; }
+  #session[data-wall] .sit-half-name { font-size: 40px; font-size: clamp(22px, 9cqi, 40px); }
+  #session[data-wall] .sit-partner { font-size: clamp(48px, 12vw, 110px); }
+  #session[data-wall] .sit-streak-n { font-size: 96px; }
+  #session[data-wall] .sit-btn { min-height: 64px; font-size: 20px; }
   #session[data-wall] #phase-label { font-size: 18px; }
   #session[data-wall] #round-label { font-size: 34px; }
   /* Grand écran : deux colonnes égales, le chrono a la place de grandir */
