@@ -8,25 +8,22 @@
     "rounds": [
       {
         "p": "Monté",
-        "d": "NOGI MMA",
         "ra": "Dessous",
         "rb": "Dessus",
-        "ga": "Revenir en garde ou finir dessus (demi-garde = non)",
-        "gb": "Soumettre. Transitions libres si tu restes dominant",
+        "ga": "Garde complète ou dessus, pas la demi-garde",
+        "gb": "Soumettre en restant dominant",
         "reset": "Retour en garde, dessous qui finit dessus ou soumission → on repart en monté, rôles inversés"
       },
       {
         "p": "Tortue",
-        "d": "NOGI MMA",
         "ra": "En tortue",
         "rb": "Attaquant",
-        "ga": "Revenir en garde ou finir dessus (demi-garde = non)",
-        "gb": "Soumettre. Transitions libres si tu restes dominant",
+        "ga": "Garde complète ou dessus, pas la demi-garde",
+        "gb": "Soumettre en restant dominant",
         "reset": "Retour en garde, dessous qui finit dessus ou soumission → on repart en tortue, rôles inversés"
       },
       {
         "p": "Single leg au sol",
-        "d": "NOGI MMA",
         "ra": "Jambe tenue",
         "rb": "Attaquant",
         "ga": "Finir clairement dessus.",
@@ -35,7 +32,6 @@
       },
       {
         "p": "Garde fermée",
-        "d": "NOGI MMA",
         "ra": "Garde",
         "rb": "Dans la garde",
         "ga": "Renverser ou soumettre.",
@@ -44,7 +40,6 @@
       },
       {
         "p": "Garde ouverte",
-        "d": "NOGI MMA",
         "ra": "Garde",
         "rb": "Passeur",
         "ga": "Renverser ou soumettre.",
@@ -53,7 +48,6 @@
       },
       {
         "p": "Debout",
-        "d": "NOGI MMA",
         "ra": "Combattant A",
         "rb": "Combattant B",
         "ga": "Amener au sol, puis soumettre.",
@@ -85,7 +79,6 @@
     "chaines": [
       {
         "nom": "Dos",
-        "d": "NOGI MMA",
         "etapes": [
           "Mata-leão engagé, main au menton",
           "Dos pris, crochets en place",
@@ -95,7 +88,6 @@
       },
       {
         "nom": "Monté",
-        "d": "NOGI MMA",
         "etapes": [
           "Clé de bras depuis le monté",
           "Monté haut",
@@ -105,7 +97,6 @@
       },
       {
         "nom": "Garde fermée",
-        "d": "NOGI MMA",
         "etapes": [
           "Triangle verrouillé",
           "Garde fermée, posture cassée",
@@ -114,7 +105,6 @@
       },
       {
         "nom": "Jambes",
-        "d": "NOGI",
         "etapes": [
           "Clé de cheville engagée",
           "Ashi garami",
@@ -124,7 +114,6 @@
       },
       {
         "nom": "Front headlock",
-        "d": "NOGI MMA",
         "etapes": [
           "Darce engagé",
           "Front headlock au sol",
@@ -134,7 +123,6 @@
       },
       {
         "nom": "Passage",
-        "d": "NOGI MMA",
         "etapes": [
           "Knee cut engagé",
           "Demi-garde avec knee shield",

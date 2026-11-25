@@ -6,15 +6,12 @@
     "jambes": "Jeu de jambes",
     "soum": "Soumissions engagées",
     "debout": "Lutte & clinch",
-    "cage": "Cage",
-    "frappes": "Sol avec frappes",
     "scramble": "Transitions & scrambles"
   },
   "positions": [
     {
       "p": "Garde fermée",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Dans la garde",
       "ga": [
@@ -30,7 +27,6 @@
     {
       "p": "Garde fermée, posture cassée",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Dans la garde",
       "ga": [
@@ -45,7 +41,6 @@
     {
       "p": "Garde fermée, le dessus debout",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Debout dans la garde",
       "ga": [
@@ -59,7 +54,6 @@
     {
       "p": "Garde haute, jambes sous les aisselles",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Dans la garde",
       "ga": [
@@ -74,7 +68,6 @@
     {
       "p": "Demi-garde, dessous avec l'underhook",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -89,7 +82,6 @@
     {
       "p": "Demi-garde, dessous aplati (crossface)",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -104,7 +96,6 @@
     {
       "p": "Demi-garde profonde (deep half)",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -119,7 +110,6 @@
     {
       "p": "Demi-garde avec knee shield",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -135,7 +125,6 @@
     {
       "p": "Lockdown (demi-garde verrouillée)",
       "th": "garde",
-      "d": "NOGI",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -149,7 +138,6 @@
     {
       "p": "Garde papillon",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Dans la garde",
       "ga": [
@@ -164,7 +152,6 @@
     {
       "p": "Garde papillon, underhook pour le dessous",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Dans la garde",
       "ga": [
@@ -178,7 +165,6 @@
     {
       "p": "Garde ouverte, passeur debout",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Debout",
       "ga": [
@@ -193,7 +179,6 @@
     {
       "p": "Garde ouverte, passeur à genoux",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "À genoux",
       "ga": [
@@ -208,7 +193,6 @@
     {
       "p": "Assis contre debout",
       "th": "garde",
-      "d": "NOGI",
       "ra": "Assis",
       "rb": "Debout",
       "ga": [
@@ -223,7 +207,6 @@
     {
       "p": "Garde X",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Debout",
       "ga": [
@@ -237,7 +220,6 @@
     {
       "p": "Garde inversée",
       "th": "garde",
-      "d": "NOGI",
       "ra": "Garde",
       "rb": "Passeur",
       "ga": [
@@ -254,7 +236,6 @@
     {
       "p": "Leg drag en place",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Passeur",
       "ga": [
@@ -269,7 +250,6 @@
     {
       "p": "Knee cut engagé",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Passeur",
       "ga": [
@@ -284,7 +264,6 @@
     {
       "p": "Body lock pass engagé",
       "th": "garde",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Passeur",
       "ga": [
@@ -299,7 +278,6 @@
     {
       "p": "Contrôle latéral (cem quilos)",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -314,7 +292,6 @@
     {
       "p": "Contrôle latéral, dessous avec ses cadres",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -329,7 +306,6 @@
     {
       "p": "Contrôle latéral, le dessous a l'underhook",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -343,7 +319,6 @@
     {
       "p": "Kesa gatame (tête et bras)",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -358,7 +333,6 @@
     {
       "p": "Kesa inversé",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -372,7 +346,6 @@
     {
       "p": "Monté bas (montada)",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -387,7 +360,6 @@
     {
       "p": "Monté haut",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -402,7 +374,6 @@
     {
       "p": "Monté technique",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -417,7 +388,6 @@
     {
       "p": "Monté, un bras et une jambe piégés",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -431,7 +401,6 @@
     {
       "p": "Genou sur le ventre (joelho na barriga)",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -446,7 +415,6 @@
     {
       "p": "Nord-sud",
       "th": "ctrl",
-      "d": "NOGI MMA",
       "ra": "Dessous",
       "rb": "Dessus",
       "ga": [
@@ -461,7 +429,6 @@
     {
       "p": "Dos pris, crochets en place",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -475,7 +442,6 @@
     {
       "p": "Dos pris, body triangle",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -489,7 +455,6 @@
     {
       "p": "Dos pris, un seul crochet",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -503,7 +468,6 @@
     {
       "p": "Dos pris, défenseur à plat ventre",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -517,7 +481,6 @@
     {
       "p": "Seatbelt sans crochets",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -531,7 +494,6 @@
     {
       "p": "Tortue",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "En tortue",
       "rb": "Attaquant",
       "ga": [
@@ -546,7 +508,6 @@
     {
       "p": "Tortue, attaquant sur le côté",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "En tortue",
       "rb": "Attaquant",
       "ga": [
@@ -561,7 +522,6 @@
     {
       "p": "Front headlock au sol",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Tête prise",
       "rb": "Attaquant",
       "ga": [
@@ -576,7 +536,6 @@
     {
       "p": "Crucifix",
       "th": "dos",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -590,7 +549,6 @@
     {
       "p": "Truck",
       "th": "dos",
-      "d": "NOGI",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -604,7 +562,6 @@
     {
       "p": "Ashi garami",
       "th": "jambes",
-      "d": "NOGI MMA",
       "ra": "Jambe piégée",
       "rb": "Attaquant",
       "ga": [
@@ -619,7 +576,6 @@
     {
       "p": "Single leg X",
       "th": "jambes",
-      "d": "NOGI MMA",
       "ra": "Garde",
       "rb": "Debout",
       "ga": [
@@ -633,7 +589,6 @@
     {
       "p": "Clé de cheville engagée",
       "th": "jambes",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -646,7 +601,6 @@
     {
       "p": "Jambes emmêlées après un renversement",
       "th": "jambes",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -662,7 +616,6 @@
     {
       "p": "Outside ashi",
       "th": "jambes",
-      "d": "NOGI",
       "ra": "Jambe piégée",
       "rb": "Attaquant",
       "ga": [
@@ -677,7 +630,6 @@
     {
       "p": "Saddle (inside sankaku)",
       "th": "jambes",
-      "d": "NOGI",
       "ra": "Jambe piégée",
       "rb": "Attaquant",
       "ga": [
@@ -693,7 +645,6 @@
     {
       "p": "50/50",
       "th": "jambes",
-      "d": "NOGI",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -710,7 +661,6 @@
     {
       "p": "Clé de genou engagée",
       "th": "jambes",
-      "d": "NOGI",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -724,7 +674,6 @@
     {
       "p": "Toe hold engagé",
       "th": "jambes",
-      "d": "NOGI",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -739,7 +688,6 @@
     {
       "p": "Triangle verrouillé",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Pris dans le triangle",
       "rb": "Attaquant",
       "ga": [
@@ -753,7 +701,6 @@
     {
       "p": "Clé de bras depuis la garde, bras pas tendu",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Bras attaqué",
       "rb": "Attaquant (garde)",
       "ga": [
@@ -768,7 +715,6 @@
     {
       "p": "Clé de bras depuis le monté",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Bras attaqué",
       "rb": "Attaquant",
       "ga": [
@@ -782,7 +728,6 @@
     {
       "p": "Guillotine (gravata) depuis la garde",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Tête prise",
       "rb": "Attaquant (garde)",
       "ga": [
@@ -796,7 +741,6 @@
     {
       "p": "Guillotine debout",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Tête prise",
       "rb": "Attaquant",
       "ga": [
@@ -810,7 +754,6 @@
     {
       "p": "Kimura verrouillée par le dessous",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Bras attaqué",
       "rb": "Attaquant (dessous)",
       "ga": [
@@ -824,7 +767,6 @@
     {
       "p": "Kimura depuis le contrôle latéral",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Bras attaqué",
       "rb": "Attaquant",
       "ga": [
@@ -838,7 +780,6 @@
     {
       "p": "Americana engagée",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Bras attaqué",
       "rb": "Attaquant",
       "ga": [
@@ -852,7 +793,6 @@
     {
       "p": "Darce engagé",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Tête prise",
       "rb": "Attaquant",
       "ga": [
@@ -865,7 +805,6 @@
     {
       "p": "Anaconda engagé",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Tête prise",
       "rb": "Attaquant",
       "ga": [
@@ -878,7 +817,6 @@
     {
       "p": "Arm triangle (kata gatame) engagé",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -891,7 +829,6 @@
     {
       "p": "Omoplata engagée",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Bras attaqué",
       "rb": "Attaquant",
       "ga": [
@@ -906,7 +843,6 @@
     {
       "p": "Mata-leão engagé, main au menton",
       "th": "soum",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -919,7 +855,6 @@
     {
       "p": "Duel de mains, aucune prise",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -936,7 +871,6 @@
     {
       "p": "Clinch, over-under",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -953,7 +887,6 @@
     {
       "p": "Clinch, contrôle nuque-coude",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -970,7 +903,6 @@
     {
       "p": "Double underhooks contre double overhooks",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -987,7 +919,6 @@
     {
       "p": "Double-leg engagé",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -1002,7 +933,6 @@
     {
       "p": "Single leg engagé",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Jambe tenue",
       "rb": "Attaquant",
       "ga": [
@@ -1017,7 +947,6 @@
     {
       "p": "Single leg, attaquant à genoux",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Debout sur une jambe",
       "rb": "Attaquant à genoux",
       "ga": [
@@ -1031,7 +960,6 @@
     {
       "p": "Ceinture de face (body lock)",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -1046,7 +974,6 @@
     {
       "p": "Dos debout (back body lock)",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Défenseur",
       "rb": "Attaquant",
       "ga": [
@@ -1061,7 +988,6 @@
     {
       "p": "Front headlock debout",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Tête prise",
       "rb": "Attaquant",
       "ga": [
@@ -1076,7 +1002,6 @@
     {
       "p": "Russian tie (bras pris à deux mains)",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Bras pris",
       "rb": "Attaquant",
       "ga": [
@@ -1091,7 +1016,6 @@
     {
       "p": "Sprawl, l'attaquant tient encore une jambe",
       "th": "debout",
-      "d": "NOGI MMA",
       "ra": "Sous le sprawl",
       "rb": "Sur le sprawl",
       "ga": [
@@ -1104,222 +1028,8 @@
       ]
     },
     {
-      "p": "Dos à la cage",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Dos au grillage",
-      "rb": "Attaquant",
-      "ga": [
-        "Revenir au centre",
-        "Inverser contre la cage"
-      ],
-      "gb": [
-        "Amener au sol",
-        "Le garder collé à la cage"
-      ],
-      "st": true
-    },
-    {
-      "p": "Dos à la cage, double underhooks adverses",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Dos au grillage",
-      "rb": "Attaquant",
-      "ga": [
-        "Retrouver un underhook et pivoter"
-      ],
-      "gb": [
-        "Amener au sol"
-      ],
-      "st": true
-    },
-    {
-      "p": "Dos à la cage, single leg engagé",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Jambe tenue",
-      "rb": "Attaquant",
-      "ga": [
-        "Se libérer en restant debout"
-      ],
-      "gb": [
-        "Finir l'amenée au sol"
-      ],
-      "st": true
-    },
-    {
-      "p": "Dos pris debout contre la cage",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Défenseur",
-      "rb": "Attaquant",
-      "ga": [
-        "Se retourner face à lui"
-      ],
-      "gb": [
-        "Ramener au sol et prendre les crochets"
-      ],
-      "st": true
-    },
-    {
-      "p": "Assis contre la cage",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Assis",
-      "rb": "Dessus",
-      "ga": [
-        "Se relever (wall walk)"
-      ],
-      "gb": [
-        "Le maintenir au sol"
-      ]
-    },
-    {
-      "p": "Garde fermée contre la cage",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Garde",
-      "rb": "Dans la garde",
-      "ga": [
-        "Remonter le long de la cage",
-        "Soumettre"
-      ],
-      "gb": [
-        "Le maintenir et passer"
-      ]
-    },
-    {
-      "p": "Papillon contre la cage",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "Garde",
-      "rb": "Dessus",
-      "ga": [
-        "Se relever",
-        "Renverser"
-      ],
-      "gb": [
-        "Passer la garde"
-      ]
-    },
-    {
-      "p": "Tortue contre la cage",
-      "th": "cage",
-      "d": "MMA",
-      "ra": "En tortue",
-      "rb": "Attaquant",
-      "ga": [
-        "Se relever"
-      ],
-      "gb": [
-        "Prendre le dos",
-        "Le ramener au sol"
-      ]
-    },
-    {
-      "p": "Garde fermée, le dessus frappe",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "Garde",
-      "rb": "Dessus",
-      "ga": [
-        "Contrôler les bras et soumettre",
-        "Se relever"
-      ],
-      "gb": [
-        "Frapper puis passer"
-      ],
-      "lv": "conf"
-    },
-    {
-      "p": "Demi-garde, le dessus frappe",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "Dessous",
-      "rb": "Dessus",
-      "ga": [
-        "Remettre la garde ou se relever"
-      ],
-      "gb": [
-        "Frapper puis passer"
-      ],
-      "lv": "conf"
-    },
-    {
-      "p": "Contrôle latéral, le dessus frappe",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "Dessous",
-      "rb": "Dessus",
-      "ga": [
-        "Remettre la garde ou revenir sur les genoux"
-      ],
-      "gb": [
-        "Frapper puis monter"
-      ],
-      "lv": "conf"
-    },
-    {
-      "p": "Monté, le dessus frappe",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "Dessous",
-      "rb": "Dessus",
-      "ga": [
-        "Sortir en protégeant le visage"
-      ],
-      "gb": [
-        "Frapper et finir (clé de bras quand il pousse)"
-      ],
-      "lv": "conf"
-    },
-    {
-      "p": "Tortue, l'attaquant frappe",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "En tortue",
-      "rb": "Attaquant",
-      "ga": [
-        "Se relever"
-      ],
-      "gb": [
-        "Frapper et prendre les crochets"
-      ],
-      "lv": "conf"
-    },
-    {
-      "p": "Crucifix, l'attaquant frappe",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "Défenseur",
-      "rb": "Attaquant",
-      "ga": [
-        "Libérer le bras"
-      ],
-      "gb": [
-        "Frapper puis finir"
-      ],
-      "lv": "conf"
-    },
-    {
-      "p": "Au sol, adversaire debout (MMA)",
-      "th": "frappes",
-      "d": "MMA",
-      "ra": "Au sol",
-      "rb": "Debout",
-      "ga": [
-        "Se relever (stand-up technique)",
-        "Attaquer les jambes"
-      ],
-      "gb": [
-        "Passer ou frapper en entrant"
-      ],
-      "lv": "conf"
-    },
-    {
       "p": "Les deux à genoux",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -1335,7 +1045,6 @@
     {
       "p": "Dos à dos, assis",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -1349,7 +1058,6 @@
     {
       "p": "Assis face à face",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "Combattant A",
       "rb": "Combattant B",
       "ga": [
@@ -1365,7 +1073,6 @@
     {
       "p": "Dog fight (demi-garde, sur un genou)",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "Côté whizzer",
       "rb": "Côté underhook",
       "ga": [
@@ -1380,7 +1087,6 @@
     {
       "p": "Dessous remonté sur les genoux",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "Remonte sur les genoux",
       "rb": "Dessus",
       "ga": [
@@ -1394,7 +1100,6 @@
     {
       "p": "Un à genoux, l'autre debout",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "À genoux",
       "rb": "Debout",
       "ga": [
@@ -1407,7 +1112,6 @@
     {
       "p": "Atterrissage après un renversement",
       "th": "scramble",
-      "d": "NOGI MMA",
       "ra": "Vient d'être renversé",
       "rb": "Vient de renverser",
       "ga": [
@@ -1420,92 +1124,54 @@
   ],
   "contraintes": [
     {
-      "t": "Aucune contrainte",
-      "d": "*"
-    },
-    {
-      "t": "Interdit de frapper",
-      "d": "MMA",
-      "sauf": [
-        "frappes"
-      ]
-    },
-    {
-      "t": "Frappes légères autorisées au sol (gants)",
-      "d": "MMA",
-      "g": true,
-      "lv": "conf"
-    },
-    {
-      "t": "Frappes debout légères autorisées (gants, 30 %)",
-      "d": "MMA",
-      "s": true,
-      "lv": "conf"
-    },
-    {
-      "t": "Frappes au corps uniquement",
-      "d": "MMA",
-      "lv": "conf"
+      "t": "Aucune contrainte"
     },
     {
       "t": "Le défenseur gagne s'il tient jusqu'au bout",
-      "d": "*",
       "a": true
     },
     {
       "t": "Le défenseur ne fait que défendre, aucune attaque",
-      "d": "*",
       "a": true
     },
     {
       "t": "Une seule main pour le dessus ou l'attaquant",
-      "d": "*",
       "g": true,
-      "a": true,
-      "sauf": [
-        "frappes"
-      ]
+      "a": true
     },
     {
       "t": "Le dessus ou l'attaquant doit progresser toutes les 10 s",
-      "d": "*",
       "g": true,
       "a": true
     },
     {
       "t": "Le dessous doit attaquer dans les 15 premières secondes",
-      "d": "*",
       "g": true,
       "a": true
     },
     {
       "t": "Le dessous joue sans les mains (mains sur la ceinture)",
-      "d": "*",
       "g": true,
       "a": true,
       "lv": "conf",
       "sauf": [
         "soum",
-        "jambes",
-        "frappes"
+        "jambes"
       ]
     },
     {
       "t": "Le passeur garde les mains derrière le dos",
-      "d": "*",
       "g": true,
       "a": true,
       "sauf": [
         "soum",
         "jambes",
         "dos",
-        "frappes",
         "scramble"
       ]
     },
     {
       "t": "Leg locks interdits",
-      "d": "*",
       "g": true,
       "sauf": [
         "jambes"
@@ -1513,7 +1179,6 @@
     },
     {
       "t": "Soumissions aux jambes uniquement",
-      "d": "NOGI",
       "g": true,
       "lv": "conf",
       "sauf": [
@@ -1522,13 +1187,11 @@
     },
     {
       "t": "Clés de talon autorisées",
-      "d": "NOGI",
       "g": true,
       "lv": "conf"
     },
     {
       "t": "Étranglements uniquement",
-      "d": "*",
       "g": true,
       "sauf": [
         "soum",
@@ -1537,7 +1200,6 @@
     },
     {
       "t": "Clés de bras et d'épaule uniquement",
-      "d": "*",
       "g": true,
       "sauf": [
         "soum",
@@ -1546,7 +1208,6 @@
     },
     {
       "t": "Pas de soumission : on gagne à la position",
-      "d": "*",
       "g": true,
       "sauf": [
         "soum",
@@ -1555,54 +1216,44 @@
     },
     {
       "t": "Tenir 3 secondes une position pour la valider",
-      "d": "*",
       "g": true
     },
     {
       "t": "Reset à la position de départ après chaque renversement ou passage",
-      "d": "*",
       "g": true
     },
     {
       "t": "Changement de rôles à chaque soumission",
-      "d": "*",
       "g": true
     },
     {
       "t": "Le défenseur a les yeux fermés",
-      "d": "*",
       "g": true,
       "a": true,
       "lv": "conf",
       "sauf": [
-        "frappes",
         "soum"
       ]
     },
     {
       "t": "Amenée au sol = on enchaîne au sol",
-      "d": "*",
       "s": true
     },
     {
       "t": "Pas de garde tirée : on amène ou on reste debout",
-      "d": "*",
       "s": true
     },
     {
       "t": "Pas de soulevé : amenées sans décoller l'adversaire du sol",
-      "d": "*",
       "s": true,
       "lv": "deb"
     },
     {
       "t": "Intensité à 50 %",
-      "d": "*",
       "lv": "deb"
     },
     {
       "t": "Le dessus ne cherche que le contrôle, pas la soumission",
-      "d": "*",
       "g": true,
       "a": true,
       "lv": "deb",
@@ -1613,16 +1264,13 @@
     },
     {
       "t": "Rythme à 100 % sur les 20 dernières secondes",
-      "d": "*",
       "lv": "conf"
     },
     {
-      "t": "5 sprawls avant le départ",
-      "d": "*"
+      "t": "5 sprawls avant le départ"
     },
     {
       "t": "Le défenseur démarre fatigué : 10 sprawls avant le départ",
-      "d": "*",
       "a": true,
       "lv": "conf"
     }
