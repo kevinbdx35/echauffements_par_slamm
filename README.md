@@ -8,7 +8,7 @@ Site de partage des programmes d'échauffement NOGI et MMA, construit avec [Astr
 
 - **NOGI** — Échauffement rituel tous les mardis · 18 exercices · 18–20 minutes · 5 phases
 - **MMA** — Arts martiaux mixtes · 18 exercices · 5 phases
-- **Situations** — Sparring à thème pendant la séance · 18 positions tirées au sort · chrono de rounds, binômes par poids ou roi du tapis
+- **Situations** — Sparring à thème pendant la séance · 96 positions en 9 thèmes tirées au sort · chrono de rounds, binômes par poids ou roi du tapis
 - **Étirements** — Programme de fin de séance · PDF 22 pages · 15 minutes
 
 ## Stack
@@ -56,16 +56,16 @@ Si une vidéo est supprimée ou rendue privée, un message "Vidéo indisponible"
 
 Le paquet de la page Situations est dans `src/data/situations.json`. Il contient trois parties.
 
-**`themes`** : la clé courte et le nom affiché de chaque thème (`garde`, `ctrl`, `dos`, `jambes`, `debout`).
+**`themes`** : la clé courte et le nom affiché de chaque thème (`garde`, `ctrl`, `dos`, `jambes`, `soum`, `debout`, `cage`, `frappes`, `scramble`). Le menu « Thème de la séance », le formulaire « Situations du club » et l'étiquette des cartes sont générés à partir de cette liste : pour ajouter un thème, il suffit de l'ajouter ici.
 
 **`positions`** : une entrée par position.
 
 | Champ | Rôle |
 | --- | --- |
 | `p` | Nom de la position, affiché en grand sur la carte |
-| `th` | Clé du thème (`garde`, `ctrl`, `dos`, `jambes`, `debout`) |
+| `th` | Clé du thème, une des clés de `themes` |
 | `d` | Discipline : `"NOGI"`, `"MMA"` ou `"NOGI MMA"` |
-| `ra`, `rb` | Rôles des combattants A et B, ex. `"Dessous"` et `"Dessus"` |
+| `ra`, `rb` | Rôles des combattants A et B. Convention : **rôle A = dessous ou défenseur, rôle B = dessus ou attaquant** (ex. `"Dessous"` / `"Dessus"`, `"Tête prise"` / `"Attaquant"`) |
 | `ga`, `gb` | Listes d'objectifs pour A et pour B ; un objectif est tiré au sort à chaque carte |
 | `st` | `true` si la position se travaille debout |
 | `sym` | `true` si les deux rôles sont identiques (la carte affiche alors « Combattant A » et « Combattant B ») |
@@ -73,17 +73,17 @@ Le paquet de la page Situations est dans `src/data/situations.json`. Il contient
 
 ```json
 {
-  "p": "Demi-garde",
+  "p": "Demi-garde, dessous avec l'underhook",
   "th": "garde",
   "d": "NOGI MMA",
   "ra": "Dessous",
   "rb": "Dessus",
-  "ga": ["Prendre l'underhook et sortir au dos", "Balayer"],
-  "gb": ["Libérer la jambe et passer"]
+  "ga": ["Prendre le dos", "Renverser en remontant sur les genoux"],
+  "gb": ["Reprendre l'underhook et écraser", "Passer la garde"]
 }
 ```
 
-**`contraintes`** : une entrée par contrainte. Une contrainte n'est tirée que si elle est compatible avec la position.
+**`contraintes`** : une entrée par contrainte. Une contrainte n'est tirée que si elle est compatible avec la position : tous ses champs `d`, `g`, `s`, `a`, `lv` et `sauf` doivent être respectés. Grâce à la convention des rôles, le texte peut nommer les combattants : « le dessous » ou « le défenseur » désignent toujours le rôle A, « le dessus » ou « l'attaquant » le rôle B.
 
 | Champ | Rôle |
 | --- | --- |
@@ -93,7 +93,11 @@ Le paquet de la page Situations est dans `src/data/situations.json`. Il contient
 | `s` | `true` : seulement sur une position debout |
 | `a` | `true` : seulement si les rôles sont différents |
 | `lv` | `"deb"` ou `"conf"` : seulement à ce niveau |
-| `nth` | Liste de thèmes exclus, ex. `["jambes"]` pour « Leg locks interdits » |
+| `sauf` | Liste de clés de thèmes : la contrainte n'est jamais tirée pour une position de ces thèmes, ex. `["jambes"]` pour « Leg locks interdits » |
+
+```json
+{ "t": "Leg locks interdits", "d": "*", "g": true, "sauf": ["jambes"] }
+```
 
 Les positions ajoutées depuis la page (« Situations du club ») restent dans le navigateur de l'appareil, avec les réglages et la liste des membres (clé `slamm-situations-v1` du `localStorage`).
 

@@ -234,7 +234,7 @@ const [format, disc, level] = groupes;
   import data from '../data/situations.json';
 
   type Pos = { p: string; th: string; d: string; ra: string; rb: string; ga: string[]; gb: string[]; st?: boolean; sym?: boolean; lv?: string; club?: string };
-  type Con = { t: string; d: string; g?: boolean; s?: boolean; a?: boolean; lv?: string; nth?: string[] };
+  type Con = { t: string; d: string; g?: boolean; s?: boolean; a?: boolean; lv?: string; sauf?: string[] };
   type Member = { id: string; name: string; w: number | null; on: boolean };
   type Settings = { format: 'pairs' | 'kot'; rounds: number; roundSec: number; restSec: number; swap: boolean; disc: string; level: string; theme: string };
   type Card = { p: string; th: string; disc: string; ra: string; rb: string; goalA: string; goalB: string; c: string; sym: boolean; conf: boolean; deb: boolean };
@@ -297,7 +297,7 @@ const [format, disc, level] = groupes;
     if (c.s && !p.st) return false;
     if (c.a && p.sym) return false;
     if (c.lv && c.lv !== level) return false;
-    if (c.nth && c.nth.includes(p.th)) return false;
+    if (c.sauf && c.sauf.includes(p.th)) return false;
     return true;
   }
   function draw(s: Settings, avoid: string[] = []): Card | null {
@@ -971,6 +971,7 @@ const [format, disc, level] = groupes;
   .sit-pos {
     margin-top: 16px;
     font-size: clamp(44px, 11vw, 80px);
+    font-size: clamp(32px, 13cqi, 80px);
     overflow-wrap: break-word;
   }
   .sit-halves {
@@ -986,13 +987,17 @@ const [format, disc, level] = groupes;
   .sit-half { background: rgb(var(--c-bg)); padding: 14px; min-width: 0; }
   @media (min-width: 640px) { .sit-half { padding: 16px 18px; } }
   .sit-half-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; min-width: 0; }
+  /* Carte étroite : la pastille toujours au-dessus du rôle, pour que les deux moitiés s'alignent */
+  @container (max-width: 420px) {
+    .sit-half-head { flex-direction: column; align-items: flex-start; }
+  }
   .sit-role {
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.12em;
     color: rgb(var(--c-muted));
-    white-space: nowrap;
+    min-width: 0;
   }
   @media (max-width: 399px) { .sit-role { letter-spacing: 0.06em; } }
   .sit-letter {
@@ -1109,7 +1114,7 @@ const [format, disc, level] = groupes;
   .sit-band { background: rgb(var(--c-surface-2)); color: rgb(var(--c-fg)); }
   .sit-band[data-phase='prep'] #phase-label { color: rgb(var(--c-accent)); }
   .sit-band[data-phase='work'] { background: rgb(var(--c-accent-strong)); color: #fff; }
-  #timer-box, #session-card { container-type: inline-size; }
+  #timer-box, #session-card, #preview { container-type: inline-size; }
   .sit-timer {
     font-size: clamp(112px, 30vw, 280px);
     font-size: min(clamp(112px, 30vw, 280px), 62cqi);
@@ -1218,7 +1223,7 @@ const [format, disc, level] = groupes;
   /* Le chrono remplit la largeur de sa colonne sans déborder, ni dépasser la moitié de la hauteur */
   #session[data-wall] .sit-timer { font-size: clamp(120px, 34vw, 420px); font-size: max(96px, min(62cqi, 48vh)); }
   #session[data-wall] .sit-flash { font-size: 30px; }
-  #session[data-wall] .sit-pos { font-size: clamp(48px, 12vw, 132px); font-size: clamp(48px, 13cqi, 132px); }
+  #session[data-wall] .sit-pos { font-size: clamp(40px, 12vw, 132px); font-size: clamp(34px, 13cqi, 132px); }
   #session[data-wall] .sit-goal { font-size: 22px; }
   #session[data-wall] .sit-rule-text { font-size: 26px; }
   #session[data-wall] .sit-half-name { font-size: 40px; }
