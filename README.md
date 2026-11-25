@@ -8,7 +8,7 @@ Site de partage des programmes d'échauffement NOGI et MMA, construit avec [Astr
 
 - **NOGI** — Échauffement rituel tous les mardis · 18 exercices · 18–20 minutes · 5 phases
 - **MMA** — Arts martiaux mixtes · 18 exercices · 5 phases
-- **Situations** — Sparring à thème pendant la séance · 96 positions en 9 thèmes tirées au sort · chrono de rounds et sons, tout le monde en même temps ou roi du tapis
+- **Situations** — Sparring à thème pendant la séance · 96 positions en 9 thèmes tirées au sort · chrono de rounds et sons, tout le monde en même temps, roi du tapis ou méthode Danaher
 - **Étirements** — Programme de fin de séance · PDF 22 pages · 15 minutes
 
 ## Stack
@@ -103,10 +103,28 @@ Les positions ajoutées depuis la page (« Situations du club ») restent dans l
 
 ### Formats de séance
 
-- **Tout le monde en même temps** : tous les binômes travaillent la même carte. Options : inverser les rôles à mi-round (« On inverse les rôles ! ») et changer de partenaire à chaque round (« Changez de partenaire » s'affiche pendant le repos).
+- **Tout le monde en même temps** : tous les binômes travaillent la même carte. Options : inverser les rôles à mi-round (« On inverse les rôles ! »), changer de partenaire à chaque round (« Changez de partenaire » s'affiche pendant le repos ; impossible sans repos, la case est alors grisée) et « 1 round sur 3 en mauvaise position » (un round tiré au hasard par bloc de 3, jamais deux à la suite, dans la liste `mauvaises_positions` de `danaher.json`).
 - **Roi du tapis** : le roi tient le rôle A, le challenger le rôle B. « Le roi garde sa place » augmente sa série de 1 ; « Le challenger prend la place » fait du challenger le nouveau roi, avec une série de 1. Sans clic, le roi garde sa place à la fin du round. Le résultat peut être corrigé pendant le repos, et sur l'écran de fin pour le dernier round, qui affiche la meilleure série de la séance.
 
-Le menu « Thème de la séance » indique le nombre de positions de chaque thème selon la discipline et le niveau choisis ; un thème vide est désactivé, et la sélection revient à « Tous les thèmes » s'il le devient.
+- **Méthode Danaher** : positional sparring selon John Danaher, en trois programmes (voir plus bas). Les options d'inversion et de changement de partenaire restent disponibles.
+
+Options valables pour tous les formats :
+
+- **Durée surprise** : chaque round dure au hasard entre 2/3 et 4/3 de la durée choisie (4 à 8 min pour 6 min). Le chrono affiche « ? » pendant le travail, sans double bip à 10 s, seulement le son de fin. L'inversion des rôles tombe à la moitié de la durée choisie, pour ne pas révéler la fin du round.
+- **Débrief** : avec un repos de 15 s ou plus, « Débrief : raconte ton round à ton partenaire, ce qui a marché et où tu t'es fait prendre » s'affiche pendant le repos ; sinon (repos plus court ou sans repos), sur l'écran de fin.
+
+Le menu « Thème de la séance » indique le nombre de positions de chaque thème selon la discipline et le niveau choisis ; un thème vide est désactivé, et la sélection revient à « Tous les thèmes » s'il le devient. En méthode Danaher, le thème est fixé par le programme.
+
+## Modifier la méthode Danaher
+
+Les programmes sont dans `src/data/danaher.json`. Les noms de positions qu'il cite doivent exister à l'identique dans `situations.json`.
+
+- **`seance_dds`** (« Séance type Danaher ») : `rounds_defaut`, `duree_defaut` (en secondes) et `repos_defaut` sont appliqués une fois quand on choisit ce programme, qui décoche aussi l'inversion à mi-round (les règles de reset inversent déjà les rôles) ; tout reste modifiable. `rounds` est la liste des cartes, jouées dans l'ordre, sans tirage : `p`, `d`, `ra`, `rb` comme dans `situations.json`, `ga` et `gb` (un seul objectif, en texte) et `reset`, affiché à la place de la contrainte sous le libellé « Reset ».
+- **`echappements_dabord`** : `positions` liste les positions tirées au sort (cartes de `situations.json`) ; `regle_debutant` ou `regle_confirme` s'affiche à la place de la contrainte selon le niveau.
+- **`a_rebours`** : `chaines`, chacune avec `nom`, `d` (filtre de discipline) et `etapes`, de la plus proche de la finition à la plus éloignée. Le round 1 part de la première étape, chaque round suivant passe à l'étape d'après, puis la chaîne recommence. La carte affiche « Étape 2 / 4 » et une contrainte tirée normalement.
+- **`mauvaises_positions`** : positions utilisées par l'option « 1 round sur 3 en mauvaise position ».
+
+Pour que la carte d'aperçu tienne sur un petit téléphone (360 × 640), chaque objectif doit tenir en 3 lignes dans une demi-carte : environ 32 caractères au maximum.
 
 ## Déploiement
 

@@ -1619,6 +1619,12 @@
     {
       "t": "5 sprawls avant le départ",
       "d": "*"
+    },
+    {
+      "t": "Le défenseur démarre fatigué : 10 sprawls avant le départ",
+      "d": "*",
+      "a": true,
+      "lv": "conf"
     }
   ]
 }

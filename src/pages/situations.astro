@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import Icon from '../components/Icon.astro';
 import data from '../data/situations.json';
+import danaher from '../data/danaher.json';
 const base = import.meta.env.BASE_URL;
 
 const themes = Object.entries(data.themes);
@@ -18,11 +19,13 @@ const steppers = [
   { key: 'restSec', titre: 'Repos', moins: 'Raccourcir le repos', plus: 'Allonger le repos' },
 ];
 const groupes = [
-  { name: 'format', titre: 'Format', options: [['group', 'Tout le monde en même temps'], ['kot', 'Roi du tapis']] },
+  { name: 'format', titre: 'Format', options: [['group', 'Tout le monde en même temps'], ['kot', 'Roi du tapis'], ['danaher', 'Méthode Danaher']] },
   { name: 'disc', titre: 'Discipline', options: [['all', 'Tout'], ['NOGI', 'NOGI'], ['MMA', 'MMA']] },
   { name: 'level', titre: 'Niveau', options: [['deb', 'Débutant'], ['conf', 'Confirmé']] },
 ];
 const [format, disc, level] = groupes;
+// Programmes de la méthode Danaher (src/data/danaher.json)
+const programmes = [['dds', danaher.seance_dds.nom], ['esc', danaher.echappements_dabord.nom], ['reb', danaher.a_rebours.nom]];
 ---
 
 <Layout
@@ -64,6 +67,21 @@ const [format, disc, level] = groupes;
             ))}
           </div>
         </fieldset>
+        <div id="danaher-opts" class="mt-4 flex flex-col gap-4">
+          <fieldset>
+            <legend class="mb-2 font-semibold">Programme</legend>
+            <div class="flex flex-wrap gap-2">
+              {programmes.map(([v, t]) => (
+                <label><input type="radio" name="prog" value={v} class="peer sr-only" /><span class={pill}>{t}</span></label>
+              ))}
+            </div>
+          </fieldset>
+          <p id="prog-desc" class="text-sm text-muted"></p>
+          <div id="chain-row">
+            <label for="chain" class="block mb-2 font-semibold">Chaîne</label>
+            <select id="chain" class={`${field} sm:max-w-xs cursor-pointer`}></select>
+          </div>
+        </div>
         <div class="mt-5">
           {steppers.map(s => (
             <div class="flex items-center justify-between gap-3 py-2.5 border-t border-line">
@@ -80,11 +98,25 @@ const [format, disc, level] = groupes;
               <span class="font-semibold">Inverser les rôles à mi-round</span>
               <input id="swap" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
             </label>
-            <label class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-t border-line cursor-pointer">
-              <span class="font-semibold">Changer de partenaire à chaque round</span>
-              <input id="partner" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
+            <label id="partner-row" class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-t border-line cursor-pointer has-[:disabled]:cursor-not-allowed">
+              <span class="flex flex-col">
+                <span class="font-semibold">Changer de partenaire à chaque round</span>
+                <span id="partner-note" class="text-sm text-muted">nécessite un repos</span>
+              </span>
+              <input id="partner" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer disabled:cursor-not-allowed disabled:opacity-40" />
+            </label>
+            <label id="bad-row" class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-t border-line cursor-pointer">
+              <span class="font-semibold">1 round sur 3 en mauvaise position</span>
+              <input id="bad" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
             </label>
           </div>
+          <label class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-t border-line cursor-pointer">
+            <span class="flex flex-col">
+              <span class="font-semibold">Durée surprise</span>
+              <span class="text-sm text-muted">Chaque round dure entre 2/3 et 4/3 de la durée choisie</span>
+            </span>
+            <input id="surprise" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
+          </label>
           <div class="border-t border-line"></div>
         </div>
       </section>
@@ -104,10 +136,11 @@ const [format, disc, level] = groupes;
           ))}
           <div>
             <label for="theme" class="block mb-2 font-semibold">Thème de la séance</label>
-            <select id="theme" class={`${field} sm:max-w-xs cursor-pointer`}>
+            <select id="theme" class={`${field} sm:max-w-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed`}>
               <option value="all">Tous les thèmes</option>
               {themes.map(([k, t]) => <option value={k}>{t}</option>)}
             </select>
+            <p id="theme-note" class="mt-2 text-sm text-muted">Défini par le programme Danaher</p>
           </div>
         </div>
       </section>
@@ -186,6 +219,7 @@ const [format, disc, level] = groupes;
     <div id="end" class="flex-1 w-full max-w-site mx-auto px-4 md:px-8 py-10 lg:py-16" hidden>
       <p class={label}>Séance terminée</p>
       <p class="mt-2 font-display text-[clamp(48px,10vw,96px)]">Bien <span class="text-accent">joué</span></p>
+      <p id="end-debrief" class="sit-debrief mt-6 max-w-[40ch]">Débrief : raconte ton round à ton partenaire, ce qui a marché et où tu t'es fait prendre</p>
       <div class="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
         <div id="end-kot" class="min-w-0" hidden></div>
         <div>
@@ -205,11 +239,19 @@ const [format, disc, level] = groupes;
 
 <script>
   import data from '../data/situations.json';
+  import danaher from '../data/danaher.json';
 
   type Pos = { p: string; th: string; d: string; ra: string; rb: string; ga: string[]; gb: string[]; st?: boolean; sym?: boolean; lv?: string; club?: string };
   type Con = { t: string; d: string; g?: boolean; s?: boolean; a?: boolean; lv?: string; sauf?: string[] };
-  type Settings = { format: 'group' | 'kot'; rounds: number; roundSec: number; restSec: number; swap: boolean; partner: boolean; disc: string; level: string; theme: string };
-  type Card = { p: string; th: string; disc: string; ra: string; rb: string; goalA: string; goalB: string; c: string; sym: boolean; conf: boolean; deb: boolean };
+  type Settings = {
+    format: 'group' | 'kot' | 'danaher'; prog: 'dds' | 'esc' | 'reb'; chain: string;
+    rounds: number; roundSec: number; restSec: number; swap: boolean; partner: boolean; surprise: boolean; bad: boolean;
+    disc: string; level: string; theme: string;
+  };
+  // tag : étiquette à la place du thème ; extra : étiquette en plus ; ruleLabel : Contrainte, Règle ou Reset
+  type Card = { p: string; th: string; disc: string; ra: string; rb: string; goalA: string; goalB: string; c: string; sym: boolean; conf: boolean; deb: boolean; tag?: string; extra?: string; ruleLabel?: string };
+  type DdsRound = { p: string; d: string; ra: string; rb: string; ga: string; gb: string; reset: string };
+  type Chain = { nom: string; d: string; etapes: string[] };
 
   const THEMES = data.themes as Record<string, string>;
   const BUILTIN = data.positions as Pos[];
@@ -217,11 +259,23 @@ const [format, disc, level] = groupes;
   const KEY = 'slamm-situations-v1';
   const OPTS: Record<string, number[]> = {
     rounds: Array.from({ length: 18 }, (_, i) => i + 3),
-    roundSec: [30, 45, 60, 90, 120, 150, 180, 240, 300],
-    restSec: [10, 15, 20, 30, 45, 60],
+    roundSec: [30, 45, 60, 90, 120, 150, 180, 240, 300, 360],
+    restSec: [0, 10, 15, 20, 30, 45, 60],
   };
   const PREP = 10;
-  const DEFAULTS: Settings = { format: 'group', rounds: 8, roundSec: 60, restSec: 20, swap: true, partner: true, disc: 'all', level: 'deb', theme: 'all' };
+  const DEBRIEF_MIN = 15; // repos minimum pour afficher le débrief pendant le repos
+  const DEBRIEF = 'Débrief : raconte ton round à ton partenaire, ce qui a marché et où tu t\'es fait prendre';
+  const DDS = danaher.seance_dds;
+  const ESC = danaher.echappements_dabord;
+  const CHAINS = danaher.a_rebours.chaines as Chain[];
+  const BAD = danaher.mauvaises_positions as string[];
+  const PROG_LABEL: Record<string, string> = { dds: 'Séance type', esc: ESC.nom, reb: danaher.a_rebours.nom };
+  const PROG_DESC: Record<string, string> = { dds: DDS.description, esc: ESC.description, reb: danaher.a_rebours.description };
+  const DEFAULTS: Settings = {
+    format: 'group', prog: 'dds', chain: CHAINS[0].nom,
+    rounds: 8, roundSec: 60, restSec: 20, swap: true, partner: true, surprise: false, bad: false,
+    disc: 'all', level: 'deb', theme: 'all',
+  };
 
   /* ---------- Stockage ---------- */
   // Le champ members des anciennes versions est ignoré, puis disparaît à la prochaine sauvegarde
@@ -232,7 +286,11 @@ const [format, disc, level] = groupes;
       const s = { ...DEFAULTS, ...(raw.settings || {}) };
       for (const k of ['rounds', 'roundSec', 'restSec']) if (!OPTS[k].includes(s[k])) s[k] = DEFAULTS[k];
       if (s.format === 'pairs') s.format = 'group';
-      if (!['group', 'kot'].includes(s.format)) s.format = DEFAULTS.format;
+      if (!['group', 'kot', 'danaher'].includes(s.format)) s.format = DEFAULTS.format;
+      if (!['dds', 'esc', 'reb'].includes(s.prog)) s.prog = DEFAULTS.prog;
+      if (!CHAINS.some(c => c.nom === s.chain)) s.chain = DEFAULTS.chain;
+      s.surprise = !!s.surprise;
+      s.bad = !!s.bad;
       if (!['all', 'NOGI', 'MMA'].includes(s.disc)) s.disc = DEFAULTS.disc;
       if (!['deb', 'conf'].includes(s.level)) s.level = DEFAULTS.level;
       if (s.theme !== 'all' && !THEMES[s.theme]) s.theme = 'all';
@@ -269,11 +327,8 @@ const [format, disc, level] = groupes;
     if (c.sauf && c.sauf.includes(p.th)) return false;
     return true;
   }
-  function draw(s: Settings, avoid: string[] = []): Card | null {
-    const pool = eligible(s);
-    if (!pool.length) return null;
-    const fresh = pool.filter(p => !avoid.includes(p.p));
-    const pos = pick(fresh.length ? fresh : pool);
+  // Carte d'une position donnée, avec une contrainte compatible tirée au sort
+  function cardFor(pos: Pos, s: Settings): Card {
     const disc = s.disc === 'all' ? pick(discsOf(pos)) : s.disc;
     const cons = CONS.filter(c => fits(c, pos, disc, s.level));
     const sym = !!pos.sym;
@@ -281,6 +336,64 @@ const [format, disc, level] = groupes;
     const rb = sym ? 'Combattant B' : pos.rb;
     const c = cons.length ? pick(cons).t.replaceAll('{A}', ra).replaceAll('{B}', rb) : 'Travail libre de la position';
     return { p: pos.p, th: pos.th, disc, ra, rb, goalA: pick(pos.ga), goalB: pick(pos.gb), c, sym, conf: pos.lv === 'conf', deb: s.level === 'deb' };
+  }
+  function pickPos(pool: Pos[], avoid: string[]) {
+    const fresh = pool.filter(p => !avoid.includes(p.p));
+    return pick(fresh.length ? fresh : pool);
+  }
+  function draw(s: Settings, avoid: string[] = []): Card | null {
+    const pool = eligible(s);
+    return pool.length ? cardFor(pickPos(pool, avoid), s) : null;
+  }
+  const byName = (n: string) => allPositions().find(p => p.p === n);
+  // Chaînes « À rebours » disponibles pour la discipline choisie
+  const chainsFor = (s: Settings) => CHAINS.filter(c => s.disc === 'all' || c.d.split(' ').includes(s.disc));
+  const currentChain = (s: Settings) => { const list = chainsFor(s); return list.find(c => c.nom === s.chain) || list[0] || null; };
+  const escPool = (s: Settings) => ESC.positions.map(byName).filter((p): p is Pos => !!p && matchesDeck(p, s));
+  const badPool = (s: Settings) => BAD.map(byName).filter((p): p is Pos => !!p && matchesDeck(p, s));
+
+  // Carte du round n (à partir de 1) selon le format et le programme
+  function cardForRound(s: Settings, round: number, avoid: string[] = [], badRound = false): Card | null {
+    if (s.format === 'danaher') {
+      if (s.prog === 'dds') {
+        const list = DDS.rounds as DdsRound[];
+        const i = (round - 1) % list.length, r = list[i];
+        const sym = r.ra === 'Combattant A';
+        return { p: r.p, th: '', disc: s.disc === 'all' ? 'NOGI MMA' : s.disc, ra: r.ra, rb: r.rb, goalA: r.ga, goalB: r.gb,
+          c: r.reset, ruleLabel: 'Reset', sym, conf: false, deb: s.level === 'deb', tag: `Séance type · ${i + 1} / ${list.length}` };
+      }
+      if (s.prog === 'esc') {
+        const pool = escPool(s);
+        if (!pool.length) return null;
+        const card = cardFor(pickPos(pool, avoid), s);
+        return { ...card, c: s.level === 'deb' ? ESC.regle_debutant : ESC.regle_confirme, ruleLabel: 'Règle', tag: ESC.nom };
+      }
+      const chain = currentChain(s);
+      if (!chain) return null;
+      const i = (round - 1) % chain.etapes.length, pos = byName(chain.etapes[i]);
+      if (!pos) return null;
+      return { ...cardFor(pos, s), tag: `À rebours · ${chain.nom}`, extra: `Étape ${i + 1} / ${chain.etapes.length}` };
+    }
+    if (badRound) {
+      const pool = badPool(s);
+      if (pool.length) return { ...cardFor(pickPos(pool, avoid), s), extra: 'Mauvaise position' };
+    }
+    return draw(s, avoid);
+  }
+  const hasCards = (s: Settings) => s.format === 'danaher'
+    ? (s.prog === 'dds' || (s.prog === 'esc' ? escPool(s).length > 0 : !!currentChain(s)))
+    : eligible(s).length > 0;
+
+  // Un round sur trois en mauvaise position : un round au hasard par bloc de 3, jamais deux à la suite
+  function badPlan(rounds: number) {
+    const plan = new Set<number>();
+    for (let start = 1; start <= rounds; start += 3) {
+      const size = Math.min(3, rounds - start + 1);
+      if (size < 3 && Math.random() >= size / 3) continue;
+      const options = Array.from({ length: size }, (_, k) => start + k).filter(r => !plan.has(r - 1));
+      if (options.length) plan.add(pick(options));
+    }
+    return plan;
   }
   // preview : carte d'aperçu en haut de page, sans le rappel débutant (affiché dans le résumé)
   function cardHTML(card: Card | null, names?: { a?: string; b?: string; aNote?: string; bNote?: string }, preview = false) {
@@ -294,12 +407,13 @@ const [format, disc, level] = groupes;
     return `<article class="sit-card${preview ? ' sit-card-preview' : ''}">
       <div class="sit-card-meta">
         <span class="sit-tag sit-tag-strong">${esc(card.disc)}</span>
-        <span class="sit-tag">${esc(THEMES[card.th] || card.th)}</span>
+        <span class="sit-tag">${esc(card.tag || THEMES[card.th] || card.th)}</span>
+        ${card.extra ? `<span class="sit-tag sit-tag-accent">${esc(card.extra)}</span>` : ''}
         ${card.conf ? '<span class="sit-tag">Confirmés</span>' : ''}
       </div>
       <h3 class="sit-pos font-display">${esc(card.p)}</h3>
       <div class="sit-halves">${half('a', card.ra, card.goalA, names?.a, names?.aNote)}${half('b', card.rb, card.goalB, names?.b, names?.bNote)}</div>
-      <div class="sit-rule"><p class="sit-label">Contrainte</p><p class="sit-rule-text">${esc(card.c)}</p></div>
+      <div class="sit-rule"><p class="sit-label">${esc(card.ruleLabel || 'Contrainte')}</p><p class="sit-rule-text">${esc(card.c)}</p></div>
       ${card.deb && !preview ? '<p class="sit-safety">Pas de clés de talon, intensité contrôlée, on tape tôt</p>' : ''}
     </article>`;
   }
@@ -334,7 +448,7 @@ const [format, disc, level] = groupes;
 
   function syncSettingsUI() {
     const s = S();
-    for (const name of ['format', 'disc', 'level']) {
+    for (const name of ['format', 'disc', 'level', 'prog']) {
       document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]`).forEach(i => { i.checked = i.value === (s as any)[name]; });
     }
     $('out-rounds').textContent = String(s.rounds);
@@ -344,33 +458,66 @@ const [format, disc, level] = groupes;
       const k = b.dataset.step as string, o = OPTS[k], i = o.indexOf((s as any)[k]);
       b.disabled = b.dataset.dir === '-1' ? i <= 0 : i >= o.length - 1;
     });
+    const isDanaher = s.format === 'danaher';
+    $('danaher-opts').hidden = !isDanaher;
+    $('prog-desc').textContent = PROG_DESC[s.prog];
+    $('chain-row').hidden = !(isDanaher && s.prog === 'reb');
+    // Chaînes filtrées selon la discipline
+    const chains = chainsFor(s), chainSel = $<HTMLSelectElement>('chain');
+    chainSel.innerHTML = chains.map(c => `<option value="${esc(c.nom)}">${esc(c.nom)} (${c.etapes.length} étapes)</option>`).join('');
+    const chain = currentChain(s);
+    if (chain && chain.nom !== s.chain) { s.chain = chain.nom; save(); }
+    if (chain) chainSel.value = chain.nom;
+    // Options de séance
     $<HTMLInputElement>('swap').checked = s.swap;
-    $<HTMLInputElement>('partner').checked = s.partner;
+    const noRest = s.restSec === 0;
+    const partner = $<HTMLInputElement>('partner');
+    partner.checked = s.partner && !noRest;
+    partner.disabled = noRest;
+    $('partner-note').hidden = !noRest;
+    $<HTMLInputElement>('bad').checked = s.bad;
+    $('bad-row').hidden = s.format !== 'group';
+    $<HTMLInputElement>('surprise').checked = s.surprise;
     $('group-opts').hidden = s.format === 'kot';
+    // Thème : fixé par le programme en méthode Danaher
+    $<HTMLSelectElement>('theme').disabled = isDanaher;
+    $('theme-note').hidden = !isDanaher;
     updateThemeOptions();
     updateSummary();
   }
+  const restLabel = (s: Settings) => s.restSec ? `, repos ${fmt(s.restSec)}` : ' sans repos';
   function updateSummary() {
     const s = S();
     const total = PREP + s.rounds * s.roundSec + (s.rounds - 1) * s.restSec;
-    const empty = eligible(s).length === 0;
+    const empty = !hasCards(s);
     const parts = [`${s.rounds} rounds de ${fmt(s.roundSec)}`, `environ ${Math.max(1, Math.round(total / 60))} min`];
+    if (s.surprise) parts.push('durée surprise');
     if (empty) parts.push('aucune carte ne correspond aux filtres');
     $('summary').textContent = parts.join(' · ');
     document.querySelectorAll<HTMLButtonElement>('.start-btn').forEach(b => { b.disabled = empty; });
     // Résumé des réglages sous la carte
-    const recap = [
-      s.disc === 'all' ? 'NOGI et MMA' : s.disc,
-      s.level === 'deb' ? 'Débutant : pas de clés de talon, on tape tôt' : 'Confirmé',
-      s.theme === 'all' ? 'Tous les thèmes' : THEMES[s.theme],
-      `${s.rounds} × ${fmt(s.roundSec)}, repos ${fmt(s.restSec)}`,
-      s.format === 'kot' ? 'Roi du tapis' : 'Tout le monde en même temps',
-    ];
+    const discLabel = s.disc === 'all' ? 'NOGI et MMA' : s.disc;
+    const levelLabel = s.level === 'deb' ? 'Débutant : pas de clés de talon, on tape tôt' : 'Confirmé';
+    const durations = `${s.rounds} × ${fmt(s.roundSec)}${restLabel(s)}`;
+    let recap: string[];
+    if (s.format === 'danaher') {
+      const prog = s.prog === 'reb' ? `${PROG_LABEL.reb} : ${currentChain(s)?.nom ?? '—'}` : PROG_LABEL[s.prog];
+      recap = s.prog === 'dds' ? ['Méthode Danaher', prog, durations] : ['Méthode Danaher', prog, discLabel, levelLabel, durations];
+    } else {
+      recap = [discLabel, levelLabel, s.theme === 'all' ? 'Tous les thèmes' : THEMES[s.theme], durations,
+        s.format === 'kot' ? 'Roi du tapis' : 'Tout le monde en même temps'];
+      if (s.format === 'group' && s.bad) recap.push('1 round sur 3 en mauvaise position');
+    }
+    if (s.surprise) recap.push('durée surprise');
     $('recap').textContent = recap.join(' · ');
   }
+  // Aperçu : en Séance type et À rebours, « Tirer une autre carte » montre la carte suivante dans l'ordre
+  let previewRound = 1;
+  let previewCard: Card | null = null;
   function renderPreview(animate = true) {
     const el = $('preview');
-    el.innerHTML = cardHTML(draw(S()), undefined, true);
+    previewCard = cardForRound(S(), previewRound, previewCard ? [previewCard.p] : []);
+    el.innerHTML = cardHTML(previewCard, undefined, true);
     if (animate) flip(el);
   }
   function renderClub() {
@@ -384,12 +531,24 @@ const [format, disc, level] = groupes;
     updateSummary();
   }
 
-  document.querySelectorAll<HTMLInputElement>('input[name="format"], input[name="disc"], input[name="level"]').forEach(i => {
+  // Choisir la Séance type règle une seule fois les durées et décoche l'inversion (les resets inversent déjà les rôles)
+  function applyDdsDefaults() {
+    const s = S();
+    s.rounds = DDS.rounds_defaut; s.roundSec = DDS.duree_defaut; s.restSec = DDS.repos_defaut; s.swap = false;
+  }
+  document.querySelectorAll<HTMLInputElement>('input[name="format"], input[name="disc"], input[name="level"], input[name="prog"]').forEach(i => {
     i.addEventListener('change', () => {
-      (S() as any)[i.name] = i.value; save(); syncSettingsUI();
-      if (i.name !== 'format') renderPreview();
+      const s = S();
+      (s as any)[i.name] = i.value;
+      const choseDds = (i.name === 'prog' && i.value === 'dds') || (i.name === 'format' && i.value === 'danaher' && s.prog === 'dds');
+      if (choseDds) applyDdsDefaults();
+      if (i.name === 'format' || i.name === 'prog') previewRound = 1;
+      save(); syncSettingsUI(); renderPreview();
     });
   });
+  $<HTMLSelectElement>('chain').addEventListener('change', e => { S().chain = (e.target as HTMLSelectElement).value; previewRound = 1; save(); syncSettingsUI(); renderPreview(); });
+  $<HTMLInputElement>('bad').addEventListener('change', e => { S().bad = (e.target as HTMLInputElement).checked; save(); updateSummary(); });
+  $<HTMLInputElement>('surprise').addEventListener('change', e => { S().surprise = (e.target as HTMLInputElement).checked; save(); updateSummary(); });
   document.querySelectorAll<HTMLButtonElement>('[data-step]').forEach(b => b.addEventListener('click', () => {
     const k = b.dataset.step as string, o = OPTS[k];
     const i = Math.min(o.length - 1, Math.max(0, o.indexOf((S() as any)[k]) + Number(b.dataset.dir)));
@@ -398,7 +557,11 @@ const [format, disc, level] = groupes;
   $<HTMLInputElement>('swap').addEventListener('change', e => { S().swap = (e.target as HTMLInputElement).checked; save(); });
   $<HTMLInputElement>('partner').addEventListener('change', e => { S().partner = (e.target as HTMLInputElement).checked; save(); });
   $<HTMLSelectElement>('theme').addEventListener('change', e => { S().theme = (e.target as HTMLSelectElement).value; save(); updateSummary(); renderPreview(); });
-  $('redraw').addEventListener('click', () => renderPreview());
+  $('redraw').addEventListener('click', () => {
+    const s = S();
+    if (s.format === 'danaher' && s.prog !== 'esc') previewRound++;
+    renderPreview();
+  });
 
   $<HTMLFormElement>('add-club').addEventListener('submit', e => {
     e.preventDefault();
@@ -474,6 +637,7 @@ const [format, disc, level] = groupes;
     paused: boolean; left: number; swapped: boolean;
     card: Card | null; next: Card | null; history: { round: number; card: Card }[];
     kot: Kot | null; snap: Kot | null; decision: 'king' | 'chal' | null;
+    badRounds: Set<number>;
   };
   let ses: Sess | null = null;
   let raf = 0, interval = 0, flashTimer = 0, stopTimer = 0, lastShown = -1;
@@ -488,13 +652,17 @@ const [format, disc, level] = groupes;
 
   function startSession() {
     const set = clone(S());
-    if (!eligible(set).length) return;
+    if (!hasCards(set)) return;
     initAudio();
+    const badRounds = set.format === 'group' && set.bad ? badPlan(set.rounds) : new Set<number>();
     ses = {
       set, phase: 'prep', round: 1, dur: 0, end: 0, prevRem: 0, paused: false, left: 0, swapped: false,
-      card: null, next: draw(set), history: [],
+      card: null, next: cardForRound(set, 1, [], badRounds.has(1)), history: [],
       kot: set.format === 'kot' ? { streak: 0, best: 0 } : null, snap: null, decision: null,
+      badRounds,
     };
+    // Séance type : « Nouvelle carte » n'a pas de sens, l'ordre est fixe
+    $<HTMLButtonElement>('s-card').disabled = set.format === 'danaher' && set.prog === 'dds';
     overlay.hidden = false;
     $('live').hidden = false; $('end').hidden = true;
     document.documentElement.style.overflow = 'hidden';
@@ -514,7 +682,9 @@ const [format, disc, level] = groupes;
     if (!ses) return;
     const s = ses;
     s.phase = phase;
-    s.dur = phase === 'prep' ? PREP : phase === 'work' ? s.set.roundSec : s.set.restSec;
+    // Durée surprise : entre 2/3 et 4/3 de la durée choisie, à la seconde près
+    const workSec = s.set.surprise ? Math.round(s.set.roundSec * (2 / 3 + Math.random() * 2 / 3)) : s.set.roundSec;
+    s.dur = phase === 'prep' ? PREP : phase === 'work' ? workSec : s.set.restSec;
     s.end = at + s.dur * 1000;
     s.prevRem = s.dur * 1000;
     s.swapped = false;
@@ -524,9 +694,7 @@ const [format, disc, level] = groupes;
       s.decision = null; s.snap = null;
       sounds.go();
     }
-    if (phase === 'rest') {
-      s.next = draw(s.set, s.history.slice(-3).map(h => h.card.p));
-    }
+    if (phase === 'rest') s.next = nextCard(s);
     render(true);
   }
 
@@ -540,8 +708,14 @@ const [format, disc, level] = groupes;
       ses.decision = 'king';
     }
     if (ses.round >= ses.set.rounds) finish();
-    else enterPhase('rest', at);
+    else if (ses.set.restSec === 0) {
+      // Sans repos : le round suivant part aussitôt
+      ses.next = nextCard(ses);
+      ses.round++;
+      enterPhase('work', at);
+    } else enterPhase('rest', at);
   }
+  const nextCard = (s: Sess) => cardForRound(s.set, s.round + 1, s.history.slice(-3).map(h => h.card.p), s.badRounds.has(s.round + 1));
 
   function advance(at: number) {
     if (!ses) return;
@@ -561,11 +735,13 @@ const [format, disc, level] = groupes;
     if (!ses || ses.phase === 'done') return;
     const rem = ses.end - now, prev = ses.prevRem;
     if (ses.phase === 'work') {
-      if (ses.dur > 20 && crossed(prev, rem, 10000)) sounds.ten();
-      const mid = ses.dur * 500;
-      if (ses.set.format === 'group' && ses.set.swap && !ses.swapped && prev > mid && rem <= mid) {
+      // Durée surprise : pas de double bip à 10 s, seulement le son de fin
+      if (!ses.set.surprise && ses.dur > 20 && crossed(prev, rem, 10000)) sounds.ten();
+      // Inversion à la moitié de la durée choisie : avec la durée surprise, elle ne trahit pas la fin du round
+      const elapsed = ses.dur * 1000 - rem, half = ses.set.roundSec * 500;
+      if (ses.set.format !== 'kot' && ses.set.swap && !ses.swapped && elapsed >= half) {
         ses.swapped = true;
-        if (rem > mid - 1500) { sounds.swap(); flash('On inverse les rôles !', 3000); }
+        if (elapsed < half + 1500) { sounds.swap(); flash('On inverse les rôles !', 3000); }
         render(false);
       }
     } else {
@@ -576,6 +752,11 @@ const [format, disc, level] = groupes;
   }
 
   function showTime(rem: number) {
+    // Durée surprise : le temps restant du round reste caché
+    if (ses && ses.phase === 'work' && ses.set.surprise) {
+      if (lastShown !== -2) { lastShown = -2; $('timer').textContent = '?'; }
+      return;
+    }
     const sec = Math.max(0, Math.ceil(rem / 1000));
     if (sec === lastShown) return;
     lastShown = sec;
@@ -609,9 +790,15 @@ const [format, disc, level] = groupes;
     showTime(s.paused ? s.left : s.end - Date.now());
   }
 
+  const debriefHTML = () => `<p class="sit-debrief">${esc(DEBRIEF)}</p>`;
+  const showDebriefInRest = (s: Sess) => s.phase === 'rest' && s.set.restSec >= DEBRIEF_MIN;
   function groupHTML() {
     const s = ses as Sess;
-    if (s.phase === 'rest' && s.set.partner) return '<p class="sit-partner font-display">Changez de partenaire</p>';
+    if (s.phase === 'rest') {
+      // Sans repos, le changement de partenaire est ignoré (la case est grisée dans les réglages)
+      const partner = s.set.partner && s.set.restSec > 0 ? '<p class="sit-partner font-display">Changez de partenaire</p>' : '';
+      return partner + (showDebriefInRest(s) ? debriefHTML() : '');
+    }
     if (s.phase === 'work' && s.swapped) return '<p class="sit-note">Rôles inversés : A devient B, B devient A</p>';
     return '';
   }
@@ -627,7 +814,8 @@ const [format, disc, level] = groupes;
     if (s.phase === 'rest' && s.snap) {
       return `${streak}<p class="sit-label sit-mt">Round terminé : qui a gagné ?</p><div class="sit-kot-btns">
         <button type="button" class="sit-btn press" data-kot="king" aria-pressed="${s.decision === 'king'}">Le roi garde sa place</button>
-        <button type="button" class="sit-btn press" data-kot="chal" aria-pressed="${s.decision === 'chal'}">Le challenger prend la place</button></div>`;
+        <button type="button" class="sit-btn press" data-kot="chal" aria-pressed="${s.decision === 'chal'}">Le challenger prend la place</button></div>
+        ${showDebriefInRest(s) ? debriefHTML() : ''}`;
     }
     return streak;
   }
@@ -674,7 +862,9 @@ const [format, disc, level] = groupes;
   });
   $('s-card').addEventListener('click', () => {
     if (!ses || ses.phase === 'done') return;
-    const fresh = draw(ses.set, [ses.card?.p, ses.next?.p].filter(Boolean) as string[]);
+    // Même logique que le plan de séance : en À rebours, même étape et nouvelle contrainte
+    const r = ses.phase === 'work' ? ses.round : ses.round + 1;
+    const fresh = cardForRound(ses.set, r, [ses.card?.p, ses.next?.p].filter(Boolean) as string[], ses.badRounds.has(r));
     if (ses.phase === 'work') {
       ses.card = fresh;
       const last = ses.history[ses.history.length - 1];
@@ -721,8 +911,10 @@ const [format, disc, level] = groupes;
   function renderEnd() {
     const s = ses as Sess;
     $('end-list').innerHTML = s.history.length
-      ? s.history.map(h => `<li class="sit-hist"><span class="sit-hist-n">${h.round}</span><div class="min-w-0"><p class="sit-hist-p">${esc(h.card.p)}</p><p class="sit-hist-c">${esc(THEMES[h.card.th] || '')} · ${esc(h.card.c)}</p></div></li>`).join('')
+      ? s.history.map(h => `<li class="sit-hist"><span class="sit-hist-n">${h.round}</span><div class="min-w-0"><p class="sit-hist-p">${esc(h.card.p)}</p><p class="sit-hist-c">${esc([h.card.tag || THEMES[h.card.th], h.card.extra].filter(Boolean).join(' · '))} · ${esc(h.card.c)}</p></div></li>`).join('')
       : '<li class="sit-resting">Aucun round terminé.</li>';
+    // Pas de repos assez long pour débriefer : le message passe sur l'écran de fin
+    $('end-debrief').hidden = s.set.restSec >= DEBRIEF_MIN;
     const box = $('end-kot');
     box.hidden = !s.kot;
     if (!s.kot) { box.innerHTML = ''; return; }
@@ -1002,6 +1194,8 @@ const [format, disc, level] = groupes;
     color: rgb(var(--c-accent));
   }
   .sit-note { font-size: 18px; font-weight: 700; color: rgb(var(--c-muted)); }
+  .sit-debrief { margin-top: 16px; font-size: 18px; font-weight: 700; line-height: 1.3; }
+  .sit-tag-accent { border-color: rgb(var(--c-accent)); color: rgb(var(--c-accent)); }
   .sit-streak { display: flex; flex-direction: column; }
   .sit-streak-n { font-size: 64px; line-height: 1; font-variant-numeric: tabular-nums; }
   .sit-kot-btns { margin-top: 8px; display: grid; gap: 8px; }
@@ -1057,6 +1251,7 @@ const [format, disc, level] = groupes;
   #session[data-wall] .sit-half-name { font-size: 40px; font-size: clamp(22px, 9cqi, 40px); }
   #session[data-wall] .sit-partner { font-size: clamp(48px, 12vw, 110px); }
   #session[data-wall] .sit-streak-n { font-size: 96px; }
+  #session[data-wall] .sit-debrief { font-size: 26px; }
   #session[data-wall] .sit-btn { min-height: 64px; font-size: 20px; }
   #session[data-wall] #phase-label { font-size: 18px; }
   #session[data-wall] #round-label { font-size: 34px; }

@@ -1,0 +1,162 @@
+{
+  "seance_dds": {
+    "nom": "Séance type Danaher",
+    "description": "6 rounds de 6 minutes sans repos, toujours dans le même ordre. Chaque round a sa règle de reset.",
+    "rounds_defaut": 6,
+    "duree_defaut": 360,
+    "repos_defaut": 0,
+    "rounds": [
+      {
+        "p": "Monté",
+        "d": "NOGI MMA",
+        "ra": "Dessous",
+        "rb": "Dessus",
+        "ga": "Revenir en garde ou finir dessus (demi-garde = non)",
+        "gb": "Soumettre. Transitions libres si tu restes dominant",
+        "reset": "Retour en garde, dessous qui finit dessus ou soumission → on repart en monté, rôles inversés"
+      },
+      {
+        "p": "Tortue",
+        "d": "NOGI MMA",
+        "ra": "En tortue",
+        "rb": "Attaquant",
+        "ga": "Revenir en garde ou finir dessus (demi-garde = non)",
+        "gb": "Soumettre. Transitions libres si tu restes dominant",
+        "reset": "Retour en garde, dessous qui finit dessus ou soumission → on repart en tortue, rôles inversés"
+      },
+      {
+        "p": "Single leg au sol",
+        "d": "NOGI MMA",
+        "ra": "Jambe tenue",
+        "rb": "Attaquant",
+        "ga": "Finir clairement dessus.",
+        "gb": "Finir clairement dessus.",
+        "reset": "Dès que l'un est clairement dessus → on repart, rôles inversés"
+      },
+      {
+        "p": "Garde fermée",
+        "d": "NOGI MMA",
+        "ra": "Garde",
+        "rb": "Dans la garde",
+        "ga": "Renverser ou soumettre.",
+        "gb": "Passer, puis soumettre",
+        "reset": "Uniquement sur soumission, on continue après un passage ou un renversement"
+      },
+      {
+        "p": "Garde ouverte",
+        "d": "NOGI MMA",
+        "ra": "Garde",
+        "rb": "Passeur",
+        "ga": "Renverser ou soumettre.",
+        "gb": "Passer, puis soumettre",
+        "reset": "Uniquement sur soumission, on continue après un passage ou un renversement"
+      },
+      {
+        "p": "Debout",
+        "d": "NOGI MMA",
+        "ra": "Combattant A",
+        "rb": "Combattant B",
+        "ga": "Amener au sol, puis soumettre.",
+        "gb": "Amener au sol, puis soumettre.",
+        "reset": "Uniquement sur soumission, on continue après un passage ou un renversement"
+      }
+    ]
+  },
+  "echappements_dabord": {
+    "nom": "Échappements d'abord",
+    "description": "Pour les débutants : chaque round part d'une mauvaise position. On apprend d'abord à survivre, ensuite à sortir.",
+    "positions": [
+      "Monté bas (montada)",
+      "Monté haut",
+      "Contrôle latéral (cem quilos)",
+      "Kesa gatame (tête et bras)",
+      "Nord-sud",
+      "Genou sur le ventre (joelho na barriga)",
+      "Dos pris, crochets en place",
+      "Seatbelt sans crochets",
+      "Tortue"
+    ],
+    "regle_debutant": "Priorité 1 : ne pas se faire soumettre. Priorité 2 : sortir. Le dessous gagne s'il revient en garde ; le dessus gagne s'il soumet.",
+    "regle_confirme": "Sortie offensive : le dessous ne gagne que s'il sort directement sur une attaque (jambes, dos ou soumission), pas en revenant simplement en garde."
+  },
+  "a_rebours": {
+    "nom": "À rebours",
+    "description": "On commence tout près de la finition, puis chaque round repart une étape plus loin.",
+    "chaines": [
+      {
+        "nom": "Dos",
+        "d": "NOGI MMA",
+        "etapes": [
+          "Mata-leão engagé, main au menton",
+          "Dos pris, crochets en place",
+          "Seatbelt sans crochets",
+          "Tortue"
+        ]
+      },
+      {
+        "nom": "Monté",
+        "d": "NOGI MMA",
+        "etapes": [
+          "Clé de bras depuis le monté",
+          "Monté haut",
+          "Monté bas (montada)",
+          "Contrôle latéral (cem quilos)"
+        ]
+      },
+      {
+        "nom": "Garde fermée",
+        "d": "NOGI MMA",
+        "etapes": [
+          "Triangle verrouillé",
+          "Garde fermée, posture cassée",
+          "Garde fermée"
+        ]
+      },
+      {
+        "nom": "Jambes",
+        "d": "NOGI",
+        "etapes": [
+          "Clé de cheville engagée",
+          "Ashi garami",
+          "Single leg X",
+          "Garde ouverte, passeur debout"
+        ]
+      },
+      {
+        "nom": "Front headlock",
+        "d": "NOGI MMA",
+        "etapes": [
+          "Darce engagé",
+          "Front headlock au sol",
+          "Sprawl, l'attaquant tient encore une jambe",
+          "Double-leg engagé"
+        ]
+      },
+      {
+        "nom": "Passage",
+        "d": "NOGI MMA",
+        "etapes": [
+          "Knee cut engagé",
+          "Demi-garde avec knee shield",
+          "Garde ouverte, passeur debout"
+        ]
+      }
+    ]
+  },
+  "mauvaises_positions": [
+    "Monté bas (montada)",
+    "Monté haut",
+    "Monté technique",
+    "Contrôle latéral (cem quilos)",
+    "Contrôle latéral, dessous avec ses cadres",
+    "Kesa gatame (tête et bras)",
+    "Nord-sud",
+    "Genou sur le ventre (joelho na barriga)",
+    "Dos pris, crochets en place",
+    "Dos pris, body triangle",
+    "Seatbelt sans crochets",
+    "Tortue",
+    "Front headlock au sol",
+    "Crucifix"
+  ]
+}
