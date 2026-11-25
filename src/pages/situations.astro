@@ -1,0 +1,1233 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Icon from '../components/Icon.astro';
+import data from '../data/situations.json';
+const base = import.meta.env.BASE_URL;
+
+const themes = Object.entries(data.themes);
+const label = 'text-xs font-bold uppercase tracking-[0.12em] text-muted';
+const pill = 'press inline-flex items-center min-h-11 px-4 rounded-full border border-line text-sm font-semibold text-muted cursor-pointer hover:text-fg peer-checked:bg-fg peer-checked:text-bg peer-checked:border-fg peer-focus-visible:outline peer-focus-visible:outline-2 peer-focus-visible:outline-accent peer-focus-visible:outline-offset-[3px]';
+const field = 'w-full min-h-11 px-4 rounded-full border border-line bg-surface text-base text-fg placeholder:text-faint transition-colors duration-150 hover:border-muted';
+const btn = 'press inline-flex items-center justify-center gap-1.5 min-h-11 px-4 rounded-full border border-line text-sm font-semibold hover:border-muted';
+const stepBtn = 'press size-11 shrink-0 grid place-items-center rounded-full border border-line text-xl font-bold leading-none hover:border-muted disabled:opacity-40 disabled:pointer-events-none';
+
+const steppers = [
+  { key: 'rounds', titre: 'Rounds', moins: 'Moins de rounds', plus: 'Plus de rounds' },
+  { key: 'roundSec', titre: 'Durée du round', moins: 'Raccourcir le round', plus: 'Allonger le round' },
+  { key: 'restSec', titre: 'Repos', moins: 'Raccourcir le repos', plus: 'Allonger le repos' },
+];
+const groupes = [
+  { name: 'format', titre: 'Format', options: [['pairs', 'Binômes en rotation'], ['kot', 'Roi du tapis']] },
+  { name: 'disc', titre: 'Discipline', options: [['all', 'Tout'], ['NOGI', 'NOGI'], ['MMA', 'MMA']] },
+  { name: 'level', titre: 'Niveau', options: [['deb', 'Débutant'], ['conf', 'Confirmé']] },
+];
+const [format, disc, level] = groupes;
+---
+
+<Layout
+  title="Situations de sparring"
+  description={`Sparring à thème NOGI et MMA : ${data.positions.length} positions tirées au sort, binômes par poids et chrono de rounds.`}
+>
+  <section>
+    <div class="max-w-site mx-auto px-4 md:px-8 pt-4 pb-8 lg:pt-10 lg:pb-14">
+      <a href={base} class="-ml-1 px-1 min-h-11 inline-flex items-center gap-1.5 text-sm font-semibold text-muted transition-colors duration-150 hover:text-fg">
+        <Icon name="arrow-left" class="size-4" /> Accueil
+      </a>
+      <h1 class="mt-2 font-display text-[clamp(56px,12vw,120px)]">
+        Situations <span class="text-accent">de sparring</span>
+      </h1>
+      <dl class="mt-6 flex flex-wrap gap-x-7 gap-y-2 tabular-nums">
+        <div class="flex flex-col">
+          <dt class={label}>Positions</dt>
+          <dd id="count-pos" class="font-display text-[32px] leading-[1.1]">{data.positions.length}</dd>
+        </div>
+        <div class="flex flex-col">
+          <dt class={label}>Contraintes</dt>
+          <dd class="font-display text-[32px] leading-[1.1]">{data.contraintes.length}</dd>
+        </div>
+        <div class="flex flex-col">
+          <dt class={label}>Thèmes</dt>
+          <dd class="font-display text-[32px] leading-[1.1]">{themes.length}</dd>
+        </div>
+      </dl>
+      <p class="mt-5 text-lg text-muted max-w-[46ch]">Tire une situation, forme les binômes et lance les rounds. Le téléphone sonne les départs et les fins.</p>
+    </div>
+  </section>
+
+  <div class="max-w-site mx-auto px-4 md:px-8 pb-12 grid gap-12 lg:grid-cols-2 lg:gap-16 lg:items-start">
+    <!-- Colonne 1 : séance et paquet -->
+    <div class="min-w-0 flex flex-col gap-12">
+      <section aria-labelledby="h-seance">
+        <h2 id="h-seance" class={label}>Séance</h2>
+        <fieldset class="mt-4">
+          <legend class="sr-only">{format.titre}</legend>
+          <div class="flex flex-wrap gap-2">
+            {format.options.map(([v, t]) => (
+              <label><input type="radio" name={format.name} value={v} class="peer sr-only" /><span class={pill}>{t}</span></label>
+            ))}
+          </div>
+        </fieldset>
+        <div class="mt-5">
+          {steppers.map(s => (
+            <div class="flex items-center justify-between gap-3 py-2.5 border-t border-line">
+              <span id={`lbl-${s.key}`} class="font-semibold">{s.titre}</span>
+              <div class="flex items-center gap-1.5" role="group" aria-labelledby={`lbl-${s.key}`}>
+                <button type="button" class={stepBtn} data-step={s.key} data-dir="-1" aria-label={s.moins}>−</button>
+                <output id={`out-${s.key}`} class="w-[4.5rem] text-center font-display text-[30px] leading-none tabular-nums !normal-case" aria-live="polite"></output>
+                <button type="button" class={stepBtn} data-step={s.key} data-dir="1" aria-label={s.plus}>+</button>
+              </div>
+            </div>
+          ))}
+          <label id="swap-row" class="flex items-center justify-between gap-3 py-2.5 min-h-[66px] border-y border-line cursor-pointer">
+            <span class="font-semibold">Inverser les rôles à mi-round</span>
+            <input id="swap" type="checkbox" class="size-[22px] shrink-0 accent-accent-strong cursor-pointer" />
+          </label>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-paquet">
+        <h2 id="h-paquet" class={label}>Paquet</h2>
+        <div class="mt-4 flex flex-col gap-5">
+          {[disc, level].map(g => (
+            <fieldset>
+              <legend class="mb-2 font-semibold">{g.titre}</legend>
+              <div class="flex flex-wrap gap-2">
+                {g.options.map(([v, t]) => (
+                  <label><input type="radio" name={g.name} value={v} class="peer sr-only" /><span class={pill}>{t}</span></label>
+                ))}
+              </div>
+            </fieldset>
+          ))}
+          <div>
+            <label for="theme" class="block mb-2 font-semibold">Thème de la séance</label>
+            <select id="theme" class={`${field} sm:max-w-xs cursor-pointer`}>
+              <option value="all">Tous les thèmes</option>
+              {themes.map(([k, t]) => <option value={k}>{t}</option>)}
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="h-apercu">
+        <div class="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+          <h2 id="h-apercu" class={label}>Aperçu d'une carte</h2>
+          <button id="redraw" type="button" class={`${btn} whitespace-nowrap`}><Icon name="shuffle" class="size-4" /> Tirer une autre carte</button>
+        </div>
+        <div id="preview" class="mt-4" aria-live="polite"></div>
+      </section>
+    </div>
+
+    <!-- Colonne 2 : présents et situations du club -->
+    <div class="min-w-0 flex flex-col gap-12">
+      <section aria-labelledby="h-presents">
+        <div class="flex items-baseline justify-between gap-4">
+          <h2 id="h-presents" class={label}>Présents</h2>
+          <p id="present-count" class="text-sm font-semibold text-muted tabular-nums"></p>
+        </div>
+        <form id="add-member" class="mt-4 grid grid-cols-[minmax(0,1fr)_5.5rem_auto] gap-2">
+          <label class="sr-only" for="m-name">Prénom</label>
+          <input id="m-name" class={field} placeholder="Prénom" maxlength="40" autocomplete="off" required />
+          <label class="sr-only" for="m-weight">Poids en kg</label>
+          <input id="m-weight" class={`${field} px-3 text-center`} placeholder="kg" inputmode="decimal" type="number" min="20" max="250" step="0.5" />
+          <button type="submit" class={`${btn} bg-fg text-bg border-fg`} aria-label="Ajouter le membre"><Icon name="plus" class="size-4" /><span class="hidden sm:inline">Ajouter</span></button>
+        </form>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button id="check-all" type="button" class={btn}>Tout cocher</button>
+          <button id="check-none" type="button" class={btn}>Tout décocher</button>
+        </div>
+        <ul id="members" class="mt-4 border-b border-line"></ul>
+        <p id="members-empty" class="mt-4 text-muted">Ajoute les membres présents. Le poids sert à former des binômes équilibrés.</p>
+      </section>
+
+      <section aria-labelledby="h-club">
+        <h2 id="h-club" class={label}>Situations du club</h2>
+        <p class="mt-3 text-muted">Ajoute vos propres positions au paquet. Laisse le rôle B vide si les deux combattants ont le même rôle.</p>
+        <form id="add-club" class="mt-4 grid gap-2 sm:grid-cols-2">
+          <label class="sm:col-span-2"><span class="sr-only">Nom de la position</span><input id="c-p" class={field} placeholder="Nom de la position" maxlength="60" required /></label>
+          <label><span class="sr-only">Thème</span>
+            <select id="c-th" class={`${field} cursor-pointer`}>{themes.map(([k, t]) => <option value={k}>{t}</option>)}</select>
+          </label>
+          <label><span class="sr-only">Discipline</span>
+            <select id="c-d" class={`${field} cursor-pointer`}>
+              <option value="NOGI MMA">NOGI et MMA</option><option value="NOGI">NOGI</option><option value="MMA">MMA</option>
+            </select>
+          </label>
+          <label><span class="sr-only">Rôle A</span><input id="c-ra" class={field} placeholder="Rôle A (ex. Dessous)" maxlength="30" /></label>
+          <label><span class="sr-only">Objectif A</span><input id="c-ga" class={field} placeholder="Objectif A" maxlength="80" /></label>
+          <label><span class="sr-only">Rôle B</span><input id="c-rb" class={field} placeholder="Rôle B (ex. Dessus)" maxlength="30" /></label>
+          <label><span class="sr-only">Objectif B</span><input id="c-gb" class={field} placeholder="Objectif B" maxlength="80" /></label>
+          <div class="sm:col-span-2 flex flex-wrap items-center gap-x-6 gap-y-1">
+            <label class="inline-flex items-center gap-2.5 min-h-11 cursor-pointer font-semibold"><input id="c-st" type="checkbox" class="size-5 accent-accent-strong" /> Debout</label>
+            <label class="inline-flex items-center gap-2.5 min-h-11 cursor-pointer font-semibold"><input id="c-lv" type="checkbox" class="size-5 accent-accent-strong" /> Confirmés seulement</label>
+            <button type="submit" class={`${btn} ml-auto`}><Icon name="plus" class="size-4" /> Ajouter au paquet</button>
+          </div>
+        </form>
+        <ul id="club" class="mt-4"></ul>
+      </section>
+    </div>
+  </div>
+
+  <div class="sticky bottom-0 z-[5] border-t border-line bg-bg/90 backdrop-blur-md pb-[env(safe-area-inset-bottom)]">
+    <div class="max-w-site mx-auto px-4 md:px-8 py-3 flex flex-wrap items-center justify-between gap-x-6 gap-y-2">
+      <p id="summary" class="text-sm font-semibold text-muted tabular-nums" aria-live="polite"></p>
+      <button id="start" type="button" class="press inline-flex items-center justify-center gap-2 min-h-12 px-6 rounded-full bg-accent-strong text-white font-bold max-sm:w-full disabled:opacity-40 disabled:cursor-not-allowed">
+        <Icon name="play" class="size-4" /> Démarrer la séance
+      </button>
+    </div>
+  </div>
+
+  <!-- Écran de séance -->
+  <div id="session" class="fixed inset-0 z-50 bg-bg text-fg flex flex-col overflow-y-auto overscroll-contain" role="dialog" aria-modal="true" aria-label="Séance de sparring" hidden>
+    <div id="live" class="flex-1 flex flex-col">
+      <div id="band" class="sit-band">
+        <div class="max-w-site mx-auto px-4 md:px-8 h-14 flex items-center justify-between gap-4">
+          <p id="phase-label" class="text-sm font-bold uppercase tracking-[0.12em]" aria-live="polite"></p>
+          <p id="round-label" class="font-display text-2xl tabular-nums"></p>
+        </div>
+      </div>
+      <div class="flex-1 w-full max-w-site mx-auto px-4 md:px-8 py-4 lg:py-8 grid gap-6 content-start lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12">
+        <div class="min-w-0 lg:col-start-1 lg:row-start-1">
+          <p id="timer" class="sit-timer font-display tabular-nums" role="timer">0:00</p>
+          <p id="flash" class="sit-flash" aria-live="assertive"></p>
+        </div>
+        <div class="min-w-0 lg:col-start-2 lg:row-start-1 lg:row-span-2">
+          <p id="card-label" class={label}></p>
+          <div id="session-card" class="mt-2"></div>
+        </div>
+        <div id="people" class="min-w-0 lg:col-start-1 lg:row-start-2"></div>
+      </div>
+      <div class="sticky bottom-0 border-t border-line bg-bg/90 backdrop-blur-md pb-[env(safe-area-inset-bottom)]">
+        <div class="max-w-site mx-auto px-2 sm:px-4 md:px-8 py-2 grid grid-cols-5 gap-1 sm:flex sm:flex-wrap sm:justify-center sm:gap-2">
+          <button id="s-pause" type="button" class="sit-ctrl press">
+            <span data-icon="pause"><Icon name="pause" /></span><span data-icon="play" hidden><Icon name="play" /></span>
+            <span id="s-pause-text">Pause</span>
+          </button>
+          <button id="s-skip" type="button" class="sit-ctrl press"><Icon name="skip" /><span>Passer</span></button>
+          <button id="s-card" type="button" class="sit-ctrl press"><Icon name="shuffle" /><span>Nouvelle carte</span></button>
+          <button id="s-wall" type="button" class="sit-ctrl press" aria-pressed="false"><Icon name="expand" /><span>Mode mur</span></button>
+          <button id="s-stop" type="button" class="sit-ctrl press"><Icon name="x" /><span id="s-stop-text">Arrêter</span></button>
+        </div>
+      </div>
+    </div>
+
+    <div id="end" class="flex-1 w-full max-w-site mx-auto px-4 md:px-8 py-10 lg:py-16" hidden>
+      <p class={label}>Séance terminée</p>
+      <p class="mt-2 font-display text-[clamp(48px,10vw,96px)]">Bien <span class="text-accent">joué</span></p>
+      <div class="mt-8 grid gap-10 lg:grid-cols-2 lg:gap-16">
+        <div id="end-kot" hidden></div>
+        <div>
+          <p class={label}>Situations travaillées</p>
+          <ol id="end-list" class="mt-3"></ol>
+        </div>
+      </div>
+      <div class="mt-10 flex flex-wrap gap-3">
+        <button id="relaunch" type="button" class="press inline-flex items-center gap-2 min-h-12 px-6 rounded-full bg-accent-strong text-white font-bold"><Icon name="play" class="size-4" /> Relancer les mêmes réglages</button>
+        <button id="back" type="button" class={`${btn} min-h-12 px-6`}><Icon name="arrow-left" class="size-4" /> Retour aux réglages</button>
+      </div>
+    </div>
+  </div>
+
+  <template id="ico-trash"><Icon name="trash" class="size-[18px]" /></template>
+</Layout>
+
+<script>
+  import data from '../data/situations.json';
+
+  type Pos = { p: string; th: string; d: string; ra: string; rb: string; ga: string[]; gb: string[]; st?: boolean; sym?: boolean; lv?: string; club?: string };
+  type Con = { t: string; d: string; g?: boolean; s?: boolean; a?: boolean; lv?: string; nth?: string[] };
+  type Member = { id: string; name: string; w: number | null; on: boolean };
+  type Settings = { format: 'pairs' | 'kot'; rounds: number; roundSec: number; restSec: number; swap: boolean; disc: string; level: string; theme: string };
+  type Card = { p: string; th: string; disc: string; ra: string; rb: string; goalA: string; goalB: string; c: string; sym: boolean; conf: boolean; deb: boolean };
+  type Pair = { a: string; b: string; gap: number | null };
+
+  const THEMES = data.themes as Record<string, string>;
+  const BUILTIN = data.positions as Pos[];
+  const CONS = data.contraintes as Con[];
+  const KEY = 'slamm-situations-v1';
+  const OPTS: Record<string, number[]> = {
+    rounds: Array.from({ length: 18 }, (_, i) => i + 3),
+    roundSec: [30, 45, 60, 90, 120, 150, 180, 240, 300],
+    restSec: [10, 15, 20, 30, 45, 60],
+  };
+  const PREP = 10;
+  const DEFAULTS: Settings = { format: 'pairs', rounds: 8, roundSec: 60, restSec: 20, swap: true, disc: 'all', level: 'deb', theme: 'all' };
+
+  /* ---------- Stockage ---------- */
+  const store = { settings: { ...DEFAULTS }, members: [] as Member[], club: [] as Pos[] };
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (raw && typeof raw === 'object') {
+      const s = { ...DEFAULTS, ...(raw.settings || {}) };
+      for (const k of ['rounds', 'roundSec', 'restSec']) if (!OPTS[k].includes(s[k])) s[k] = DEFAULTS[k];
+      if (!['pairs', 'kot'].includes(s.format)) s.format = DEFAULTS.format;
+      if (!['all', 'NOGI', 'MMA'].includes(s.disc)) s.disc = DEFAULTS.disc;
+      if (!['deb', 'conf'].includes(s.level)) s.level = DEFAULTS.level;
+      if (s.theme !== 'all' && !THEMES[s.theme]) s.theme = 'all';
+      s.swap = !!s.swap;
+      store.settings = s;
+      if (Array.isArray(raw.members)) store.members = raw.members.filter((m: Member) => m && typeof m.name === 'string' && m.id).map((m: Member) => ({ id: String(m.id), name: m.name.slice(0, 40), w: typeof m.w === 'number' && m.w > 0 ? m.w : null, on: !!m.on }));
+      if (Array.isArray(raw.club)) store.club = raw.club.filter((p: Pos) => p && typeof p.p === 'string' && THEMES[p.th] && Array.isArray(p.ga) && Array.isArray(p.gb));
+    }
+  } catch { /* stockage indisponible : on garde les valeurs par défaut */ }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(store)); } catch { /* quota ou navigation privée */ } };
+
+  /* ---------- Outils ---------- */
+  const $ = <T extends HTMLElement = HTMLElement>(id: string) => document.getElementById(id) as T;
+  const esc = (v: unknown) => String(v ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c] as string);
+  const pick = <T,>(a: T[]): T => a[Math.floor(Math.random() * a.length)];
+  const shuffle = <T,>(a: T[]): T[] => { const r = [...a]; for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; } return r; };
+  const fmt = (sec: number) => `${Math.floor(sec / 60)}:${String(sec % 60).padStart(2, '0')}`;
+  const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  const trashIcon = ($('ico-trash') as HTMLTemplateElement).innerHTML;
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+  /* ---------- Paquet ---------- */
+  const allPositions = () => [...BUILTIN, ...store.club];
+  const discsOf = (p: Pos) => p.d.split(' ');
+  function eligible(s: Settings) {
+    return allPositions().filter(p =>
+      (s.disc === 'all' || discsOf(p).includes(s.disc)) &&
+      (s.level === 'conf' || p.lv !== 'conf') &&
+      (s.theme === 'all' || p.th === s.theme));
+  }
+  // Une contrainte ne contredit jamais la position
+  function fits(c: Con, p: Pos, disc: string, level: string) {
+    if (c.d !== '*' && c.d !== disc) return false;
+    if (c.g && p.st) return false;
+    if (c.s && !p.st) return false;
+    if (c.a && p.sym) return false;
+    if (c.lv && c.lv !== level) return false;
+    if (c.nth && c.nth.includes(p.th)) return false;
+    return true;
+  }
+  function draw(s: Settings, avoid: string[] = []): Card | null {
+    const pool = eligible(s);
+    if (!pool.length) return null;
+    const fresh = pool.filter(p => !avoid.includes(p.p));
+    const pos = pick(fresh.length ? fresh : pool);
+    const disc = s.disc === 'all' ? pick(discsOf(pos)) : s.disc;
+    const cons = CONS.filter(c => fits(c, pos, disc, s.level));
+    const sym = !!pos.sym;
+    const ra = sym ? 'Combattant A' : pos.ra;
+    const rb = sym ? 'Combattant B' : pos.rb;
+    const c = cons.length ? pick(cons).t.replaceAll('{A}', ra).replaceAll('{B}', rb) : 'Travail libre de la position';
+    return { p: pos.p, th: pos.th, disc, ra, rb, goalA: pick(pos.ga), goalB: pick(pos.gb), c, sym, conf: pos.lv === 'conf', deb: s.level === 'deb' };
+  }
+  function cardHTML(card: Card | null, names?: { a?: string; b?: string; aNote?: string; bNote?: string }) {
+    if (!card) return '<div class="sit-card sit-empty">Aucune position ne correspond à ces réglages. Change la discipline, le niveau ou le thème.</div>';
+    const half = (x: 'a' | 'b', role: string, goal: string, name?: string, note?: string) => `
+      <div class="sit-half">
+        <p class="sit-half-head">${card.sym ? '' : `<span class="sit-letter sit-letter-${x}">${x.toUpperCase()}</span>`}<span class="sit-role">${esc(role)}</span></p>
+        ${name ? `<p class="sit-half-name">${esc(name)}${note ? ` <span class="sit-half-note">${esc(note)}</span>` : ''}</p>` : ''}
+        <p class="sit-goal">${esc(goal)}</p>
+      </div>`;
+    return `<article class="sit-card">
+      <div class="sit-card-meta">
+        <span class="sit-tag sit-tag-strong">${esc(card.disc)}</span>
+        <span class="sit-tag">${esc(THEMES[card.th] || card.th)}</span>
+        ${card.conf ? '<span class="sit-tag">Confirmés</span>' : ''}
+      </div>
+      <h3 class="sit-pos font-display">${esc(card.p)}</h3>
+      <div class="sit-halves">${half('a', card.ra, card.goalA, names?.a, names?.aNote)}${half('b', card.rb, card.goalB, names?.b, names?.bNote)}</div>
+      <div class="sit-rule"><p class="sit-label">Contrainte</p><p class="sit-rule-text">${esc(card.c)}</p></div>
+      ${card.deb ? '<p class="sit-safety">Pas de clés de talon, intensité contrôlée, on tape tôt</p>' : ''}
+    </article>`;
+  }
+  function flip(el: HTMLElement) {
+    const card = el.querySelector('.sit-card') as HTMLElement | null;
+    if (!card) return;
+    card.classList.remove('sit-flip');
+    void card.offsetWidth;
+    card.classList.add('sit-flip');
+  }
+
+  /* ---------- Réglages ---------- */
+  const S = () => store.settings;
+  const present = () => store.members.filter(m => m.on);
+
+  function syncSettingsUI() {
+    const s = S();
+    for (const name of ['format', 'disc', 'level']) {
+      document.querySelectorAll<HTMLInputElement>(`input[name="${name}"]`).forEach(i => { i.checked = i.value === (s as any)[name]; });
+    }
+    $('out-rounds').textContent = String(s.rounds);
+    $('out-roundSec').textContent = fmt(s.roundSec);
+    $('out-restSec').textContent = s.restSec < 60 ? `${s.restSec} s` : fmt(s.restSec);
+    document.querySelectorAll<HTMLButtonElement>('[data-step]').forEach(b => {
+      const k = b.dataset.step as string, o = OPTS[k], i = o.indexOf((s as any)[k]);
+      b.disabled = b.dataset.dir === '-1' ? i <= 0 : i >= o.length - 1;
+    });
+    $<HTMLInputElement>('swap').checked = s.swap;
+    $('swap-row').hidden = s.format === 'kot';
+    $<HTMLSelectElement>('theme').value = s.theme;
+    updateSummary();
+  }
+  function updateSummary() {
+    const s = S(), n = present().length;
+    const total = PREP + s.rounds * s.roundSec + (s.rounds - 1) * s.restSec;
+    const parts = [`${s.rounds} rounds de ${fmt(s.roundSec)}`, `environ ${Math.max(1, Math.round(total / 60))} min`];
+    if (n < 2) parts.push('coche au moins 2 présents');
+    else if (s.format === 'kot') parts.push(`1 roi, 1 challenger, ${n - 2} en file`);
+    else parts.push(`${Math.floor(n / 2)} binôme${n >= 4 ? 's' : ''}${n % 2 ? ' + 1 au repos' : ''}`);
+    $('summary').textContent = parts.join(' · ');
+    $<HTMLButtonElement>('start').disabled = n < 2;
+  }
+  function renderPreview(animate = true) {
+    const el = $('preview');
+    el.innerHTML = cardHTML(draw(S()));
+    if (animate) flip(el);
+  }
+  function renderMembers() {
+    const list = $('members');
+    list.innerHTML = store.members.map(m => `
+      <li class="sit-member"${m.on ? '' : ' data-off'}>
+        <label class="sit-check"><input type="checkbox" data-act="on" data-id="${esc(m.id)}"${m.on ? ' checked' : ''} /><span class="sit-name">${esc(m.name)}</span></label>
+        <label class="sit-weight"><span class="sr-only">Poids de ${esc(m.name)} en kg</span><input type="number" inputmode="decimal" min="20" max="250" step="0.5" placeholder="—" data-act="w" data-id="${esc(m.id)}" value="${m.w ?? ''}" /><span aria-hidden="true">kg</span></label>
+        <button type="button" class="sit-iconbtn press" data-act="del" data-id="${esc(m.id)}" aria-label="Supprimer ${esc(m.name)}">${trashIcon}</button>
+      </li>`).join('');
+    list.hidden = !store.members.length;
+    $('members-empty').hidden = !!store.members.length;
+    $('present-count').textContent = store.members.length ? `${present().length} présent${present().length > 1 ? 's' : ''} sur ${store.members.length}` : '';
+    updateSummary();
+  }
+  function renderClub() {
+    $('club').innerHTML = store.club.map((p, i) => `
+      <li class="sit-club">
+        <div class="min-w-0"><p class="sit-club-name">${esc(p.p)}</p>
+        <p class="sit-club-meta">${esc(THEMES[p.th])} · ${esc(p.d.replace(' ', ' et '))}${p.st ? ' · Debout' : ''}${p.lv === 'conf' ? ' · Confirmés' : ''}</p></div>
+        <button type="button" class="sit-iconbtn press" data-idx="${i}" aria-label="Retirer ${esc(p.p)} du paquet">${trashIcon}</button>
+      </li>`).join('');
+    $('count-pos').textContent = String(allPositions().length);
+  }
+
+  document.querySelectorAll<HTMLInputElement>('input[name="format"], input[name="disc"], input[name="level"]').forEach(i => {
+    i.addEventListener('change', () => {
+      (S() as any)[i.name] = i.value; save(); syncSettingsUI();
+      if (i.name !== 'format') renderPreview();
+    });
+  });
+  document.querySelectorAll<HTMLButtonElement>('[data-step]').forEach(b => b.addEventListener('click', () => {
+    const k = b.dataset.step as string, o = OPTS[k];
+    const i = Math.min(o.length - 1, Math.max(0, o.indexOf((S() as any)[k]) + Number(b.dataset.dir)));
+    (S() as any)[k] = o[i]; save(); syncSettingsUI();
+  }));
+  $<HTMLInputElement>('swap').addEventListener('change', e => { S().swap = (e.target as HTMLInputElement).checked; save(); });
+  $<HTMLSelectElement>('theme').addEventListener('change', e => { S().theme = (e.target as HTMLSelectElement).value; save(); renderPreview(); });
+  $('redraw').addEventListener('click', () => renderPreview());
+
+  $<HTMLFormElement>('add-member').addEventListener('submit', e => {
+    e.preventDefault();
+    const nameEl = $<HTMLInputElement>('m-name'), wEl = $<HTMLInputElement>('m-weight');
+    const name = nameEl.value.trim().slice(0, 40);
+    if (!name) return;
+    const w = parseFloat(wEl.value.replace(',', '.'));
+    store.members.push({ id: uid(), name, w: w > 0 && w < 300 ? w : null, on: true });
+    save(); renderMembers();
+    nameEl.value = ''; wEl.value = ''; nameEl.focus();
+  });
+  $('members').addEventListener('change', e => {
+    const t = e.target as HTMLInputElement, m = store.members.find(x => x.id === t.dataset.id);
+    if (!m) return;
+    if (t.dataset.act === 'on') {
+      m.on = t.checked;
+      t.closest('li')?.toggleAttribute('data-off', !m.on);
+      $('present-count').textContent = `${present().length} présent${present().length > 1 ? 's' : ''} sur ${store.members.length}`;
+      updateSummary();
+    }
+    if (t.dataset.act === 'w') { const w = parseFloat(t.value); m.w = w > 0 && w < 300 ? w : null; }
+    save();
+  });
+  $('members').addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-act="del"]');
+    if (!b) return;
+    store.members = store.members.filter(m => m.id !== b.dataset.id);
+    save(); renderMembers();
+  });
+  const checkAll = (on: boolean) => { store.members.forEach(m => { m.on = on; }); save(); renderMembers(); };
+  $('check-all').addEventListener('click', () => checkAll(true));
+  $('check-none').addEventListener('click', () => checkAll(false));
+
+  $<HTMLFormElement>('add-club').addEventListener('submit', e => {
+    e.preventDefault();
+    const v = (id: string) => $<HTMLInputElement>(id).value.trim();
+    const p = v('c-p').slice(0, 60);
+    if (!p) return;
+    const ra = v('c-ra').slice(0, 30), rb = v('c-rb').slice(0, 30);
+    const sym = !ra || !rb || ra.toLowerCase() === rb.toLowerCase();
+    const ga = v('c-ga').slice(0, 80) || 'Prendre le dessus';
+    const gb = v('c-gb').slice(0, 80) || (sym ? ga : 'Prendre le dessus');
+    const pos: Pos = { p, th: v('c-th'), d: v('c-d'), ra: sym ? 'Combattant A' : ra, rb: sym ? 'Combattant B' : rb, ga: [ga], gb: [sym ? ga : gb], club: '1' };
+    if (sym) pos.sym = true;
+    if ($<HTMLInputElement>('c-st').checked) pos.st = true;
+    if ($<HTMLInputElement>('c-lv').checked) pos.lv = 'conf';
+    store.club.push(pos);
+    save(); renderClub();
+    (e.target as HTMLFormElement).reset();
+    $('c-p').focus();
+  });
+  $('club').addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-idx]');
+    if (!b) return;
+    store.club.splice(Number(b.dataset.idx), 1);
+    save(); renderClub();
+  });
+
+  syncSettingsUI();
+  renderMembers();
+  renderClub();
+  renderPreview(false);
+
+  /* ---------- Sons (Web Audio, créé au clic sur Démarrer) ---------- */
+  let actx: AudioContext | null = null;
+  function initAudio() {
+    try {
+      if (!actx) { const C = window.AudioContext || (window as any).webkitAudioContext; if (C) actx = new C(); }
+      actx?.resume();
+    } catch { actx = null; }
+  }
+  function tone(freq: number, dur: number, delay = 0, type: OscillatorType = 'sine', vol = 0.35) {
+    if (!actx) return;
+    try {
+      const t = actx.currentTime + delay, o = actx.createOscillator(), g = actx.createGain();
+      o.type = type; o.frequency.value = freq;
+      g.gain.setValueAtTime(0.0001, t);
+      g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+      o.connect(g).connect(actx.destination);
+      o.start(t); o.stop(t + dur + 0.05);
+    } catch { /* son indisponible */ }
+  }
+  const sounds = {
+    count: () => tone(880, 0.14),
+    go: () => tone(1320, 0.5, 0, 'square', 0.25),
+    ten: () => { tone(1046, 0.12); tone(1046, 0.12, 0.2); },
+    swap: () => { tone(1175, 0.12); tone(1175, 0.12, 0.18); tone(1175, 0.12, 0.36); },
+    end: () => { tone(196, 1.1, 0, 'sawtooth', 0.22); tone(147, 1.1, 0, 'sine', 0.35); },
+    next: () => tone(990, 0.1),
+  };
+
+  /* ---------- Écran allumé ---------- */
+  let wakeLock: any = null;
+  async function lockScreen() {
+    try { if ('wakeLock' in navigator && document.visibilityState === 'visible') wakeLock = await (navigator as any).wakeLock.request('screen'); } catch { wakeLock = null; }
+  }
+  function releaseScreen() { try { wakeLock?.release(); } catch { /* déjà libéré */ } wakeLock = null; }
+
+  /* ---------- Binômes ---------- */
+  type Stats = { met: Record<string, number>; timesA: Record<string, number>; rests: Record<string, number> };
+  const pairKey = (a: string, b: string) => (a < b ? `${a}|${b}` : `${b}|${a}`);
+  function makePairs(ids: string[], st: Stats, round: number, weight: (id: string) => number | null) {
+    const cost = (a: string, b: string) => {
+      const wa = weight(a), wb = weight(b);
+      return (wa != null && wb != null ? Math.abs(wa - wb) : 6) + 25 * (st.met[pairKey(a, b)] || 0);
+    };
+    // Glouton (la paire la moins chère d'abord), puis échanges de partenaires tant que le coût baisse
+    const pairUp = (pool: string[]) => {
+      const rem = shuffle(pool), pairs: [string, string][] = [];
+      while (rem.length > 1) {
+        let bi = 0, bj = 1, best = Infinity;
+        for (let i = 0; i < rem.length; i++) for (let j = i + 1; j < rem.length; j++) {
+          const c = cost(rem[i], rem[j]);
+          if (c < best) { best = c; bi = i; bj = j; }
+        }
+        pairs.push([rem[bi], rem[bj]]);
+        rem.splice(bj, 1); rem.splice(bi, 1);
+      }
+      let improved = true, guard = 0;
+      while (improved && guard++ < 50) {
+        improved = false;
+        for (let i = 0; i < pairs.length; i++) for (let j = i + 1; j < pairs.length; j++) {
+          const [a, b] = pairs[i], [c, d] = pairs[j], now = cost(a, b) + cost(c, d);
+          if (cost(a, c) + cost(b, d) < now - 0.01) { pairs[i] = [a, c]; pairs[j] = [b, d]; improved = true; }
+          else if (cost(a, d) + cost(b, c) < now - 0.01) { pairs[i] = [a, d]; pairs[j] = [b, c]; improved = true; }
+        }
+      }
+      return { pairs, total: pairs.reduce((t, [a, b]) => t + cost(a, b), 0) };
+    };
+    let rester: string | null = null;
+    let result: ReturnType<typeof pairUp>;
+    if (ids.length % 2) {
+      // Le repos tourne : parmi ceux qui se sont le moins reposés, celui qui laisse les binômes les plus équilibrés
+      const fewest = Math.min(...ids.map(id => st.rests[id] || 0));
+      const candidates = ids.filter(id => (st.rests[id] || 0) === fewest);
+      let best = Infinity;
+      result = { pairs: [], total: 0 };
+      for (const c of shuffle(candidates)) {
+        const r = pairUp(ids.filter(id => id !== c));
+        if (r.total < best) { best = r.total; result = r; rester = c; }
+      }
+    } else result = pairUp(ids);
+    const out: Pair[] = result.pairs.map(([x, y]) => {
+      const ax = st.timesA[x] || 0, ay = st.timesA[y] || 0;
+      const [a, b] = ax < ay || (ax === ay && Math.random() < 0.5) ? [x, y] : [y, x];
+      const wa = weight(a), wb = weight(b);
+      return { a, b, gap: wa != null && wb != null ? Math.abs(wa - wb) : null };
+    });
+    return { pairs: out, rester, round };
+  }
+
+  /* ---------- Séance ---------- */
+  type Kot = { queue: string[]; king: string; chal: string; streak: Record<string, number>; best: Record<string, number>; wins: Record<string, number> };
+  type Sess = {
+    set: Settings; names: Record<string, string>; weights: Record<string, number | null>;
+    phase: 'prep' | 'work' | 'rest' | 'done'; round: number; dur: number; end: number; prevRem: number;
+    paused: boolean; left: number; swapped: boolean;
+    card: Card | null; next: Card | null; history: { round: number; card: Card }[];
+    stats: Stats; pairs: ReturnType<typeof makePairs> | null; nextPairs: ReturnType<typeof makePairs> | null;
+    kot: Kot | null; snap: Kot | null; lastBout: { king: string; chal: string } | null; decision: 'king' | 'chal' | null;
+  };
+  let ses: Sess | null = null;
+  let raf = 0, interval = 0, flashTimer = 0, stopTimer = 0, lastShown = -1;
+  const overlay = $('session');
+  const clone = <T,>(o: T): T => JSON.parse(JSON.stringify(o));
+
+  function kotDecide(k: Kot, kingWins: boolean) {
+    const bump = (id: string) => { k.wins[id] = (k.wins[id] || 0) + 1; k.best[id] = Math.max(k.best[id] || 0, k.streak[id] || 0); };
+    if (kingWins) {
+      k.streak[k.king] = (k.streak[k.king] || 0) + 1; bump(k.king);
+      k.streak[k.chal] = 0; k.queue.push(k.chal);
+    } else {
+      k.streak[k.king] = 0; k.queue.push(k.king);
+      k.king = k.chal; k.streak[k.king] = 1; bump(k.king);
+    }
+    k.chal = k.queue.shift() as string;
+  }
+
+  function startSession() {
+    const ids = present().map(m => m.id);
+    if (ids.length < 2) return;
+    initAudio();
+    const set = clone(S());
+    const names: Record<string, string> = {}, weights: Record<string, number | null> = {};
+    present().forEach(m => { names[m.id] = m.name; weights[m.id] = m.w; });
+    ses = {
+      set, names, weights, phase: 'prep', round: 1, dur: 0, end: 0, prevRem: 0, paused: false, left: 0, swapped: false,
+      card: null, next: draw(set), history: [],
+      stats: { met: {}, timesA: {}, rests: {} }, pairs: null, nextPairs: null,
+      kot: null, snap: null, lastBout: null, decision: null,
+    };
+    if (set.format === 'kot') {
+      const q = shuffle(ids);
+      ses.kot = { king: q.shift() as string, chal: q.shift() as string, queue: q, streak: {}, best: {}, wins: {} };
+    } else {
+      ses.nextPairs = makePairs(ids, ses.stats, 1, id => weights[id]);
+    }
+    overlay.hidden = false;
+    $('live').hidden = false; $('end').hidden = true;
+    document.documentElement.style.overflow = 'hidden';
+    resetStop();
+    setPaused(false);
+    enterPhase('prep', Date.now());
+    lockScreen();
+    cancelAnimationFrame(raf); clearInterval(interval);
+    const loop = () => { tick(); raf = requestAnimationFrame(loop); };
+    raf = requestAnimationFrame(loop);
+    // Repli quand l'onglet est en arrière-plan (requestAnimationFrame y est suspendu)
+    interval = window.setInterval(tick, 250);
+    $('s-pause').focus();
+  }
+
+  function enterPhase(phase: Sess['phase'], at: number) {
+    if (!ses) return;
+    const s = ses;
+    s.phase = phase;
+    s.dur = phase === 'prep' ? PREP : phase === 'work' ? s.set.roundSec : s.set.restSec;
+    s.end = at + s.dur * 1000;
+    s.prevRem = s.dur * 1000;
+    s.swapped = false;
+    if (phase === 'work') {
+      s.card = s.next; s.next = null;
+      if (s.card) s.history.push({ round: s.round, card: s.card });
+      if (s.nextPairs) {
+        s.pairs = s.nextPairs; s.nextPairs = null;
+        const st = s.stats;
+        s.pairs.pairs.forEach(p => { const k = pairKey(p.a, p.b); st.met[k] = (st.met[k] || 0) + 1; st.timesA[p.a] = (st.timesA[p.a] || 0) + 1; });
+        if (s.pairs.rester) st.rests[s.pairs.rester] = (st.rests[s.pairs.rester] || 0) + 1;
+      }
+      s.lastBout = null; s.decision = null; s.snap = null;
+      sounds.go();
+    }
+    if (phase === 'rest') {
+      s.next = draw(s.set, s.history.slice(-3).map(h => h.card.p));
+      if (s.set.format === 'pairs') s.nextPairs = makePairs(Object.keys(s.names), s.stats, s.round + 1, id => s.weights[id]);
+    }
+    render(true);
+  }
+
+  function endWork(at: number) {
+    if (!ses) return;
+    sounds.end();
+    // Roi du tapis : sans clic, le roi garde sa place (modifiable pendant le repos)
+    if (ses.kot) {
+      ses.snap = clone(ses.kot);
+      ses.lastBout = { king: ses.kot.king, chal: ses.kot.chal };
+      kotDecide(ses.kot, true);
+      ses.decision = 'king';
+    }
+    if (ses.round >= ses.set.rounds) finish();
+    else enterPhase('rest', at);
+  }
+
+  function advance(at: number) {
+    if (!ses) return;
+    if (ses.phase === 'prep') enterPhase('work', at);
+    else if (ses.phase === 'work') endWork(at);
+    else if (ses.phase === 'rest') { ses.round++; enterPhase('work', at); }
+  }
+
+  function crossed(prev: number, rem: number, t: number) { return prev > t && rem <= t && rem > t - 1500; }
+
+  function tick() {
+    if (!ses || ses.phase === 'done' || ses.paused) return;
+    const now = Date.now();
+    // Chrono basé sur l'horloge : si l'onglet a ralenti, on rattrape les phases manquées
+    let guard = 0;
+    while (ses && ses.phase !== 'done' && now >= ses.end && guard++ < 100) advance(ses.end);
+    if (!ses || ses.phase === 'done') return;
+    const rem = ses.end - now, prev = ses.prevRem;
+    if (ses.phase === 'work') {
+      if (ses.dur > 20 && crossed(prev, rem, 10000)) sounds.ten();
+      const mid = ses.dur * 500;
+      if (ses.set.format === 'pairs' && ses.set.swap && !ses.swapped && prev > mid && rem <= mid) {
+        ses.swapped = true;
+        if (rem > mid - 1500) { sounds.swap(); flash('On inverse les rôles !', 3000); }
+        render(false);
+      }
+    } else {
+      for (const t of [3000, 2000, 1000]) if (crossed(prev, rem, t)) sounds.count();
+    }
+    ses.prevRem = rem;
+    showTime(rem);
+  }
+
+  function showTime(rem: number) {
+    const sec = Math.max(0, Math.ceil(rem / 1000));
+    if (sec === lastShown) return;
+    lastShown = sec;
+    $('timer').textContent = fmt(sec);
+  }
+
+  function flash(text: string, ms: number) {
+    const el = $('flash');
+    el.textContent = text;
+    el.classList.add('is-on');
+    clearTimeout(flashTimer);
+    flashTimer = window.setTimeout(() => el.classList.remove('is-on'), ms);
+  }
+
+  const nm = (id: string) => esc(ses?.names[id] ?? '');
+
+  function render(newCard: boolean) {
+    if (!ses) return;
+    const s = ses;
+    const band = $('band');
+    band.dataset.phase = s.phase;
+    $('phase-label').textContent = s.paused ? 'En pause' : { prep: 'Préparation', work: 'Travail', rest: 'Repos', done: '' }[s.phase];
+    const r = s.phase === 'rest' ? s.round + 1 : s.round;
+    $('round-label').textContent = `Round ${r} / ${s.set.rounds}`;
+    $('card-label').textContent = s.phase === 'work' ? 'Carte du round' : s.phase === 'prep' ? 'Premier round' : 'Prochain round';
+
+    const card = s.phase === 'work' ? s.card : s.next;
+    let names: { a?: string; b?: string; aNote?: string; bNote?: string } | undefined;
+    if (s.kot) {
+      names = { a: s.names[s.kot.king], b: s.names[s.kot.chal], aNote: `roi · série ${s.kot.streak[s.kot.king] || 0}` };
+    } else {
+      const P = s.phase === 'work' ? s.pairs : s.nextPairs;
+      if (P && P.pairs.length === 1) {
+        const p = P.pairs[0], sw = s.phase === 'work' && s.swapped;
+        names = { a: s.names[sw ? p.b : p.a], b: s.names[sw ? p.a : p.b] };
+      }
+    }
+    const cardEl = $('session-card');
+    cardEl.innerHTML = cardHTML(card, names);
+    if (newCard) flip(cardEl);
+    $('people').innerHTML = s.kot ? kotHTML() : pairsHTML();
+    showTime(s.paused ? s.left : s.end - Date.now());
+  }
+
+  function pairsHTML() {
+    const s = ses as Sess;
+    const P = s.phase === 'work' ? s.pairs : s.nextPairs;
+    if (!P) return '';
+    const sw = s.phase === 'work' && s.swapped;
+    const rows = P.pairs.map(p => {
+      const a = sw ? p.b : p.a, b = sw ? p.a : p.b;
+      return `<li class="sit-pair">
+        <p class="sit-pair-row"><span class="sit-letter sit-letter-a">A</span><span class="sit-pair-name">${nm(a)}</span></p>
+        <p class="sit-pair-row"><span class="sit-letter sit-letter-b">B</span><span class="sit-pair-name">${nm(b)}</span></p>
+        ${p.gap != null && p.gap > 12 ? `<p class="sit-warn">Écart de ${Math.round(p.gap)} kg : contrôler l'intensité</p>` : ''}
+      </li>`;
+    }).join('');
+    return `<p class="sit-label">${s.phase === 'work' ? 'Binômes' : 'Binômes du prochain round'}${sw ? ' · rôles inversés' : ''}</p>
+      <ul class="sit-pairs">${rows}</ul>
+      ${P.rester ? `<p class="sit-resting">Au repos : <strong>${nm(P.rester)}</strong></p>` : ''}`;
+  }
+
+  function kotHTML() {
+    const s = ses as Sess, k = s.kot as Kot;
+    let buttons = '';
+    if (s.phase === 'work') {
+      buttons = `<p class="sit-label">Qui gagne ?</p><div class="sit-kot-btns">
+        <button type="button" class="sit-btn press" data-kot="king">${nm(k.king)} garde sa place</button>
+        <button type="button" class="sit-btn press" data-kot="chal">${nm(k.chal)} prend la place</button></div>`;
+    } else if (s.phase === 'rest' && s.lastBout) {
+      const lb = s.lastBout;
+      buttons = `<p class="sit-label">Round terminé : qui a gagné ?</p><div class="sit-kot-btns">
+        <button type="button" class="sit-btn press" data-kot="king" aria-pressed="${s.decision === 'king'}">${nm(lb.king)} garde sa place</button>
+        <button type="button" class="sit-btn press" data-kot="chal" aria-pressed="${s.decision === 'chal'}">${nm(lb.chal)} prend la place</button></div>`;
+    }
+    const queue = k.queue.length
+      ? `<ol class="sit-queue">${k.queue.map((id, i) => `<li><span class="sit-queue-n">${i + 1}</span>${nm(id)}</li>`).join('')}</ol>`
+      : '<p class="sit-resting">Personne en attente</p>';
+    return `${buttons}
+      <p class="sit-label sit-mt">File d'attente</p>${queue}`;
+  }
+
+  function kotClick(which: 'king' | 'chal') {
+    if (!ses || !ses.kot) return;
+    const s = ses;
+    if (s.phase === 'work') {
+      kotDecide(s.kot, which === 'king');
+      sounds.next();
+      flash(`Au suivant : ${s.names[s.kot.chal]}`, 2000);
+      render(false);
+    } else if (s.phase === 'rest' && s.snap && s.decision !== which) {
+      s.kot = clone(s.snap);
+      kotDecide(s.kot, which === 'king');
+      s.decision = which;
+      render(false);
+    }
+  }
+  $('people').addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-kot]');
+    if (b) kotClick(b.dataset.kot as 'king' | 'chal');
+  });
+
+  function setPaused(p: boolean) {
+    $('s-pause-text').textContent = p ? 'Reprendre' : 'Pause';
+    ($('s-pause').querySelector('[data-icon="pause"]') as HTMLElement).hidden = p;
+    ($('s-pause').querySelector('[data-icon="play"]') as HTMLElement).hidden = !p;
+  }
+  $('s-pause').addEventListener('click', () => {
+    if (!ses || ses.phase === 'done') return;
+    initAudio();
+    if (ses.paused) { ses.end = Date.now() + ses.left; ses.paused = false; }
+    else { ses.left = Math.max(0, ses.end - Date.now()); ses.paused = true; }
+    setPaused(ses.paused);
+    render(false);
+  });
+  $('s-skip').addEventListener('click', () => {
+    if (!ses || ses.phase === 'done') return;
+    const wasPaused = ses.paused;
+    ses.paused = false; setPaused(false);
+    if (wasPaused) ses.end = Date.now();
+    advance(Date.now());
+  });
+  $('s-card').addEventListener('click', () => {
+    if (!ses || ses.phase === 'done') return;
+    const fresh = draw(ses.set, [ses.card?.p, ses.next?.p].filter(Boolean) as string[]);
+    if (ses.phase === 'work') {
+      ses.card = fresh;
+      const last = ses.history[ses.history.length - 1];
+      if (fresh) { if (last && last.round === ses.round) last.card = fresh; else ses.history.push({ round: ses.round, card: fresh }); }
+    } else ses.next = fresh;
+    render(true);
+  });
+  $('s-wall').addEventListener('click', () => {
+    const on = !overlay.hasAttribute('data-wall');
+    overlay.toggleAttribute('data-wall', on);
+    $('s-wall').setAttribute('aria-pressed', String(on));
+    try {
+      if (on && overlay.requestFullscreen && !document.fullscreenElement) overlay.requestFullscreen().catch(() => {});
+      if (!on && document.fullscreenElement) document.exitFullscreen().catch(() => {});
+    } catch { /* plein écran refusé */ }
+  });
+  function resetStop() {
+    clearTimeout(stopTimer);
+    $('s-stop').removeAttribute('data-confirm');
+    $('s-stop-text').textContent = 'Arrêter';
+  }
+  $('s-stop').addEventListener('click', () => {
+    const b = $('s-stop');
+    if (b.hasAttribute('data-confirm')) { resetStop(); finish(); return; }
+    b.setAttribute('data-confirm', '');
+    $('s-stop-text').textContent = 'Confirmer';
+    stopTimer = window.setTimeout(resetStop, 3000);
+  });
+
+  function stopLoop() { cancelAnimationFrame(raf); clearInterval(interval); lastShown = -1; }
+
+  function finish() {
+    if (!ses) return;
+    ses.phase = 'done';
+    stopLoop();
+    releaseScreen();
+    $('live').hidden = true;
+    $('end').hidden = false;
+    renderEnd();
+    overlay.scrollTop = 0;
+    $('relaunch').focus({ preventScroll: true });
+  }
+
+  function renderEnd() {
+    const s = ses as Sess;
+    $('end-list').innerHTML = s.history.length
+      ? s.history.map(h => `<li class="sit-hist"><span class="sit-hist-n">${h.round}</span><div class="min-w-0"><p class="sit-hist-p">${esc(h.card.p)}</p><p class="sit-hist-c">${esc(THEMES[h.card.th] || '')} · ${esc(h.card.c)}</p></div></li>`).join('')
+      : '<li class="sit-resting">Aucun round terminé.</li>';
+    const box = $('end-kot');
+    box.hidden = !s.kot;
+    if (!s.kot) { box.innerHTML = ''; return; }
+    const k = s.kot;
+    const rank = Object.keys(s.names).sort((a, b) => (k.best[b] || 0) - (k.best[a] || 0) || (k.wins[b] || 0) - (k.wins[a] || 0));
+    const lb = s.lastBout;
+    box.innerHTML = `
+      ${lb && s.snap ? `<p class="sit-label">Dernier combat</p><div class="sit-kot-btns sit-mb">
+        <button type="button" class="sit-btn press" data-end="king" aria-pressed="${s.decision === 'king'}">${nm(lb.king)} garde sa place</button>
+        <button type="button" class="sit-btn press" data-end="chal" aria-pressed="${s.decision === 'chal'}">${nm(lb.chal)} prend la place</button></div>` : ''}
+      <p class="sit-label">Classement par meilleure série</p>
+      <ol class="mt-3">${rank.map((id, i) => `<li class="sit-hist"><span class="sit-hist-n">${i + 1}</span><div class="min-w-0"><p class="sit-hist-p">${nm(id)}</p><p class="sit-hist-c">Meilleure série ${k.best[id] || 0} · ${k.wins[id] || 0} victoire${(k.wins[id] || 0) > 1 ? 's' : ''}</p></div></li>`).join('')}</ol>`;
+  }
+  $('end-kot').addEventListener('click', e => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('[data-end]');
+    if (!b || !ses || !ses.snap) return;
+    const which = b.dataset.end as 'king' | 'chal';
+    if (ses.decision === which) return;
+    ses.kot = clone(ses.snap);
+    kotDecide(ses.kot, which === 'king');
+    ses.decision = which;
+    renderEnd();
+  });
+
+  function closeSession() {
+    stopLoop();
+    releaseScreen();
+    ses = null;
+    overlay.hidden = true;
+    overlay.removeAttribute('data-wall');
+    $('s-wall').setAttribute('aria-pressed', 'false');
+    try { if (document.fullscreenElement) document.exitFullscreen().catch(() => {}); } catch { /* rien */ }
+    document.documentElement.style.overflow = '';
+    $('start').focus();
+  }
+  $('relaunch').addEventListener('click', () => { stopLoop(); startSession(); });
+  $('back').addEventListener('click', closeSession);
+  $('start').addEventListener('click', startSession);
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !ses || ses.phase === 'done') return;
+    lockScreen();
+    tick();
+  });
+  document.addEventListener('fullscreenchange', () => {
+    if (!document.fullscreenElement && overlay.hasAttribute('data-wall')) {
+      overlay.removeAttribute('data-wall');
+      $('s-wall').setAttribute('aria-pressed', 'false');
+    }
+  });
+</script>
+
+<style is:global>
+  /* Éléments générés en JS : les styles scopés d'Astro ne s'y appliquent pas */
+  /* L'attribut hidden doit l'emporter sur les classes d'affichage (flex, grid) */
+  [hidden] { display: none !important; }
+  .sit-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgb(var(--c-muted));
+  }
+  .sit-mt { margin-top: 24px; }
+  .sit-mb { margin-bottom: 28px; }
+
+  /* Carte */
+  .sit-card {
+    border: 1px solid rgb(var(--c-line));
+    background: rgb(var(--c-surface));
+    border-radius: 0.75rem;
+    padding: 20px;
+  }
+  @media (min-width: 640px) { .sit-card { padding: 24px; } }
+  .sit-empty { color: rgb(var(--c-muted)); }
+  .sit-card-meta { display: flex; flex-wrap: wrap; gap: 6px; }
+  .sit-tag {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--c-line));
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgb(var(--c-muted));
+  }
+  .sit-tag-strong {
+    background: rgb(var(--c-accent-strong));
+    border-color: rgb(var(--c-accent-strong));
+    color: #fff;
+  }
+  .sit-pos {
+    margin-top: 16px;
+    font-size: clamp(44px, 11vw, 80px);
+    overflow-wrap: break-word;
+  }
+  .sit-halves {
+    margin-top: 20px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1px;
+    background: rgb(var(--c-line));
+    border: 1px solid rgb(var(--c-line));
+    border-radius: 0.75rem;
+    overflow: hidden;
+  }
+  .sit-half { background: rgb(var(--c-bg)); padding: 14px; min-width: 0; }
+  @media (min-width: 640px) { .sit-half { padding: 16px 18px; } }
+  .sit-half-head { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 8px; min-width: 0; }
+  .sit-role {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: rgb(var(--c-muted));
+    white-space: nowrap;
+  }
+  @media (max-width: 399px) { .sit-role { letter-spacing: 0.06em; } }
+  .sit-letter {
+    flex: none;
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 800;
+  }
+  .sit-letter-a { background: rgb(var(--c-fg)); color: rgb(var(--c-bg)); }
+  .sit-letter-b { background: rgb(var(--c-accent-strong)); color: #fff; }
+  .sit-half-name {
+    margin-top: 10px;
+    font-stretch: 68%;
+    font-weight: 800;
+    text-transform: uppercase;
+    font-size: 28px;
+    line-height: 1;
+    overflow-wrap: anywhere;
+  }
+  .sit-half-note {
+    display: block;
+    margin-top: 4px;
+    font-stretch: 100%;
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: rgb(var(--c-accent));
+  }
+  .sit-goal { margin-top: 10px; font-weight: 600; line-height: 1.3; overflow-wrap: break-word; }
+  .sit-rule { margin-top: 18px; padding-top: 16px; border-top: 1px solid rgb(var(--c-line)); }
+  .sit-rule-text { margin-top: 4px; font-size: 18px; font-weight: 700; line-height: 1.3; }
+  .sit-safety {
+    margin-top: 12px;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+    font-size: 14px;
+    color: rgb(var(--c-muted));
+  }
+  .sit-safety::before {
+    content: '';
+    flex: none;
+    width: 6px;
+    height: 6px;
+    border-radius: 999px;
+    background: rgb(var(--c-accent));
+    transform: translateY(-2px);
+  }
+
+  /* Retournement au tirage */
+  @keyframes sit-flip {
+    from { opacity: 0; transform: perspective(1200px) rotateY(-80deg); }
+    to { opacity: 1; transform: perspective(1200px) rotateY(0); }
+  }
+  @keyframes sit-fade { from { opacity: 0; } to { opacity: 1; } }
+  .sit-flip { animation: sit-flip 360ms cubic-bezier(0.23, 1, 0.32, 1) both; }
+  @media (prefers-reduced-motion: reduce) {
+    .sit-flip { animation: sit-fade 150ms ease-out both; }
+  }
+
+  /* Présents */
+  .sit-member {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 0;
+    border-top: 1px solid rgb(var(--c-line));
+  }
+  .sit-check { display: flex; align-items: center; gap: 12px; min-height: 44px; min-width: 0; cursor: pointer; }
+  .sit-check input { flex: none; width: 22px; height: 22px; accent-color: rgb(var(--c-accent-strong)); cursor: pointer; }
+  .sit-name { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: color 150ms ease; }
+  .sit-member[data-off] .sit-name { color: rgb(var(--c-faint)); }
+  .sit-weight { display: flex; align-items: center; gap: 6px; font-size: 14px; color: rgb(var(--c-muted)); }
+  .sit-weight input {
+    width: 4.5rem;
+    min-height: 40px;
+    padding: 0 8px;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--c-line));
+    background: rgb(var(--c-surface));
+    color: rgb(var(--c-fg));
+    font-size: 16px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .sit-iconbtn {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 999px;
+    color: rgb(var(--c-muted));
+  }
+  @media (hover: hover) and (pointer: fine) {
+    .sit-iconbtn:hover { color: rgb(var(--c-accent)); background: rgb(var(--c-surface-2)); }
+  }
+  .sit-club {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-top: 1px solid rgb(var(--c-line));
+  }
+  .sit-club:last-child { border-bottom: 1px solid rgb(var(--c-line)); }
+  .sit-club-name { font-weight: 700; overflow-wrap: anywhere; }
+  .sit-club-meta { font-size: 14px; color: rgb(var(--c-muted)); }
+
+  /* Séance */
+  .sit-band { background: rgb(var(--c-surface-2)); color: rgb(var(--c-fg)); }
+  .sit-band[data-phase='prep'] #phase-label { color: rgb(var(--c-accent)); }
+  .sit-band[data-phase='work'] { background: rgb(var(--c-accent-strong)); color: #fff; }
+  .sit-timer {
+    font-size: clamp(112px, 30vw, 280px);
+    line-height: 0.85;
+    letter-spacing: -0.02em;
+  }
+  .sit-flash {
+    min-height: 1.5em;
+    margin-top: 8px;
+    font-size: 22px;
+    font-weight: 800;
+    color: rgb(var(--c-accent));
+    opacity: 0;
+    transform: translateY(4px);
+    transition: opacity 200ms cubic-bezier(0.23, 1, 0.32, 1), transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
+  }
+  .sit-flash.is-on { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .sit-flash { transform: none; } }
+  .sit-pairs {
+    margin-top: 8px;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  }
+  .sit-pair {
+    border: 1px solid rgb(var(--c-line));
+    background: rgb(var(--c-surface));
+    border-radius: 0.75rem;
+    padding: 10px 14px;
+    display: grid;
+    gap: 6px;
+  }
+  .sit-pair-row { display: flex; align-items: center; gap: 10px; min-width: 0; }
+  .sit-pair-name { font-size: 18px; font-weight: 700; overflow-wrap: anywhere; }
+  .sit-warn { font-size: 13px; font-weight: 700; color: rgb(var(--c-accent)); }
+  .sit-resting { margin-top: 10px; color: rgb(var(--c-muted)); }
+  .sit-resting strong { color: rgb(var(--c-fg)); }
+  .sit-kot-btns { margin-top: 8px; display: grid; gap: 8px; }
+  @media (min-width: 480px) { .sit-kot-btns { grid-template-columns: 1fr 1fr; } }
+  .sit-btn {
+    min-height: 52px;
+    padding: 8px 18px;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--c-line));
+    background: rgb(var(--c-surface));
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+  @media (hover: hover) and (pointer: fine) { .sit-btn:hover { border-color: rgb(var(--c-muted)); } }
+  .sit-btn[aria-pressed='true'] { background: rgb(var(--c-fg)); border-color: rgb(var(--c-fg)); color: rgb(var(--c-bg)); }
+  .sit-queue { margin-top: 8px; display: flex; flex-wrap: wrap; gap: 6px; }
+  .sit-queue li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 36px;
+    padding: 0 14px 0 6px;
+    border-radius: 999px;
+    border: 1px solid rgb(var(--c-line));
+    font-weight: 600;
+  }
+  .sit-queue-n {
+    display: inline-grid;
+    place-items: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 999px;
+    background: rgb(var(--c-surface-2));
+    font-size: 12px;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .sit-ctrl {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: 56px;
+    padding: 4px 2px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+    color: rgb(var(--c-muted));
+  }
+  @media (min-width: 640px) {
+    .sit-ctrl {
+      flex-direction: row;
+      gap: 8px;
+      min-height: 48px;
+      padding: 0 18px;
+      font-size: 14px;
+      border: 1px solid rgb(var(--c-line));
+    }
+  }
+  @media (hover: hover) and (pointer: fine) { .sit-ctrl:hover { color: rgb(var(--c-fg)); border-color: rgb(var(--c-muted)); } }
+  .sit-ctrl[aria-pressed='true'] { color: rgb(var(--c-fg)); }
+  .sit-ctrl[data-confirm] { background: rgb(var(--c-accent-strong)); border-color: rgb(var(--c-accent-strong)); color: #fff; }
+
+  /* Mode mur : lisible depuis le tapis */
+  #session[data-wall] .sit-timer { font-size: clamp(150px, 36vw, 440px); }
+  #session[data-wall] .sit-pos { font-size: clamp(56px, 13vw, 140px); }
+  #session[data-wall] .sit-goal { font-size: 22px; }
+  #session[data-wall] .sit-rule-text { font-size: 26px; }
+  #session[data-wall] .sit-half-name { font-size: 40px; }
+  #session[data-wall] .sit-pair-name { font-size: 26px; }
+  #session[data-wall] #round-label { font-size: 32px; }
+
+  /* Fin de séance */
+  .sit-hist {
+    display: flex;
+    gap: 14px;
+    align-items: baseline;
+    padding: 12px 0;
+    border-top: 1px solid rgb(var(--c-line));
+  }
+  .sit-hist-n { flex: none; width: 2ch; font-weight: 800; color: rgb(var(--c-faint)); font-variant-numeric: tabular-nums; }
+  .sit-hist-p { font-weight: 700; font-size: 18px; }
+  .sit-hist-c { font-size: 14px; color: rgb(var(--c-muted)); }
+</style>

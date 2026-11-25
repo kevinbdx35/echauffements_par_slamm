@@ -1,0 +1,195 @@
+{
+  "themes": {
+    "garde": "Garde & demi-garde",
+    "ctrl": "Contrôles & sorties",
+    "dos": "Dos & tortue",
+    "jambes": "Jeu de jambes",
+    "debout": "Debout & cage"
+  },
+  "positions": [
+    {
+      "p": "Garde fermée",
+      "th": "garde",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Balayer", "Soumettre depuis la garde", "Casser la posture et prendre le dos"],
+      "gb": ["Ouvrir la garde et passer", "Garder la posture sans se faire balayer"]
+    },
+    {
+      "p": "Demi-garde",
+      "th": "garde",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Prendre l'underhook et sortir au dos", "Revenir en garde complète", "Balayer"],
+      "gb": ["Libérer la jambe et passer", "Prendre le cross-face et aplatir"]
+    },
+    {
+      "p": "Garde papillon",
+      "th": "garde",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Soulever et balayer", "Entrer en single leg X", "Arm drag et prendre le dos"],
+      "gb": ["Écraser les crochets et passer", "Garder les hanches basses et stabiliser"]
+    },
+    {
+      "p": "Garde ouverte, adversaire debout",
+      "th": "garde",
+      "d": "NOGI MMA",
+      "ra": "Au sol",
+      "rb": "Debout",
+      "ga": ["Balayer ou se relever proprement", "Accrocher une jambe et entrer en attaque de jambe"],
+      "gb": ["Passer la garde", "Rester hors de portée des crochets"]
+    },
+    {
+      "p": "Contrôle latéral",
+      "th": "ctrl",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Récupérer la garde", "Passer en tortue puis se relever", "Sortir sous l'adversaire"],
+      "gb": ["Monter", "Prendre le genou sur le ventre", "Soumettre"]
+    },
+    {
+      "p": "Monté",
+      "th": "ctrl",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Sortir en bridge", "Sortir coude-genou et récupérer la demi-garde"],
+      "gb": ["Rester monté", "Soumettre (clé de bras, étranglement)", "Prendre le dos quand il se retourne"]
+    },
+    {
+      "p": "Nord-sud",
+      "th": "ctrl",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Tourner vers l'adversaire et récupérer la garde", "Passer en tortue"],
+      "gb": ["Garder le contrôle en suivant les hanches", "Étranglement nord-sud ou kimura"]
+    },
+    {
+      "p": "Genou sur le ventre",
+      "th": "ctrl",
+      "d": "NOGI MMA",
+      "ra": "Dessous",
+      "rb": "Dessus",
+      "ga": ["Pousser le genou et récupérer la garde", "Se relever"],
+      "gb": ["Suivre les déplacements sans perdre le genou", "Monter ou soumettre"]
+    },
+    {
+      "p": "Front headlock",
+      "th": "ctrl",
+      "d": "NOGI MMA",
+      "ra": "Pris",
+      "rb": "Attaquant",
+      "ga": ["Libérer la tête et revenir face", "Se relever en gardant les mains"],
+      "gb": ["Guillotine ou d'Arce", "Tourner autour et prendre le dos"]
+    },
+    {
+      "p": "Dos pris, deux crochets",
+      "th": "dos",
+      "d": "NOGI MMA",
+      "ra": "Défenseur",
+      "rb": "Au dos",
+      "ga": ["Protéger le cou et sortir les crochets", "Revenir face à l'adversaire"],
+      "gb": ["Garder les crochets", "Étrangler"]
+    },
+    {
+      "p": "Tortue",
+      "th": "dos",
+      "d": "NOGI MMA",
+      "ra": "Tortue",
+      "rb": "Dessus",
+      "ga": ["Se relever", "Ramener l'adversaire en garde", "Rouler et inverser"],
+      "gb": ["Placer les crochets et prendre le dos", "Retourner et contrôler à plat"]
+    },
+    {
+      "p": "Ashi garami",
+      "th": "jambes",
+      "d": "NOGI",
+      "ra": "Attaquant",
+      "rb": "Défenseur",
+      "ga": ["Clé de cheville droite", "Garder le contrôle des hanches"],
+      "gb": ["Dégager le genou et sortir la jambe", "Passer au-dessus et contrôler"]
+    },
+    {
+      "p": "Single leg X",
+      "th": "jambes",
+      "d": "NOGI",
+      "ra": "Dessous",
+      "rb": "Debout",
+      "ga": ["Balayer et finir au-dessus", "Entrer en ashi garami"],
+      "gb": ["Libérer la jambe et passer", "Garder l'équilibre et casser les crochets"]
+    },
+    {
+      "p": "50/50",
+      "th": "jambes",
+      "d": "NOGI",
+      "ra": "Combattant A",
+      "rb": "Combattant B",
+      "ga": ["Finir une attaque de jambe", "Sortir de la 50/50 en position dominante"],
+      "gb": ["Finir une attaque de jambe", "Sortir de la 50/50 en position dominante"],
+      "sym": true,
+      "lv": "conf"
+    },
+    {
+      "p": "Clinch",
+      "th": "debout",
+      "d": "NOGI MMA",
+      "ra": "Combattant A",
+      "rb": "Combattant B",
+      "ga": ["Amener au sol", "Prendre le dos debout", "Prendre le double underhook"],
+      "gb": ["Amener au sol", "Prendre le dos debout", "Prendre le double underhook"],
+      "st": true,
+      "sym": true
+    },
+    {
+      "p": "Double-leg engagé",
+      "th": "debout",
+      "d": "NOGI MMA",
+      "ra": "Défenseur",
+      "rb": "Lutteur",
+      "ga": ["Sprawl et whizzer", "Rester debout et se dégager", "Guillotine"],
+      "gb": ["Finir l'amenée au sol", "Changer de côté et passer derrière"],
+      "st": true
+    },
+    {
+      "p": "Dos à la cage",
+      "th": "debout",
+      "d": "MMA",
+      "ra": "Contre la cage",
+      "rb": "Pousse",
+      "ga": ["Inverser la position", "Se dégager vers le centre"],
+      "gb": ["Garder contre la cage", "Amener au sol"],
+      "st": true
+    },
+    {
+      "p": "Assis contre la cage",
+      "th": "debout",
+      "d": "MMA",
+      "ra": "Assis",
+      "rb": "Dessus",
+      "ga": ["Se relever le long de la cage", "Prendre l'underhook et sortir"],
+      "gb": ["Garder au sol", "Ramener à plat ou prendre le dos"]
+    }
+  ],
+  "contraintes": [
+    { "t": "Interdit de frapper", "d": "MMA" },
+    { "t": "Frappes légères autorisées au sol", "d": "MMA", "g": true, "lv": "conf" },
+    { "t": "Frappes légères au corps uniquement", "d": "MMA", "s": true, "lv": "conf" },
+    { "t": "{A} gagne s'il tient jusqu'au bout", "d": "*", "a": true },
+    { "t": "{B} : une seule main", "d": "*", "a": true, "g": true },
+    { "t": "Leg locks interdits", "d": "*", "nth": ["jambes"] },
+    { "t": "Soumissions aux jambes uniquement", "d": "*", "g": true, "lv": "conf" },
+    { "t": "Intensité à 50 %", "d": "*", "lv": "deb" },
+    { "t": "{B} ne cherche que le contrôle, pas de soumission", "d": "*", "a": true, "g": true, "lv": "deb", "nth": ["jambes"] },
+    { "t": "Pas de soumission : on gagne à la position", "d": "*" },
+    { "t": "Soumission verrouillée : on repart de la position", "d": "*" },
+    { "t": "Pas de pause de plus de 3 secondes", "d": "*" },
+    { "t": "Amener au sol suffit pour gagner", "d": "*", "s": true },
+    { "t": "Interdit de s'agripper à la cage", "d": "MMA", "s": true }
+  ]
+}

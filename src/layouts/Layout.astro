@@ -58,12 +58,13 @@ const jsonLd = isHome
       <div class="max-w-site mx-auto px-4 md:px-8 h-14 flex items-center justify-between gap-4">
         <a href={base} class="h-full flex items-center gap-2 whitespace-nowrap">
           <span class="text-accent text-lg leading-none" aria-hidden="true">⬡</span>
-          <span class="font-display text-xl tracking-[0.01em]"><span class="hidden sm:inline">Échauffements par </span>SLAMM</span>
+          <span class="font-display text-xl tracking-[0.01em] max-[379px]:sr-only"><span class="hidden sm:inline">Échauffements par </span>SLAMM</span>
         </a>
         <nav class="h-full flex" aria-label="Programmes">
-          <a href={`${base}mma`} aria-current={isActive('mma') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('mma') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>MMA</a>
-          <a href={`${base}nogi`} aria-current={isActive('nogi') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('nogi') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>NOGI</a>
-          <a href={`${base}etirements`} aria-current={isActive('etirements') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('etirements') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>Étirements</a>
+          <a href={`${base}mma`} aria-current={isActive('mma') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 max-[399px]:px-1.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('mma') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>MMA</a>
+          <a href={`${base}nogi`} aria-current={isActive('nogi') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 max-[399px]:px-1.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('nogi') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>NOGI</a>
+          <a href={`${base}situations`} aria-current={isActive('situations') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 max-[399px]:px-1.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('situations') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>Situations</a>
+          <a href={`${base}etirements`} aria-current={isActive('etirements') ? 'page' : undefined} class:list={["h-full flex items-center px-2.5 max-[399px]:px-1.5 -mb-px border-b-2 text-sm font-semibold transition-colors duration-150", isActive('etirements') ? "text-fg border-accent" : "text-muted border-transparent hover:text-fg"]}>Étirements</a>
         </nav>
       </div>
     </header>

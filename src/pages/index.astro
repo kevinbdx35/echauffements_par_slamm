@@ -5,12 +5,14 @@ import mma from '../data/mma.json';
 import nogi from '../data/nogi.json';
 import etirements from '../data/etirements.json';
 import durees from '../data/programmes.json';
+import situations from '../data/situations.json';
 const base = import.meta.env.BASE_URL;
 
 const programmes = [
   { href: `${base}mma`, titre: 'MMA', sousTitre: 'Arts martiaux mixtes', meta: `${durees.mma.duree} · ${mma.length} exercices` },
   { href: `${base}nogi`, titre: 'NOGI', sousTitre: 'Grappling sans kimono', meta: `${durees.nogi.duree} · ${nogi.length} exercices` },
 ];
+const pendant = { href: `${base}situations`, titre: 'Situations', sousTitre: 'Sparring à thème, binômes et rounds', meta: `${situations.positions.length} positions · chrono · binômes` };
 const apres = { href: `${base}etirements`, titre: 'Étirements', sousTitre: 'Fin de séance, tout le corps', meta: `${durees.etirements.duree} · ${etirements.length} pages` };
 ---
 
@@ -35,6 +37,13 @@ const apres = { href: `${base}etirements`, titre: 'Étirements', sousTitre: 'Fin
           <span class="prog-arrow"><Icon name="arrow-right" /></span>
         </a>
       ))}
+      <p class="mt-8 pb-2.5 text-xs font-bold uppercase tracking-[0.12em] text-muted">Pendant la séance</p>
+      <a href={pendant.href} class="prog">
+        <span class="prog-title font-display">{pendant.titre}</span>
+        <span class="text-muted">{pendant.sousTitre}</span>
+        <span class="text-sm font-semibold tabular-nums">{pendant.meta}</span>
+        <span class="prog-arrow"><Icon name="arrow-right" /></span>
+      </a>
       <p class="mt-8 pb-2.5 text-xs font-bold uppercase tracking-[0.12em] text-muted">Après la séance</p>
       <a href={apres.href} class="prog border-b border-line">
         <span class="prog-title font-display">{apres.titre}</span>
